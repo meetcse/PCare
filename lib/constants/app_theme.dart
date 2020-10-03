@@ -8,8 +8,20 @@ ThemeData appTheme = ThemeData(
       color: UniversalColors.whiteColor,
     ),
     headline2: TextStyle(
-      fontSize: 20,
-      color: UniversalColors.lightBlue,
-    ),
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+        color: UniversalColors.gradientColorStart),
+    headline6: TextStyle(
+        fontSize: 14,
+        // fontWeight: FontWeight.w500,
+        color: UniversalColors.black),
+    button: TextStyle(
+        fontSize: 16,
+        // fontWeight: FontWeight.w500,
+        color: UniversalColors.whiteColor),
+    subtitle1: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: UniversalColors.gradientColorStart),
   ),
 );
