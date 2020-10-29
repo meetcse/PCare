@@ -12,4 +12,6 @@ class UniversalStrings {
   static const String createAccount = "Create Account";
   static const String loginWithMobile = "Login with Mobile Number?";
   static const String loginWithEmail = "Login with Email?";
+  static const String error = "OOPS! Something went wrong";
+  static const String success = "Success";
 }
