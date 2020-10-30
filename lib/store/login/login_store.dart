@@ -15,6 +15,7 @@ abstract class _LoginStore with Store {
     _disposers = [
       reaction((_) => email, validateEmail),
       reaction((_) => password, validatePassword),
+      reaction((_) => mobileNumber, validateMobileNumber),
     ];
   }
 
@@ -23,10 +24,19 @@ abstract class _LoginStore with Store {
   String email = '';
 
   @observable
+  String mobileNumber = '';
+
+  @observable
   String emailError = null;
 
   @observable
+  String mobileNumberError = null;
+
+  @observable
   String passwordError = null;
+
+  @observable
+  String loginWith = 'email';
 
   @observable
   String errorMessage;
@@ -44,12 +54,17 @@ abstract class _LoginStore with Store {
   bool isRemember = false;
 
   @computed
-  bool get canLogin =>
-      email.isNotEmpty &&
-      password.isNotEmpty &&
-      emailError == null &&
-      passwordError == null &&
-      errorMessage == null;
+  bool get canLogin => loginWith == 'email'
+      ? email.isNotEmpty &&
+          password.isNotEmpty &&
+          emailError == null &&
+          passwordError == null &&
+          errorMessage == null
+      : mobileNumber.isNotEmpty &&
+          mobileNumberError == null &&
+          password.isNotEmpty &&
+          passwordError == null &&
+          errorMessage == null;
 
   @computed
   bool get canForgetPassword => email.isNotEmpty;
@@ -61,8 +76,18 @@ abstract class _LoginStore with Store {
   }
 
   @action
+  void setMobileNumber(String value) {
+    mobileNumber = value;
+  }
+
+  @action
   void setPassword(String value) {
     password = value;
+  }
+
+  @action
+  void setLoginWith(String value) {
+    loginWith = value;
   }
 
   @action
@@ -77,6 +102,19 @@ abstract class _LoginStore with Store {
       emailError = 'Please enter a valid Email Address';
     } else {
       emailError = null;
+    }
+  }
+
+  @action
+  void validateMobileNumber(String value) {
+    bool validate = RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(value);
+    if (value.isEmpty) {
+      mobileNumberError = "Mobile Number can't be empty";
+      errorMessage = mobileNumberError;
+    } else if (!validate) {
+      mobileNumberError = 'Please enter a valid Mobile Number';
+    } else {
+      mobileNumberError = null;
     }
   }
 

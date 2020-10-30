@@ -35,7 +35,7 @@ class _SigninState extends State<Signin> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: MainAppBarWidget(
-        isColor: false,
+        isColor: true,
         // leading: BackButtonWidget(
         //   isBlackColor: true,
         // ),
@@ -44,10 +44,11 @@ class _SigninState extends State<Signin> {
         builder: (context) => SingleChildScrollView(
           child: Center(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                //SIGN IN TEXT
                 Container(
                   margin: EdgeInsets.only(top: 30, left: 20),
                   child: Row(
@@ -61,14 +62,33 @@ class _SigninState extends State<Signin> {
                     ],
                   ),
                 ),
-                TextFieldWidget(
-                  isError: _loginStore.emailError == null ? false : true,
-                  labelText: UniversalStrings.email,
-                  errorText: _loginStore.emailError,
-                  onChanged: (value) {
-                    _loginStore.setEmail(value);
-                  },
-                ),
+                //EMAIL FIELD
+                _loginStore.loginWith == 'email'
+                    ? TextFieldWidget(
+                        isError: _loginStore.emailError == null ? false : true,
+                        labelText: UniversalStrings.email,
+                        errorText: _loginStore.emailError,
+                        onChanged: (value) {
+                          _loginStore.setEmail(value);
+                        },
+                      )
+                    : Container(),
+                //MOBILE NUMBER FIELD
+
+                _loginStore.loginWith == 'mobile'
+                    ? TextFieldWidget(
+                        isError: _loginStore.mobileNumberError == null
+                            ? false
+                            : true,
+                        labelText: UniversalStrings.mobileNumber,
+                        errorText: _loginStore.mobileNumberError,
+                        onChanged: (value) {
+                          _loginStore.setMobileNumber(value);
+                        },
+                        textInputType: TextInputType.number,
+                      )
+                    : Container(),
+                //PASSWORD FIELD
                 TextFieldWidget(
                   labelText: UniversalStrings.password,
                   isError: _loginStore.passwordError == null ? false : true,
@@ -78,24 +98,12 @@ class _SigninState extends State<Signin> {
                     _loginStore.setPassword(value);
                   },
                 ),
+                //FORGOT PASSWORD
                 Container(
                   margin: EdgeInsets.only(left: 14, right: 14),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        // margin: EdgeInsets.only(left: 8),
-                        child: RadioButtonWidget(
-                          iconSelected: isRemember,
-                          groupValue: UniversalStrings.remember,
-                          itemText: UniversalStrings.remember,
-                          onChanged: (value) {
-                            setState(() {
-                              isRemember = !isRemember;
-                            });
-                          },
-                        ),
-                      ),
                       Container(
                         child: GestureDetector(
                           onTap: () {
@@ -121,7 +129,7 @@ class _SigninState extends State<Signin> {
                       if (_loginStore.canLogin) {
                         //TODO: CHange here with pushReplacement
                         // Navigator.of(context).pushNamed('/home_page');
-                        FlushbarMessage.successMessage(context, " ");
+                        // FlushbarMessage.successMessage(context, " ");
                       } else {
                         FlushbarMessage.errorMessage(
                           context,
@@ -137,6 +145,7 @@ class _SigninState extends State<Signin> {
                     width: MediaQuery.of(context).size.width,
                   ),
                 ),
+                //OR text
                 Container(
                   padding: EdgeInsets.only(
                       top: 10,
@@ -146,92 +155,108 @@ class _SigninState extends State<Signin> {
                   child: Text(UniversalStrings.or,
                       style: appTheme.textTheme.headline6, maxLines: 1),
                 ),
-                Container(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RectangleButtonWidget(
-                        isImage: true,
-                        imageOutsideBorderWidth:
-                            MediaQuery.of(context).size.width * 0.48,
-                        image: "assets/images/fb.png",
-                        imageInsideWidth:
-                            MediaQuery.of(context).size.width * 0.45,
-                        onPressed: () {
-                          //TODO: Add functionality
-                          print("Pressed FB");
-                        },
-                      ),
-                      RectangleButtonWidget(
-                        isImage: true,
-                        imageOutsideBorderWidth:
-                            MediaQuery.of(context).size.width * 0.48,
-                        image: "assets/images/gplus.png",
-                        imageInsideWidth:
-                            MediaQuery.of(context).size.width * 0.45,
-                        onPressed: () {
-                          //TODO: Add functionality
-                          print("Pressed GPlus");
-                        },
-                      ),
-                    ],
+                //FB AND GOOGLE SIGN IN
+                Expanded(
+                  flex: 0,
+                  child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RectangleButtonWidget(
+                          isImage: true,
+                          imageOutsideBorderWidth:
+                              MediaQuery.of(context).size.width * 0.48,
+                          image: "assets/images/fb.png",
+                          imageInsideWidth:
+                              MediaQuery.of(context).size.width * 0.45,
+                          onPressed: () {
+                            //TODO: Add functionality
+                            print("Pressed FB");
+                          },
+                        ),
+                        RectangleButtonWidget(
+                          isImage: true,
+                          imageOutsideBorderWidth:
+                              MediaQuery.of(context).size.width * 0.48,
+                          image: "assets/images/gplus.png",
+                          imageInsideWidth:
+                              MediaQuery.of(context).size.width * 0.45,
+                          onPressed: () {
+                            //TODO: Add functionality
+                            print("Pressed GPlus");
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+                //Login with mobile or email and crete acc text
                 Flexible(
+                  flex: 0,
                   child: Container(
+                    // alignment: Alignment.bottomCenter,
                     margin:
-                        EdgeInsets.only(top: 10, bottom: 20, left: 8, right: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(bottom: 8),
-                          child: GestureDetector(
-                            onTap: () {
-                              //TODO: Add functionality
-                            },
-                            child: Text(
-                              UniversalStrings.loginWithMobile,
-                              style: appTheme.textTheme.headline6,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(bottom: 8),
-                          child: GestureDetector(
-                            onTap: () {
-                              //TODO: Add functionality
-                            },
-                            child: Text(
-                              UniversalStrings.loginWithEmail,
-                              style: appTheme.textTheme.headline6,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                UniversalStrings.dontHaveAccount,
-                                style: appTheme.textTheme.headline6,
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(left: 2),
-                                child: GestureDetector(
-                                  child: Text(
-                                    UniversalStrings.createAccount,
-                                    style: appTheme.textTheme.subtitle1,
+                        EdgeInsets.only(top: 10, bottom: 10, left: 8, right: 8),
+                    child: Observer(
+                      builder: (context) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          _loginStore.loginWith == 'email'
+                              ? Container(
+                                  padding: EdgeInsets.only(bottom: 8),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      print("ENTER");
+                                      _loginStore.setLoginWith('mobile');
+                                    },
+                                    child: Text(
+                                      UniversalStrings.loginWithMobile,
+                                      style: appTheme.textTheme.headline6,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          _loginStore.loginWith == 'mobile'
+                              ? Container(
+                                  padding: EdgeInsets.only(bottom: 8),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      print("ENTERED");
+
+                                      _loginStore.setLoginWith('email');
+                                    },
+                                    child: Text(
+                                      UniversalStrings.loginWithEmail,
+                                      style: appTheme.textTheme.headline6,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          Container(
+                            padding: EdgeInsets.only(bottom: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  UniversalStrings.dontHaveAccount,
+                                  style: appTheme.textTheme.headline6,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(left: 2),
+                                  child: GestureDetector(
+                                    child: Text(
+                                      UniversalStrings.createAccount,
+                                      style: appTheme.textTheme.subtitle1,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

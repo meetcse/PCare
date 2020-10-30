@@ -38,6 +38,21 @@ mixin _$LoginStore on _LoginStore, Store {
     });
   }
 
+  final _$mobileNumberAtom = Atom(name: '_LoginStore.mobileNumber');
+
+  @override
+  String get mobileNumber {
+    _$mobileNumberAtom.reportRead();
+    return super.mobileNumber;
+  }
+
+  @override
+  set mobileNumber(String value) {
+    _$mobileNumberAtom.reportWrite(value, super.mobileNumber, () {
+      super.mobileNumber = value;
+    });
+  }
+
   final _$emailErrorAtom = Atom(name: '_LoginStore.emailError');
 
   @override
@@ -53,6 +68,21 @@ mixin _$LoginStore on _LoginStore, Store {
     });
   }
 
+  final _$mobileNumberErrorAtom = Atom(name: '_LoginStore.mobileNumberError');
+
+  @override
+  String get mobileNumberError {
+    _$mobileNumberErrorAtom.reportRead();
+    return super.mobileNumberError;
+  }
+
+  @override
+  set mobileNumberError(String value) {
+    _$mobileNumberErrorAtom.reportWrite(value, super.mobileNumberError, () {
+      super.mobileNumberError = value;
+    });
+  }
+
   final _$passwordErrorAtom = Atom(name: '_LoginStore.passwordError');
 
   @override
@@ -65,6 +95,21 @@ mixin _$LoginStore on _LoginStore, Store {
   set passwordError(String value) {
     _$passwordErrorAtom.reportWrite(value, super.passwordError, () {
       super.passwordError = value;
+    });
+  }
+
+  final _$loginWithAtom = Atom(name: '_LoginStore.loginWith');
+
+  @override
+  String get loginWith {
+    _$loginWithAtom.reportRead();
+    return super.loginWith;
+  }
+
+  @override
+  set loginWith(String value) {
+    _$loginWithAtom.reportWrite(value, super.loginWith, () {
+      super.loginWith = value;
     });
   }
 
@@ -192,6 +237,17 @@ mixin _$LoginStore on _LoginStore, Store {
   }
 
   @override
+  void setMobileNumber(String value) {
+    final _$actionInfo = _$_LoginStoreActionController.startAction(
+        name: '_LoginStore.setMobileNumber');
+    try {
+      return super.setMobileNumber(value);
+    } finally {
+      _$_LoginStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setPassword(String value) {
     final _$actionInfo = _$_LoginStoreActionController.startAction(
         name: '_LoginStore.setPassword');
@@ -203,11 +259,33 @@ mixin _$LoginStore on _LoginStore, Store {
   }
 
   @override
+  void setLoginWith(String value) {
+    final _$actionInfo = _$_LoginStoreActionController.startAction(
+        name: '_LoginStore.setLoginWith');
+    try {
+      return super.setLoginWith(value);
+    } finally {
+      _$_LoginStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void validateEmail(String value) {
     final _$actionInfo = _$_LoginStoreActionController.startAction(
         name: '_LoginStore.validateEmail');
     try {
       return super.validateEmail(value);
+    } finally {
+      _$_LoginStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void validateMobileNumber(String value) {
+    final _$actionInfo = _$_LoginStoreActionController.startAction(
+        name: '_LoginStore.validateMobileNumber');
+    try {
+      return super.validateMobileNumber(value);
     } finally {
       _$_LoginStoreActionController.endAction(_$actionInfo);
     }
@@ -228,8 +306,11 @@ mixin _$LoginStore on _LoginStore, Store {
   String toString() {
     return '''
 email: ${email},
+mobileNumber: ${mobileNumber},
 emailError: ${emailError},
+mobileNumberError: ${mobileNumberError},
 passwordError: ${passwordError},
+loginWith: ${loginWith},
 errorMessage: ${errorMessage},
 password: ${password},
 success: ${success},

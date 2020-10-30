@@ -8,6 +8,7 @@ class TextFieldWidget extends StatelessWidget {
   final String errorText;
   final bool isObscureText;
   final bool isError;
+  final TextInputType textInputType;
 
   TextFieldWidget(
       {@required this.labelText,
@@ -15,7 +16,8 @@ class TextFieldWidget extends StatelessWidget {
       this.textEditingController,
       this.errorText,
       this.isObscureText = false,
-      this.isError});
+      this.isError,
+      this.textInputType});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class TextFieldWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.all(20),
       child: TextField(
+        keyboardType: textInputType,
         onChanged: onChanged,
         obscureText: isObscureText,
         controller: textEditingController,
