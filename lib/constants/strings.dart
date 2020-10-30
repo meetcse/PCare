@@ -14,4 +14,6 @@ class UniversalStrings {
   static const String loginWithEmail = "Login with Email?";
   static const String error = "OOPS! Something went wrong";
   static const String success = "Success";
+  static const String home = "Home";
+  static const String welcome = "Welcome";
 }

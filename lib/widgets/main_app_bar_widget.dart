@@ -53,8 +53,10 @@ class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                           )
                         : Container(),
                     Expanded(
-                      child: Container(
-                        alignment: Alignment.centerRight,
+                      child: AnimatedContainer(
+                        duration: Duration(seconds: 2),
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.only(left: 18),
                         child: Text(
                           title != null ? title : '',
                           style: appTheme.textTheme.headline1,
