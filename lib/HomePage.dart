@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/routes/animation_route.dart';
+import 'package:pcare/routes/routes.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/empty_app_bar_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
@@ -27,19 +29,16 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    changeAppBarTitle();
+    // changeAppBarTitle();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBarWidget(
-        animatedTitle: !_isChange
-            ? UniversalStrings.welcome + ' ' + _loggedInUser['username'] + '!'
-            : UniversalStrings.home,
+        //TODO: ADD ANIMATED TITLE IF POSSIBLE
+        title: UniversalStrings.welcome + ' ' + _loggedInUser['username'] + '!',
       ),
-
-      // body: ,
     );
   }
 }

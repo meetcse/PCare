@@ -1,9 +1,11 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:pcare/HomePage.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/routes/routes.dart';
 import 'package:pcare/store/login/login_store.dart';
 import 'package:pcare/ui/Registeration/sign_in.dart';
+import 'package:pcare/ui/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,13 +29,19 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'P Care',
         routes: routes,
-        onGenerateRoute: (settings) {
-          return PageRouteBuilder(
-              pageBuilder: (_, a1, a2) => routes[settings.name](context));
-        },
+        // onGenerateRoute: (settings) {
+        //   print("HELLO");
+        //   return PageRouteBuilder(pageBuilder: (context, a1, a2) {
+        //     return FadeThroughTransition(
+        //       animation: null,
+        //       secondaryAnimation: null,
+        //       child: routes[settings.name](context),
+        //     );
+        //   });
+        // },
         // initialRoute: '/sign_in',
         home: Scaffold(
-          body: Signin(),
+          body: SplashScreen(),
         ),
       ),
     );
