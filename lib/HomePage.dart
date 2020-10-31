@@ -11,8 +11,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> _loggedInUser = {
-    "username": "Meet",
+    "username": "John",
   };
+
   bool _isChange = false;
   changeAppBarTitle() async {
     Future.delayed(Duration(seconds: 5), () {
@@ -33,9 +34,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBarWidget(
-        title: !_isChange
+        animatedTitle: !_isChange
             ? UniversalStrings.welcome + ' ' + _loggedInUser['username'] + '!'
-            : UniversalStrings.home, //TODO: ANIMATE BETWEEN BOTH TEXT
+            : UniversalStrings.home,
       ),
 
       // body: ,
