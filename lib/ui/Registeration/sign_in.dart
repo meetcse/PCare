@@ -5,11 +5,8 @@ import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/store/login/login_store.dart';
-import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
-import 'package:pcare/widgets/empty_app_bar_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
-import 'package:pcare/widgets/radio_button_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 import 'package:provider/provider.dart';
@@ -162,7 +159,8 @@ class _SigninState extends State<Signin> {
                               prefs.setBool(Preferences.isLoggedIn, true);
                               //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
                               //LOGIN DURING API
-                              Navigator.of(context).pushNamed('/home_page');
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/home_page');
                               // FlushbarMessage.successMessage(context, " ");
                             } else {
                               FlushbarMessage.errorMessage(
