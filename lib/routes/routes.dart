@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pcare/HomePage.dart';
+import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/ui/Registeration/sign_in.dart';
 
 Map<String, WidgetBuilder> routes = {

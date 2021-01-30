@@ -16,14 +16,11 @@ class AnimationRoute<T> extends MaterialPageRoute<T> {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
-    return FadeThroughTransition(
-      child: FadeThroughTransition(
-        animation: animation,
-        secondaryAnimation: secondaryAnimation,
-        child: child,
-      ),
+    return SharedAxisTransition(
+      child: child,
       animation: animation,
       secondaryAnimation: secondaryAnimation,
+      transitionType: SharedAxisTransitionType.scaled,
     );
   }
 }

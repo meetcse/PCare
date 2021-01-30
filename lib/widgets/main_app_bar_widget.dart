@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pcare/constants/app_colors.dart';
-import 'package:pcare/constants/app_theme.dart';
 import 'package:pcare/constants/dimensions.dart';
 
 class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
@@ -29,11 +28,11 @@ class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: Container(
-          // alignment: Alignment.topLeft,
+          alignment: Alignment.centerLeft,
           // constraints: BoxConstraints.expand(),
           // margin: EdgeInsets.only(top: 20, bottom: 20),
-          padding: EdgeInsets.only(top: Dimensions.appbarTopPadding),
-          height: 80,
+          padding: EdgeInsets.only(top: appBarHeight / 3.5),
+          height: appBarHeight,
           // alignment: Alignment.centerLeft,
           decoration: isColor
               ? BoxDecoration(gradient: UniversalColors.primaryGradient)
@@ -44,6 +43,7 @@ class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                 alignment: Alignment.centerLeft,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     leading != null
                         ? Container(
@@ -75,7 +75,7 @@ class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                                 child: Text(
                                   animatedTitle != null ? animatedTitle : '',
                                   key: ValueKey<String>(animatedTitle),
-                                  style: appTheme.textTheme.headline1,
+                                  style: Theme.of(context).textTheme.headline1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
@@ -88,23 +88,21 @@ class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                               margin: EdgeInsets.only(left: 18),
                               child: Text(
                                 title != null ? title : '',
-                                style: appTheme.textTheme.headline1,
+                                style: Theme.of(context).textTheme.headline1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ),
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        margin: EdgeInsets.only(
-                            left: Dimensions.appbarLeftMargin,
-                            right: Dimensions.appbarRightMargin),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            actions != null ? actions : Container(),
-                          ],
-                        ),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      margin: EdgeInsets.only(
+                          left: Dimensions.appbarLeftMargin,
+                          right: Dimensions.appbarRightMargin),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          actions != null ? actions : Container(),
+                        ],
                       ),
                     ),
                   ],

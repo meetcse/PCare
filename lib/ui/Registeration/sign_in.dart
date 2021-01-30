@@ -47,11 +47,11 @@ class _SigninState extends State<Signin> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: MainAppBarWidget(
-        isColor: true,
-        // leading: BackButtonWidget(
-        //   isBlackColor: true,
-        // ),
-      ),
+
+          // leading: BackButtonWidget(
+          //   isBlackColor: true,
+          // ),
+          ),
       body: Observer(
         builder: (context) => SingleChildScrollView(
           child: Center(
@@ -67,9 +67,9 @@ class _SigninState extends State<Signin> {
                     children: [
                       Text(
                         UniversalStrings.signIn,
-                        style: appTheme.textTheme.headline2.copyWith(
-                          fontSize: 28,
-                        ),
+                        style: Theme.of(context).textTheme.headline2.copyWith(
+                              fontSize: 28,
+                            ),
                       ),
                     ],
                   ),
@@ -123,7 +123,7 @@ class _SigninState extends State<Signin> {
                           },
                           child: Text(
                             UniversalStrings.forgetPassword,
-                            style: appTheme.textTheme.headline6,
+                            style: Theme.of(context).textTheme.headline6,
                           ),
                         ),
                       ),
@@ -146,7 +146,7 @@ class _SigninState extends State<Signin> {
                         //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
                         //LOGIN DURING API
                         Navigator.of(context)
-                            .push(AnimationRoute(builder: (context) {
+                            .pushReplacement(AnimationRoute(builder: (context) {
                           return routes['/home_page'](context);
                         }));
                         // FlushbarMessage.successMessage(context, " ");
@@ -173,7 +173,8 @@ class _SigninState extends State<Signin> {
                       left: MediaQuery.of(context).size.width * 0.47,
                       right: MediaQuery.of(context).size.width * 0.49),
                   child: Text(UniversalStrings.or,
-                      style: appTheme.textTheme.headline6, maxLines: 1),
+                      style: Theme.of(context).textTheme.headline6,
+                      maxLines: 1),
                 ),
                 //FB AND GOOGLE SIGN IN
                 Expanded(
@@ -195,17 +196,19 @@ class _SigninState extends State<Signin> {
                             print("Pressed FB");
                           },
                         ),
-                        RectangleButtonWidget(
-                          isImage: true,
-                          imageOutsideBorderWidth:
-                              MediaQuery.of(context).size.width * 0.48,
-                          image: "assets/images/gplus.png",
-                          imageInsideWidth:
-                              MediaQuery.of(context).size.width * 0.45,
-                          onPressed: () {
-                            //TODO: Add functionality
-                            print("Pressed GPlus");
-                          },
+                        Expanded(
+                          child: RectangleButtonWidget(
+                            isImage: true,
+                            imageOutsideBorderWidth:
+                                MediaQuery.of(context).size.width * 0.48,
+                            image: "assets/images/gplus.png",
+                            imageInsideWidth:
+                                MediaQuery.of(context).size.width * 0.45,
+                            onPressed: () {
+                              //TODO: Add functionality
+                              print("Pressed GPlus");
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -233,7 +236,8 @@ class _SigninState extends State<Signin> {
                                     },
                                     child: Text(
                                       UniversalStrings.loginWithMobile,
-                                      style: appTheme.textTheme.headline6,
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
                                     ),
                                   ),
                                 )
@@ -249,7 +253,8 @@ class _SigninState extends State<Signin> {
                                     },
                                     child: Text(
                                       UniversalStrings.loginWithEmail,
-                                      style: appTheme.textTheme.headline6,
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
                                     ),
                                   ),
                                 )
@@ -261,14 +266,15 @@ class _SigninState extends State<Signin> {
                               children: [
                                 Text(
                                   UniversalStrings.dontHaveAccount,
-                                  style: appTheme.textTheme.headline6,
+                                  style: Theme.of(context).textTheme.headline6,
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(left: 2),
                                   child: GestureDetector(
                                     child: Text(
                                       UniversalStrings.createAccount,
-                                      style: appTheme.textTheme.subtitle1,
+                                      style:
+                                          Theme.of(context).textTheme.subtitle1,
                                     ),
                                   ),
                                 ),

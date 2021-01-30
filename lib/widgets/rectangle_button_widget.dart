@@ -50,7 +50,7 @@ class RectangleButtonWidget extends StatelessWidget {
                 )
               : Text(
                   childText != null ? childText : "",
-                  style: appTheme.textTheme.button,
+                  style: Theme.of(context).textTheme.button,
                 ),
         ),
       ),

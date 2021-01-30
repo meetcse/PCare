@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pcare/constants/app_colors.dart';
-import 'package:pcare/constants/app_theme.dart';
 
 class RadioButtonWidget extends StatelessWidget {
   final String itemText;
@@ -42,7 +41,7 @@ class RadioButtonWidget extends StatelessWidget {
               padding: EdgeInsets.only(left: 4),
               child: Text(
                 itemText,
-                style: appTheme.textTheme.headline6,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
           ),

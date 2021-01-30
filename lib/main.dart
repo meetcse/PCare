@@ -1,15 +1,15 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:pcare/HomePage.dart';
-import 'package:pcare/constants/preferences.dart';
+import 'package:flutter/services.dart';
+import 'package:pcare/constants/app_theme.dart';
 import 'package:pcare/routes/routes.dart';
 import 'package:pcare/store/login/login_store.dart';
-import 'package:pcare/ui/Registeration/sign_in.dart';
 import 'package:pcare/ui/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: Brightness.light));
   runApp(MyApp());
 }
 
@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'P Care',
         routes: routes,
+        theme: CustomTheme.customTheme(context),
         // onGenerateRoute: (settings) {
         //   print("HELLO");
         //   return PageRouteBuilder(pageBuilder: (context, a1, a2) {
