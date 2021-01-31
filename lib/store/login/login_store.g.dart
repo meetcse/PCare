@@ -113,21 +113,6 @@ mixin _$LoginStore on _LoginStore, Store {
     });
   }
 
-  final _$errorMessageAtom = Atom(name: '_LoginStore.errorMessage');
-
-  @override
-  String get errorMessage {
-    _$errorMessageAtom.reportRead();
-    return super.errorMessage;
-  }
-
-  @override
-  set errorMessage(String value) {
-    _$errorMessageAtom.reportWrite(value, super.errorMessage, () {
-      super.errorMessage = value;
-    });
-  }
-
   final _$passwordAtom = Atom(name: '_LoginStore.password');
 
   @override
@@ -311,7 +296,6 @@ emailError: ${emailError},
 mobileNumberError: ${mobileNumberError},
 passwordError: ${passwordError},
 loginWith: ${loginWith},
-errorMessage: ${errorMessage},
 password: ${password},
 success: ${success},
 loading: ${loading},

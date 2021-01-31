@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/strings.dart';
-import 'package:pcare/routes/animation_route.dart';
-import 'package:pcare/routes/routes.dart';
-import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
-import 'package:pcare/widgets/empty_app_bar_widget.dart';
+import 'package:pcare/widgets/drawer_icon_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
+import 'package:pcare/widgets/patients/patient_drawer_widget.dart';
 import 'package:pcare/widgets/single_chip_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -98,7 +96,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: PatientDrawerWidget(),
       appBar: MainAppBarWidget(
+        leading: DrawerIconWidget(),
         //TODO: ADD ANIMATED TITLE IF POSSIBLE
         title: UniversalStrings.welcome + ' ' + _loggedInUser['username'] + '!',
       ),
@@ -109,13 +109,16 @@ class _HomePageState extends State<HomePage> {
   Widget _buildChildWidget(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
-      margin: const EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 0),
       child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 10,
+            ),
             //Image Slider
             Container(
               alignment: Alignment.topCenter,
@@ -152,7 +155,8 @@ class _HomePageState extends State<HomePage> {
           itemCount: _categories.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 90 / 70,
+            childAspectRatio:
+                MediaQuery.of(context).size.width <= 360 ? 1.1 : 90 / 70,
             mainAxisSpacing: 14,
             crossAxisSpacing: 14,
           ),

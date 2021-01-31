@@ -5,7 +5,7 @@ class LoginStore = _LoginStore with _$LoginStore;
 
 abstract class _LoginStore with Store {
   _LoginStore() {
-    _setupValidations();
+    // _setupValidations();
   }
 
   // disposers:-----------------------------------------------------------------
@@ -39,9 +39,6 @@ abstract class _LoginStore with Store {
   String loginWith = 'email';
 
   @observable
-  String errorMessage;
-
-  @observable
   String password = '';
 
   @observable
@@ -58,13 +55,11 @@ abstract class _LoginStore with Store {
       ? email.isNotEmpty &&
           password.isNotEmpty &&
           emailError == null &&
-          passwordError == null &&
-          errorMessage == null
+          passwordError == null
       : mobileNumber.isNotEmpty &&
           mobileNumberError == null &&
           password.isNotEmpty &&
-          passwordError == null &&
-          errorMessage == null;
+          passwordError == null;
 
   @computed
   bool get canForgetPassword => email.isNotEmpty;
@@ -73,16 +68,22 @@ abstract class _LoginStore with Store {
   @action
   void setEmail(String value) {
     email = value;
+    // _setupValidations();
+    validateEmail(email);
   }
 
   @action
   void setMobileNumber(String value) {
     mobileNumber = value;
+    // _setupValidations();
+    validateMobileNumber(mobileNumber);
   }
 
   @action
   void setPassword(String value) {
     password = value;
+    // _setupValidations();
+    validatePassword(password);
   }
 
   @action
@@ -97,7 +98,7 @@ abstract class _LoginStore with Store {
         .hasMatch(value);
     if (value.isEmpty) {
       emailError = "Email can't be empty";
-      errorMessage = emailError;
+      // errorMessage = emailError;
     } else if (!validate) {
       emailError = 'Please enter a valid Email Address';
     } else {
@@ -110,7 +111,7 @@ abstract class _LoginStore with Store {
     bool validate = RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(value);
     if (value.isEmpty) {
       mobileNumberError = "Mobile Number can't be empty";
-      errorMessage = mobileNumberError;
+      // errorMessage = mobileNumberError;
     } else if (!validate) {
       mobileNumberError = 'Please enter a valid Mobile Number';
     } else {
@@ -144,9 +145,9 @@ abstract class _LoginStore with Store {
     }).catchError((e) {
       loading = false;
       success = false;
-      errorMessage = e.toString().contains("ERROR_USER_NOT_FOUND")
-          ? "Email and password doesn't match"
-          : "Something went wrong, please check your internet connection and try again";
+      // errorMessage = e.toString().contains("ERROR_USER_NOT_FOUND")
+      //     ? "Email and password doesn't match"
+      //     : "Something went wrong, please check your internet connection and try again";
       print(e);
     });
   }
@@ -165,19 +166,26 @@ abstract class _LoginStore with Store {
   Future reset() async {
     email = '';
     password = '';
+    emailError = null;
+    passwordError = null;
+    // errorMessage = '';
     success = false;
     loading = false;
   }
 
   // general methods:-----------------------------------------------------------
   void dispose() {
-    for (final d in _disposers) {
-      d();
-    }
+    // for (final d in _disposers) {
+    //   d();
+    // }
   }
 
   void validateAll() {
     validatePassword(password);
-    validateEmail(email);
+    if (loginWith == 'email') {
+      validateEmail(email);
+    } else {
+      validateMobileNumber(mobileNumber);
+    }
   }
 }

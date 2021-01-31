@@ -33,6 +33,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     changeScreen(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBody: false,
       body: Container(
         height: MediaQuery.of(context).size.height,

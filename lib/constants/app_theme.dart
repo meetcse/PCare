@@ -15,6 +15,10 @@ class CustomTheme {
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                     color: UniversalColors.gradientColorStart),
+                headline3: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: UniversalColors.whiteColor),
                 headline6: TextStyle(
                     fontSize: 14,
                     // fontWeight: FontWeight.w500,

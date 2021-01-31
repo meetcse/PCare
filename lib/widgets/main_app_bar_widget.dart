@@ -48,8 +48,8 @@ class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                     leading != null
                         ? Container(
                             margin: EdgeInsets.only(
-                                left: Dimensions.appbarLeftMargin,
-                                right: Dimensions.appbarRightMargin),
+                                left: Dimensions.appbarLeftMargin + 8,
+                                right: Dimensions.appbarRightMargin - 4),
                             alignment: Alignment.centerLeft,
                             child: leading != null ? leading : null,
                           )
@@ -85,7 +85,7 @@ class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                             child: AnimatedContainer(
                               duration: Duration(seconds: 2),
                               alignment: Alignment.centerLeft,
-                              margin: EdgeInsets.only(left: 18),
+                              margin: EdgeInsets.only(left: 12),
                               child: Text(
                                 title != null ? title : '',
                                 style: Theme.of(context).textTheme.headline1,

@@ -47,7 +47,7 @@ class SingleChipWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style:
-                      Theme.of(context).textTheme.button.copyWith(fontSize: 20),
+                      Theme.of(context).textTheme.button.copyWith(fontSize: 18),
                 ),
               ),
             ),

@@ -7,11 +7,7 @@ import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/routes/animation_route.dart';
 import 'package:pcare/routes/routes.dart';
 import 'package:pcare/store/login/login_store.dart';
-import 'package:pcare/widgets/back_button_widget.dart';
-import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
-import 'package:pcare/widgets/empty_app_bar_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
-import 'package:pcare/widgets/radio_button_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +36,13 @@ class _SigninState extends State<Signin> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     _loginStore = Provider.of<LoginStore>(context);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _loginStore.dispose();
   }
 
   @override
@@ -137,12 +140,13 @@ class _SigninState extends State<Signin> {
                     isImage: false,
                     onPressed: () async {
                       //TODO: ADD functionality for validating and then route
-
+                      _loginStore.validateAll();
                       if (_loginStore.canLogin) {
-                        //TODO: CHange here with pushReplacement
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
                         prefs.setBool(Preferences.isLoggedIn, true);
+                        _loginStore.reset();
+
                         //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
                         //LOGIN DURING API
                         Navigator.of(context)
@@ -168,13 +172,19 @@ class _SigninState extends State<Signin> {
                 //OR text
                 Container(
                   padding: EdgeInsets.only(
-                      top: 10,
-                      bottom: 10,
-                      left: MediaQuery.of(context).size.width * 0.47,
-                      right: MediaQuery.of(context).size.width * 0.49),
-                  child: Text(UniversalStrings.or,
-                      style: Theme.of(context).textTheme.headline6,
-                      maxLines: 1),
+                    top: 10,
+                    bottom: 10,
+                    // left: MediaQuery.of(context).size.width * 0.47,
+                    // right: MediaQuery.of(context).size.width * 0.49,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(UniversalStrings.or,
+                          style: Theme.of(context).textTheme.headline6,
+                          maxLines: 1),
+                    ],
+                  ),
                 ),
                 //FB AND GOOGLE SIGN IN
                 Expanded(

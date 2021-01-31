@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/dimensions.dart';
 
 class TextFieldWidget extends StatelessWidget {
@@ -31,7 +32,14 @@ class TextFieldWidget extends StatelessWidget {
         controller: textEditingController,
         decoration: InputDecoration(
           labelText: labelText ?? "",
+          labelStyle: Theme.of(context).textTheme.subtitle1,
           errorText: isError ? errorText : null,
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+                color: UniversalColors.gradientColorEnd, width: 2.0),
+            borderRadius:
+                BorderRadius.circular(Dimensions.textfieldBorderRadius),
+          ),
           border: OutlineInputBorder(
             borderRadius:
                 BorderRadius.circular(Dimensions.textfieldBorderRadius),
