@@ -162,9 +162,10 @@ class _HomePageState extends State<HomePage> {
           ),
           itemBuilder: (context, index) {
             return SingleChipWidget(
-                childText: _categories[index]['name'],
-                icon: _categories[index]['icon'],
-                color: _categories[index]['color']);
+              childText: _categories[index]['name'],
+              icon: _categories[index]['icon'],
+              // color: _categories[index]['color'],
+            );
           }),
     );
   }

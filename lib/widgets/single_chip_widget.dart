@@ -4,10 +4,12 @@ import 'package:pcare/constants/app_colors.dart';
 class SingleChipWidget extends StatelessWidget {
   final String childText;
   final IconData icon;
-  final Color color;
+  // final Color color;
 
-  SingleChipWidget(
-      {@required this.childText, @required this.icon, @required this.color});
+  SingleChipWidget({
+    @required this.childText,
+    @required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class SingleChipWidget extends StatelessWidget {
         decoration: BoxDecoration(
           // color: color,
 
-          gradient: UniversalColors.primaryGradient,
+          gradient: UniversalColors.secondaryGradient,
           borderRadius: BorderRadius.all(
             Radius.circular(20),
           ),
@@ -46,8 +48,9 @@ class SingleChipWidget extends StatelessWidget {
                   childText,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style:
-                      Theme.of(context).textTheme.button.copyWith(fontSize: 18),
+                  style: Theme.of(context).textTheme.button.copyWith(
+                        fontSize: 18,
+                      ),
                 ),
               ),
             ),

@@ -8,7 +8,7 @@ class CustomTheme {
       textTheme:
           GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme.copyWith(
                 headline1: TextStyle(
-                  fontSize: 28,
+                  fontSize: 24,
                   color: UniversalColors.whiteColor,
                 ),
                 headline2: TextStyle(

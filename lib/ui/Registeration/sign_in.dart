@@ -169,7 +169,7 @@ class _SigninState extends State<Signin> {
                 ),
               ),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
               //Login with mobile or email and crete acc text
               Flexible(

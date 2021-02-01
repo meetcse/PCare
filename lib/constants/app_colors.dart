@@ -5,9 +5,9 @@ class UniversalColors {
   static const Color gradientColorStart = Color(0xff19769F);
   static const Color gradientColorEnd = Color(0xff35D8A6);
   static const Color whiteColor = Colors.white;
-  static const Color gradientColorStart2 = Color(0xff8080FF);
+  static const Color gradientColorStart2 = Color(0xffbe93c5);
   // static const Color gradientColorEnd2 = Color(0xff538FFB);
-  static const Color gradientColorEnd2 = Color(0xffA462E2);
+  static const Color gradientColorEnd2 = Color(0xff7bc6cc);
 
   static const Color lightBlue = Color(0xff5FE5BC);
   static const Color black = Color(0xff3E3E3E);
@@ -22,7 +22,7 @@ class UniversalColors {
       end: Alignment.bottomRight);
 
   static final Gradient secondaryGradient = LinearGradient(
-    colors: [gradientColorStart2, gradientColorEnd2],
+    colors: [gradientColorStart, gradientColorEnd2],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
