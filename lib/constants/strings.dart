@@ -16,4 +16,25 @@ class UniversalStrings {
   static const String success = "Success";
   static const String home = "Home";
   static const String welcome = "Welcome";
+  static const String bookAppointment = "Book An Appointment";
+  static const String bookAppointmentId = "Book_Appointment";
+  static const String myAppointments = "My Appointments";
+  static const String myAppointmentsId = "My_Appointments";
+  static const String wishlist = "WishList";
+  static const String wishlistId = "WishList";
+  static const String currentTreatment = "Current Treatments";
+  static const String currentTreatmentId = "Current_Treatments";
+  static const String todos = "To Do's";
+  static const String todosId = "To_Do's";
+  static const String recentReports = "Recent Reports";
+  static const String recentReportsId = "recent_report";
+  static const String policies = "Policies";
+  static const String policiesId = "policy";
+  static const String aboutAppId = "about_app";
+  static const String aboutApp = "About App";
+  static const String faqId = "faq";
+  static const String faq = "FAQ";
+  static const String myProfile = "My Profile";
+  static const String myProfileId = "my_profile";
+  static const String signOut = "Sign Out";
 }
