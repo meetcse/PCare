@@ -260,15 +260,20 @@ class _SigninState extends State<Signin> {
                                   UniversalStrings.dontHaveAccount,
                                   style: appTheme.textTheme.headline6,
                                 ),
+                                //CREATE ACCOUNT BUTTON
                                 Container(
                                   padding: EdgeInsets.only(left: 2),
                                   child: GestureDetector(
-                                    child: Text(
-                                      UniversalStrings.createAccount,
-                                      style: appTheme.textTheme.subtitle1,
-                                    ),
-                                  ),
-                                ),
+                                      child: Text(
+                                        UniversalStrings.createAccount,
+                                        style: appTheme.textTheme.subtitle1,
+                                      ),
+                                      onTap: () => Navigator.of(context).push(
+                                              AnimationRoute(
+                                                  builder: (context) {
+                                            return routes['/sign_up'](context);
+                                          }))),
+                                )
                               ],
                             ),
                           )
