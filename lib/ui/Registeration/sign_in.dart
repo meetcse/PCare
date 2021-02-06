@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:pcare/constants/app_colors.dart';
-import 'package:pcare/constants/app_theme.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/routes/animation_route.dart';
 import 'package:pcare/routes/routes.dart';
-import 'package:pcare/store/login/login_store.dart';
-import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
-import 'package:pcare/widgets/main_app_bar_widget.dart';
+import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Signin extends StatefulWidget {
@@ -25,27 +21,7 @@ class _SigninState extends State<Signin> {
   bool canMoveToNextPage = false;
   String email;
   String password;
-  LoginStore _loginStore;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    _loginStore = Provider.of<LoginStore>(context);
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    _loginStore.dispose();
-  }
+  LoginController controller = LoginController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +34,10 @@ class _SigninState extends State<Signin> {
       //   //   isBlackColor: true,
       //   // ),
       // ),
-      body: Observer(
-        builder: (context) => SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Obx(() {
+          return Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,17 +53,17 @@ class _SigninState extends State<Signin> {
               ),
 
               //EMAIL FIELD
-              _loginStore.loginWith == 'email'
-                  ? _buildEmailTextField()
+              controller.loginWith.value == 'email'
+                  ? _buildEmailTextField(controller)
                   : Container(),
 
               //MOBILE NUMBER FIELD
-              _loginStore.loginWith == 'mobile'
-                  ? _buildMobileNumberTextField()
+              controller.loginWith.value == 'mobile'
+                  ? _buildMobileNumberTextField(controller)
                   : Container(),
 
               //PASSWORD FIELD
-              _buildPasswordTextField(),
+              _buildPasswordTextField(controller),
 
               //FORGOT PASSWORD
               Container(
@@ -111,7 +87,7 @@ class _SigninState extends State<Signin> {
               ),
 
               //sign in button
-              _buildSignInButton(),
+              _buildSignInButton(controller),
 
               //OR text
               Container(
@@ -176,108 +152,102 @@ class _SigninState extends State<Signin> {
               Flexible(
                 fit: FlexFit.loose,
                 // flex: 0,
-                child: _buildBottomTextItems(),
+                child: _buildBottomTextItems(controller),
               ),
             ],
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
 
-  Widget _buildBottomTextItems() {
+  Widget _buildBottomTextItems(LoginController controller) {
     return Container(
       // alignment: Alignment.bottomCenter,
       margin: const EdgeInsets.only(top: 10, bottom: 10, left: 8, right: 8),
-      child: Observer(
-        builder: (context) => Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _loginStore.loginWith == 'email'
-                ? Container(
-                    padding: EdgeInsets.only(bottom: 8),
-                    child: GestureDetector(
-                      onTap: () {
-                        print("ENTER");
-                        _loginStore.setLoginWith('mobile');
-                      },
-                      child: Text(
-                        UniversalStrings.loginWithMobile,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            .copyWith(decoration: TextDecoration.underline),
-                      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          controller.loginWith.value == 'email'
+              ? Container(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("ENTER");
+                      controller.setLoginWith('mobile');
+                    },
+                    child: Text(
+                      UniversalStrings.loginWithMobile,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(decoration: TextDecoration.underline),
                     ),
-                  )
-                : Container(),
-            _loginStore.loginWith == 'mobile'
-                ? Container(
-                    padding: EdgeInsets.only(bottom: 8),
-                    child: GestureDetector(
-                      onTap: () {
-                        print("ENTERED");
+                  ),
+                )
+              : Container(),
+          controller.loginWith.value == 'mobile'
+              ? Container(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("ENTERED");
 
-                        _loginStore.setLoginWith('email');
-                      },
-                      child: Text(
-                        UniversalStrings.loginWithEmail,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            .copyWith(decoration: TextDecoration.underline),
-                      ),
-                    ),
-                  )
-                : Container(),
-            Container(
-              padding: EdgeInsets.only(bottom: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    UniversalStrings.dontHaveAccount,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 2),
-                    child: GestureDetector(
-                      child: Text(
-                        UniversalStrings.createAccount,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            .copyWith(decoration: TextDecoration.underline),
-                      ),
-                      onTap: () => Navigator.of(context)
-                          .push(AnimationRoute(builder: (context) {
-                        return routes['/sign_up'](context);
-                      })),
+                      controller.setLoginWith('email');
+                    },
+                    child: Text(
+                      UniversalStrings.loginWithEmail,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(decoration: TextDecoration.underline),
                     ),
                   ),
-                ],
-              ),
-            )
-          ],
-        ),
+                )
+              : Container(),
+          Container(
+            padding: EdgeInsets.only(bottom: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  UniversalStrings.dontHaveAccount,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 2),
+                  child: GestureDetector(
+                    child: Text(
+                      UniversalStrings.createAccount,
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1
+                          .copyWith(decoration: TextDecoration.underline),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
 
-  Widget _buildSignInButton() {
+  Widget _buildSignInButton(LoginController controller) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       child: RectangleButtonWidget(
         isImage: false,
         onPressed: () async {
           //TODO: ADD functionality for validating and then route
-          _loginStore.validateAll();
-          if (_loginStore.canLogin) {
+          controller.validateAll();
+          if (controller.canLogin) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setBool(Preferences.isLoggedIn, true);
-            _loginStore.reset();
+            controller.reset();
 
             //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
             //LOGIN DURING API
@@ -289,10 +259,10 @@ class _SigninState extends State<Signin> {
           } else {
             FlushbarMessage.errorMessage(
               context,
-              _loginStore.emailError != null
-                  ? _loginStore.emailError
-                  : _loginStore.passwordError != null
-                      ? _loginStore.passwordError
+              controller.emailError.value != null
+                  ? controller.emailError.value
+                  : controller.passwordError.value != null
+                      ? controller.passwordError.value
                       : "TRY AGAIN",
             );
           }
@@ -303,37 +273,49 @@ class _SigninState extends State<Signin> {
     );
   }
 
-  Widget _buildPasswordTextField() {
+  Widget _buildPasswordTextField(LoginController controller) {
     return TextFieldWidget(
       labelText: UniversalStrings.password,
-      isError: _loginStore.passwordError == null ? false : true,
-      errorText: _loginStore.passwordError,
+      isError: controller.passwordError.value == null ||
+              controller.passwordError.value == ''
+          ? false
+          : true,
+      errorText: controller.passwordError.value,
       isObscureText: true,
       onChanged: (value) {
-        _loginStore.setPassword(value);
+        controller.setPassword(value);
       },
     );
   }
 
-  Widget _buildMobileNumberTextField() {
+  Widget _buildMobileNumberTextField(LoginController controller) {
     return TextFieldWidget(
-      isError: _loginStore.mobileNumberError == null ? false : true,
+      isError: controller.mobileNumberError.value == null ||
+              controller.mobileNumberError.value == ''
+          ? false
+          : true,
       labelText: UniversalStrings.mobileNumber,
-      errorText: _loginStore.mobileNumberError,
+      errorText: controller.mobileNumberError.value,
+      textInputFormatter: [
+        FilteringTextInputFormatter.digitsOnly,
+      ],
       onChanged: (value) {
-        _loginStore.setMobileNumber(value);
+        controller.setMobileNumber(value);
       },
       textInputType: TextInputType.number,
     );
   }
 
-  Widget _buildEmailTextField() {
+  Widget _buildEmailTextField(LoginController controller) {
     return TextFieldWidget(
-      isError: _loginStore.emailError == null ? false : true,
+      isError: controller.emailError.value == null ||
+              controller.emailError.value == ''
+          ? false
+          : true,
       labelText: UniversalStrings.email,
-      errorText: _loginStore.emailError,
+      errorText: controller.emailError.value,
       onChanged: (value) {
-        _loginStore.setEmail(value);
+        controller.setEmail(value);
       },
     );
   }
