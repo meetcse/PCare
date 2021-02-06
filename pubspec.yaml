@@ -35,6 +35,8 @@ dependencies:
   carousel_pro: ^1.0.0
   google_fonts: ^1.1.2
   get: ^3.24.0
+  cached_network_image: ^2.5.0
+  matrix4_transform: ^1.1.7
 
 dev_dependencies:
   flutter_test:

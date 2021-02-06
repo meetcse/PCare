@@ -19,6 +19,10 @@ class CustomTheme {
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: UniversalColors.whiteColor),
+                headline4: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: UniversalColors.darkBlack),
                 headline6: TextStyle(
                     fontSize: 14,
                     // fontWeight: FontWeight.w500,
@@ -31,6 +35,10 @@ class CustomTheme {
                     fontSize: 16,
                     // fontWeight: FontWeight.w500,
                     color: UniversalColors.whiteColor),
+                bodyText1: TextStyle(
+                    fontSize: 12,
+                    // fontWeight: FontWeight.w500,
+                    color: UniversalColors.black),
               )),
     );
     return appTheme;

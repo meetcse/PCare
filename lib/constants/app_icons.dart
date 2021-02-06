@@ -8,4 +8,6 @@ class UniversalIcons {
   static const IconData wishlistDoctors = Icons.star;
   static const IconData currentTreatment = Icons.favorite;
   static const IconData todos = Icons.fact_check_outlined;
+  static const IconData backArrow = Icons.arrow_back_ios;
+  static const IconData locationIcon = Icons.location_pin;
 }

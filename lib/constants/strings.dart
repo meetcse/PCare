@@ -37,4 +37,8 @@ class UniversalStrings {
   static const String myProfile = "My Profile";
   static const String myProfileId = "my_profile";
   static const String signOut = "Sign Out";
+
+  static const String searchDoctor = "Search Doctor";
+  static const String selectDoctor = "Select Doctor";
+  static const String doctors = "Doctors";
 }

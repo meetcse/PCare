@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/routes/animation_route.dart';
+import 'package:pcare/routes/routes.dart';
 import 'package:pcare/widgets/drawer_icon_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/patients/patient_drawer_widget.dart';
@@ -36,30 +38,35 @@ class _HomePageState extends State<HomePage> {
       'name': UniversalStrings.bookAppointment,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.bookAppointmentIcon,
+      'navigateTo': '/search_doctor',
     },
     {
       "id": UniversalStrings.myAppointmentsId,
       "name": UniversalStrings.myAppointments,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.myAppointments,
+      'navigateTo': '/my_appointments',
     },
     {
       "id": UniversalStrings.wishlistId,
       "name": UniversalStrings.wishlist,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.wishlistDoctors,
+      'navigateTo': '/wishlist',
     },
     {
       "id": UniversalStrings.currentTreatmentId,
       "name": UniversalStrings.currentTreatment,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.currentTreatment,
+      'navigateTo': '/current_treatment',
     },
     {
       "id": UniversalStrings.todosId,
       "name": UniversalStrings.todos,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.todos,
+      'navigateTo': '/patient_todos',
     }
   ];
 
@@ -97,6 +104,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: PatientDrawerWidget(),
+      drawerEnableOpenDragGesture: false,
       appBar: MainAppBarWidget(
         leading: DrawerIconWidget(),
         //TODO: ADD ANIMATED TITLE IF POSSIBLE
@@ -161,10 +169,19 @@ class _HomePageState extends State<HomePage> {
             crossAxisSpacing: 14,
           ),
           itemBuilder: (context, index) {
-            return SingleChipWidget(
-              childText: _categories[index]['name'],
-              icon: _categories[index]['icon'],
-              // color: _categories[index]['color'],
+            return InkWell(
+              onTap: () {
+                Navigator.of(context).push(AnimationRoute(builder: (context) {
+                  return routes[_categories[index]['navigateTo']](context);
+                }));
+              },
+              child: SingleChipWidget(
+                childText: _categories[index]['name'],
+
+                icon: _categories[index]['icon'],
+
+                // color: _categories[index]['color'],
+              ),
             );
           }),
     );
