@@ -251,6 +251,10 @@ class _SigninState extends State<Signin> {
                             .subtitle1
                             .copyWith(decoration: TextDecoration.underline),
                       ),
+                      onTap: () => Navigator.of(context)
+                          .push(AnimationRoute(builder: (context) {
+                        return routes['/sign_up'](context);
+                      })),
                     ),
                   ),
                 ],

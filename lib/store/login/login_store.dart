@@ -103,7 +103,6 @@ abstract class _LoginStore with Store {
       emailError = 'Please enter a valid Email Address';
     } else {
       emailError = null;
-      errorMessage = null;
     }
   }
 
@@ -117,7 +116,6 @@ abstract class _LoginStore with Store {
       mobileNumberError = 'Please enter a valid Mobile Number';
     } else {
       mobileNumberError = null;
-      errorMessage = null;
     }
   }
 
@@ -129,7 +127,6 @@ abstract class _LoginStore with Store {
       passwordError = "Password must be at-least 6 char long";
     } else {
       passwordError = null;
-      errorMessage = null;
     }
   }
 

@@ -13,7 +13,7 @@ class _SearchDoctorState extends State<SearchDoctor> {
     return Scaffold(
       drawer: PatientDrawerWidget(),
       appBar: MainAppBarWidget(
-        title: ,
+        //title: ,
       ),
     );
   }
