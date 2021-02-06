@@ -1,12 +1,7 @@
-import 'package:mobx/mobx.dart';
+import 'package:get/get.dart';
 import 'package:pcare/constants/strings.dart';
-part 'patient_home_store.g.dart';
 
-class PatientHomeStore = _PatientHomeStore with _$PatientHomeStore;
-
-abstract class _PatientHomeStore with Store {
-  _PatientHomeStore() {}
-
+class PatientHomeController extends GetxController {
   List<Map<String, dynamic>> drawerItems = [
     {
       "change": true,
@@ -70,14 +65,11 @@ abstract class _PatientHomeStore with Store {
     },
   ];
 
-  //observables ----------------------------------------------
-
-  @observable
-  String selected = UniversalStrings.home;
+  var selected = UniversalStrings.home.obs;
 
   //actions -----------------------------------------------------
-  @action
+
   void setSelectedItem(String value) {
-    selected = value;
+    selected.value = value;
   }
 }

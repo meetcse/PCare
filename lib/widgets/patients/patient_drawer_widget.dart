@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/routes/animation_route.dart';
 import 'package:pcare/routes/routes.dart';
-import 'package:pcare/store/patients/patient_home_store.dart';
-import 'package:provider/provider.dart';
+import 'package:pcare/store/patients/patient_home_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PatientDrawerWidget extends StatefulWidget {
@@ -14,8 +14,8 @@ class PatientDrawerWidget extends StatefulWidget {
 }
 
 class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
-  PatientHomeStore _patientHomeStore;
-
+  PatientHomeController patientHomeController =
+      Get.put(PatientHomeController());
   //TODO: CHange with dynamic
   Map<String, dynamic> _loggedInUser = {
     "username": "John",
@@ -24,13 +24,6 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
     "mobile": "+91 8980772697",
     "city": "Vadodara"
   };
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    _patientHomeStore = Provider.of<PatientHomeStore>(context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,48 +56,50 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
   Widget _buildListOfItems() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: _patientHomeStore.drawerItems.length,
+        itemCount: patientHomeController.drawerItems.length,
         itemBuilder: (context, index) {
           return Column(
             children: [
-              if (_patientHomeStore.drawerItems[index]['change'])
+              if (patientHomeController.drawerItems[index]['change'])
                 index == 0 ? Container() : Divider()
               else
                 Container(),
-              ListTile(
-                contentPadding: EdgeInsets.only(left: 16),
-                selected: _patientHomeStore.selected ==
-                    _patientHomeStore.drawerItems[index]['id'],
-                selectedTileColor:
-                    UniversalColors.gradientColorEnd.withOpacity(0.5),
-                onTap: () async {
-                  if (_patientHomeStore.drawerItems[index]['id'] ==
-                      UniversalStrings.signOut) {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.setBool(Preferences.isLoggedIn, false);
-                    //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
-                    //LOGIN DURING API
-                    Navigator.of(context).pushAndRemoveUntil(
-                        AnimationRoute(builder: (context) {
-                      return routes['/sign_in'](context);
-                    }), (route) => false);
-                  } else {
-                    //TODO: ADD OTHER ROUTES
-                    Navigator.of(context).pop();
-                  }
-                },
-                title: Text(
-                  _patientHomeStore.drawerItems[index]['name'],
-                  style: _patientHomeStore.selected ==
-                          _patientHomeStore.drawerItems[index]['id']
-                      ? Theme.of(context).textTheme.subtitle1
-                      : Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(fontWeight: FontWeight.normal),
-                ),
-              ),
+              GetX<PatientHomeController>(builder: (patientController) {
+                return ListTile(
+                  contentPadding: EdgeInsets.only(left: 16),
+                  selected: patientController.selected.value ==
+                      patientController.drawerItems[index]['id'],
+                  selectedTileColor:
+                      UniversalColors.gradientColorEnd.withOpacity(0.5),
+                  onTap: () async {
+                    if (patientController.drawerItems[index]['id'] ==
+                        UniversalStrings.signOut) {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setBool(Preferences.isLoggedIn, false);
+                      //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
+                      //LOGIN DURING API
+                      Navigator.of(context).pushAndRemoveUntil(
+                          AnimationRoute(builder: (context) {
+                        return routes['/sign_in'](context);
+                      }), (route) => false);
+                    } else {
+                      //TODO: ADD OTHER ROUTES
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  title: Text(
+                    patientController.drawerItems[index]['name'],
+                    style: patientController.selected.value ==
+                            patientController.drawerItems[index]['id']
+                        ? Theme.of(context).textTheme.subtitle1
+                        : Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(fontWeight: FontWeight.normal),
+                  ),
+                );
+              }),
             ],
           );
         });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/dimensions.dart';
 
@@ -10,6 +11,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool isObscureText;
   final bool isError;
   final TextInputType textInputType;
+  final List<TextInputFormatter> textInputFormatter;
 
   TextFieldWidget(
       {@required this.labelText,
@@ -18,7 +20,8 @@ class TextFieldWidget extends StatelessWidget {
       this.errorText,
       this.isObscureText = false,
       this.isError,
-      this.textInputType});
+      this.textInputType,
+      this.textInputFormatter});
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,7 @@ class TextFieldWidget extends StatelessWidget {
         onChanged: onChanged,
         obscureText: isObscureText,
         controller: textEditingController,
+        inputFormatters: textInputFormatter != null ? textInputFormatter : null,
         decoration: InputDecoration(
           labelText: labelText ?? "",
           labelStyle: Theme.of(context).textTheme.subtitle1,
