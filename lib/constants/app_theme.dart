@@ -23,6 +23,10 @@ class CustomTheme {
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
                     color: UniversalColors.darkBlack),
+                headline5: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: UniversalColors.black),
                 headline6: TextStyle(
                     fontSize: 14,
                     // fontWeight: FontWeight.w500,

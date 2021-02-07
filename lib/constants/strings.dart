@@ -41,4 +41,6 @@ class UniversalStrings {
   static const String searchDoctor = "Search Doctor";
   static const String selectDoctor = "Select Doctor";
   static const String doctors = "Doctors";
+  static const String specialities = "Specialities";
+  static const String noDoctorsFound = "Sorry :(\nNo Doctors Found";
 }
