@@ -7,6 +7,7 @@ class TextFieldWidget extends StatelessWidget {
   final String labelText;
   final Function(String) onChanged;
   final Function() onTap;
+  final bool readOnly;
   final TextEditingController textEditingController;
   final String errorText;
   final bool isObscureText;
@@ -20,10 +21,11 @@ class TextFieldWidget extends StatelessWidget {
       this.textEditingController,
       this.errorText,
       this.isObscureText = false,
-      this.isError,
+      this.isError = false,
       this.textInputType,
       this.textInputFormatter,
-      this.onTap});
+      this.onTap,
+      this.readOnly = false});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class TextFieldWidget extends StatelessWidget {
         onChanged: onChanged,
         obscureText: isObscureText,
         onTap: onTap,
+        readOnly: readOnly,
         controller: textEditingController,
         inputFormatters: textInputFormatter != null ? textInputFormatter : null,
         decoration: InputDecoration(
