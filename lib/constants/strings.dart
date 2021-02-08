@@ -44,4 +44,14 @@ class UniversalStrings {
   static const String doctors = "Doctors";
   static const String specialities = "Specialities";
   static const String noDoctorsFound = "Sorry :(\nNo Doctors Found";
+
+  static const String firstName = "First Name";
+  static const String firstNameId = "first_name";
+  static const String lastName = "Last Name";
+  static const String lastNameId = "last_name";
+  static const String reEnterPassword = "Re-Enter Password";
+  static const String address = "Address";
+  static const String gender = "Gender";
+  static const String dob = "Date of Birth";
+  static const String signUp = "Sign Up";
 }

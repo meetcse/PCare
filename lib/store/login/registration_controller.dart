@@ -1,35 +1,26 @@
 import 'package:get/get.dart';
 
 class RegistrationController extends GetxController {
-  // var email = ''.obs;
+  var firstNameError = ''.obs;
+  var lastNameError = ''.obs;
+  var mobileNumberError = ''.obs;
+  var reEnterPasswordError = ''.obs;
+  var addressError = ''.obs;
+  var genderError = ''.obs;
+  var dobError = ''.obs;
 
-  // var mobileNumber = ''.obs;
-
-  // var emailError = ''.obs;
-
-  // var mobileNumberError = ''.obs;
+  var firstName = ''.obs;
+  var lastName = ''.obs;
+  var mobileNumber = ''.obs;
+  var reEnterPassword = ''.obs;
+  var address = ''.obs;
+  var gender = ''.obs;
+  var dob = ''.obs;
+  var allow = true.obs;
 
   var passwordError = ''.obs;
 
-  // var loginWith = 'email'.obs;
-
   var password = ''.obs;
-
-  // var success = false.obs;
-
-  // var loading = false.obs;
-
-  // var isRemember = false.obs;
-
-  // bool get canLogin => loginWith.value == 'email'
-  //     ? email.value.isNotEmpty &&
-  //         password.value.isNotEmpty &&
-  //         emailError.value == null &&
-  //         passwordError.value == null
-  //     : mobileNumber.value.isNotEmpty &&
-  //         mobileNumberError.value == null &&
-  //         password.value.isNotEmpty &&
-  //         passwordError.value == null;
 
   // bool get canForgetPassword => email.value.isNotEmpty;
 
@@ -39,11 +30,69 @@ class RegistrationController extends GetxController {
   //   validateEmail(email.value);
   // }
 
-  // void setMobileNumber(String value) {
-  //   mobileNumber.value = value;
-  //   // _setupValidations();
-  //   validateMobileNumber(mobileNumber.value);
-  // }
+  bool validateField(
+    String value,
+  ) {
+    if (value.isEmpty) {
+      return false;
+    }
+    return true;
+  }
+
+  void setAddress(String value) {
+    address.value = value;
+    if (!validateField(value)) {
+      addressError.value = 'Address is required';
+    }
+  }
+
+  void setGender(String value) {
+    gender.value = value;
+    if (!validateField(value)) {
+      genderError.value = 'Gender is required';
+    }
+  }
+
+  void setDob(String value) {
+    dob.value = value;
+    if (!validateField(value)) {
+      dobError.value = 'DOB is required';
+    }
+  }
+
+  void setMobileNumber(String value) {
+    mobileNumber.value = value;
+    // _setupValidations();
+    validateMobileNumber(mobileNumber.value);
+  }
+
+  void setFirstName(String value) {
+    firstName.value = value;
+    if (!validateField(value)) {
+      firstNameError.value = 'First Name is required';
+    }
+  }
+
+  void setLastName(String value) {
+    lastName.value = value;
+    if (!validateField(value)) {
+      firstNameError.value = 'Last Name is required';
+    }
+  }
+
+  void setReenterPassword(String value) {
+    reEnterPassword.value = value;
+    if (value.isEmpty) {
+      reEnterPasswordError.value = "Re Enter Password can't be empty";
+    } else if (value.length < 6) {
+      reEnterPasswordError.value =
+          "Re Enter Password must be at-least 6 char long";
+    } else if (password.value != reEnterPassword.value) {
+      reEnterPasswordError.value = "Password not matching";
+    } else {
+      reEnterPasswordError.value = null;
+    }
+  }
 
   void setPassword(String value) {
     password.value = value;
@@ -79,19 +128,19 @@ class RegistrationController extends GetxController {
   //   }
   // }
 
-  // void validateMobileNumber(String value) {
-  //   bool validate = RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(value);
-  //   if (value.isEmpty) {
-  //     mobileNumberError.value = "Mobile Number can't be empty";
-  //     // errorMessage = mobileNumberError;
-  //   } else if (value.length != 10) {
-  //     mobileNumberError.value = 'Please enter a 10 digit Mobile Number';
-  //   } else if (!validate) {
-  //     mobileNumberError.value = 'Please enter a valid Mobile Number';
-  //   } else {
-  //     mobileNumberError.value = null;
-  //   }
-  // }
+  void validateMobileNumber(String value) {
+    bool validate = RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)').hasMatch(value);
+    if (value.isEmpty) {
+      mobileNumberError.value = "Mobile Number can't be empty";
+      // errorMessage = mobileNumberError;
+    } else if (value.length != 10) {
+      mobileNumberError.value = 'Please enter a 10 digit Mobile Number';
+    } else if (!validate) {
+      mobileNumberError.value = 'Please enter a valid Mobile Number';
+    } else {
+      mobileNumberError.value = null;
+    }
+  }
 
   // Future register() async {
   //   loading.value = true;
