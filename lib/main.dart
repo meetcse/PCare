@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pcare/routes/routes.dart';
 import 'package:flutter/services.dart';
 import 'package:pcare/constants/app_theme.dart';
-import 'package:pcare/routes/routes.dart';
 import 'package:pcare/ui/splash_screen/splash_screen.dart';
 
 void main() {

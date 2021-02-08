@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pcare/constants/app_colors.dart';
-import 'package:pcare/constants/app_theme.dart';
 
 class RectangleButtonWidget extends StatelessWidget {
   final Function onPressed;

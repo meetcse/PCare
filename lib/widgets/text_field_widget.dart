@@ -6,6 +6,8 @@ import 'package:pcare/constants/dimensions.dart';
 class TextFieldWidget extends StatelessWidget {
   final String labelText;
   final Function(String) onChanged;
+  final Function() onTap;
+  final bool readOnly;
   final TextEditingController textEditingController;
   final String errorText;
   final bool isObscureText;
@@ -14,17 +16,18 @@ class TextFieldWidget extends StatelessWidget {
   final List<TextInputFormatter> textInputFormatter;
   final EdgeInsets margin;
 
-  TextFieldWidget({
-    @required this.labelText,
-    this.onChanged,
-    this.textEditingController,
-    this.errorText,
-    this.isObscureText = false,
-    this.isError = false,
-    this.textInputType,
-    this.textInputFormatter,
-    this.margin,
-  });
+  TextFieldWidget(
+      {@required this.labelText,
+      this.onChanged,
+      this.textEditingController,
+      this.errorText,
+      this.isObscureText = false,
+      this.isError = false,
+      this.textInputType,
+      this.textInputFormatter,
+      this.margin,
+      this.onTap,
+      this.readOnly = false});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,8 @@ class TextFieldWidget extends StatelessWidget {
         keyboardType: textInputType,
         onChanged: onChanged,
         obscureText: isObscureText,
+        onTap: onTap,
+        readOnly: readOnly,
         controller: textEditingController,
         inputFormatters: textInputFormatter != null ? textInputFormatter : null,
         decoration: InputDecoration(
