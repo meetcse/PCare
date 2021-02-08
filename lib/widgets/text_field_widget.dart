@@ -14,6 +14,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool isError;
   final TextInputType textInputType;
   final List<TextInputFormatter> textInputFormatter;
+  final EdgeInsets margin;
 
   TextFieldWidget(
       {@required this.labelText,
@@ -24,6 +25,7 @@ class TextFieldWidget extends StatelessWidget {
       this.isError = false,
       this.textInputType,
       this.textInputFormatter,
+      this.margin,
       this.onTap,
       this.readOnly = false});
 
@@ -31,7 +33,7 @@ class TextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.all(20),
+      margin: margin != null ? margin : EdgeInsets.all(20),
       child: TextField(
         keyboardType: textInputType,
         onChanged: onChanged,

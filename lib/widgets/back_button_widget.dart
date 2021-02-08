@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pcare/constants/app_colors.dart';
+import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/dimensions.dart';
 
 class BackButtonWidget extends StatelessWidget {
@@ -9,7 +10,7 @@ class BackButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         icon: Icon(
-          Icons.arrow_back_ios,
+          UniversalIcons.backArrow,
           color: !isBlackColor
               ? UniversalColors.whiteColor
               : UniversalColors.black,

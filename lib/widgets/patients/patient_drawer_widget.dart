@@ -83,8 +83,15 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
                           AnimationRoute(builder: (context) {
                         return routes['/sign_in'](context);
                       }), (route) => false);
+                    } else if (patientController.drawerItems[index]
+                            ['navigateTo'] !=
+                        '') {
+                      Navigator.of(context)
+                          .push(AnimationRoute(builder: (context) {
+                        return routes[patientController.drawerItems[index]
+                            ['navigateTo']](context);
+                      }));
                     } else {
-                      //TODO: ADD OTHER ROUTES
                       Navigator.of(context).pop();
                     }
                   },

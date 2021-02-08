@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pcare/constants/app_colors.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 
 class CustomProgressIndicatorWidget extends StatelessWidget {
+  final double size;
+
+  CustomProgressIndicatorWidget({this.size = 50});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: JumpingDotsProgressIndicator(
+    return SpinKitFadingFour(
       color: UniversalColors.gradientColorStart,
-      dotSpacing: 0.1,
-      fontSize: 100,
-      milliseconds: 150,
-    ));
+      size: size,
+    );
   }
 }

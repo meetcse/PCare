@@ -30,11 +30,14 @@ dependencies:
   shared_preferences: ^0.5.12
   flushbar: ^1.10.4
   build_runner: ^1.10.4
-  progress_indicators: ^0.1.5
+  flutter_spinkit: "^4.1.2"
   animations: ^1.1.2
   carousel_pro: ^1.0.0
   google_fonts: ^1.1.2
   get: ^3.24.0
+  cached_network_image: ^2.5.0
+  matrix4_transform: ^1.1.7
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
