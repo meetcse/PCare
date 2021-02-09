@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/store/login/registration_controller.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
-import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
 class SignUp extends StatefulWidget {
@@ -29,6 +28,7 @@ class _SignUpState extends State<SignUp> {
         "obscure": false,
         "read_only": false,
         "required": true,
+        "text_editing_controller": false
       },
       {
         "id": UniversalStrings.lastNameId,
@@ -38,6 +38,7 @@ class _SignUpState extends State<SignUp> {
         "obscure": false,
         "read_only": false,
         "required": true,
+        "text_editing_controller": false
       },
       {
         "id": UniversalStrings.mobileNumber,
@@ -47,6 +48,7 @@ class _SignUpState extends State<SignUp> {
         "obscure": false,
         "read_only": false,
         "required": true,
+        "text_editing_controller": false
       },
       {
         "id": UniversalStrings.password,
@@ -56,6 +58,7 @@ class _SignUpState extends State<SignUp> {
         "obscure": true,
         "read_only": false,
         "required": true,
+        "text_editing_controller": false
       },
       {
         "id": UniversalStrings.reEnterPassword,
@@ -65,6 +68,7 @@ class _SignUpState extends State<SignUp> {
         "obscure": true,
         "read_only": false,
         "required": true,
+        "text_editing_controller": false
       },
       {
         "id": UniversalStrings.address,
@@ -74,6 +78,7 @@ class _SignUpState extends State<SignUp> {
         "obscure": false,
         "read_only": false,
         "required": true,
+        "text_editing_controller": false
       },
       {
         "id": UniversalStrings.gender,
@@ -83,17 +88,18 @@ class _SignUpState extends State<SignUp> {
         "obscure": false,
         "read_only": false,
         "required": true,
+        "text_editing_controller": false
       },
       {
         "id": UniversalStrings.dob,
         'text': UniversalStrings.dob,
         'onTap': 'Yes',
-        'readOnly': 'Yes',
         'input_type': TextInputType.datetime,
         "error_text": registrationController.dobError,
         "obscure": false,
-        "read_only": false,
+        "read_only": true,
         "required": true,
+        "text_editing_controller": true
       },
     ];
   }
@@ -179,6 +185,11 @@ class _SignUpState extends State<SignUp> {
           return Obx(() {
             return registrationController.allow.value
                 ? TextFieldWidget(
+                    textEditingController: _registrationList[index]
+                            ['text_editing_controller']
+                        ? new TextEditingController(
+                            text: registrationController.dob.value)
+                        : null,
                     margin: const EdgeInsets.only(
                         left: 12, right: 12, top: 10, bottom: 6),
                     labelText: _registrationList[index]['text'],
@@ -242,9 +253,7 @@ class _SignUpState extends State<SignUp> {
       lastDate: DateTime.now(),
     );
 
-    setState(() {
-      _date =
-          d.day.toString() + "/" + d.month.toString() + "/" + d.year.toString();
-    });
+    registrationController.setDob(
+        d.day.toString() + "/" + d.month.toString() + "/" + d.year.toString());
   }
 }
