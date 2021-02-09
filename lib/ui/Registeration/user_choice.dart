@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/routes/animation_route.dart';
 import 'package:pcare/routes/routes.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
@@ -13,80 +15,92 @@ class UserChoice extends StatefulWidget {
 }
 
 class _UserChoiceState extends State<UserChoice> {
-  bool _patient = true;
-  bool _doctor = false;
-  bool _receptionist = false;
+  String _userType = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MainAppBarWidget(
-          isColor: false,
-          leading: BackButtonWidget(
-            isBlackColor: true,
+      appBar: MainAppBarWidget(
+        isColor: false,
+        leading: BackButtonWidget(
+          isBlackColor: true,
+        ),
+      ),
+      body: _buildChildWidget(),
+    );
+  }
+
+  Widget _buildChildWidget() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          child: Text(
+            "Choose Any One",
+            style: Theme.of(context).textTheme.headline2.copyWith(
+                  fontSize: 34,
+                ),
           ),
         ),
-        body: Center(
+        _cardWidget(
+            child: _buildRadioButton(UniversalStrings.patientRadioButton,
+                UniversalStrings.groupValue)),
+        _cardWidget(
+            child: _buildRadioButton(UniversalStrings.doctorRadioButton,
+                UniversalStrings.groupValue)),
+        _cardWidget(
+            child: _buildRadioButton(
+                UniversalStrings.receptionist, UniversalStrings.groupValue)),
+        Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text("Please select any one from below"),
-              Padding(padding: EdgeInsets.only(bottom: 15)),
-              RadioButtonWidget(
-                itemText: 'Patient',
-                groupValue: 'yoyo',
-                iconSelected: _patient,
-                onChanged: (value) {
-                  setState(() {
-                    _patient = true;
-                    _doctor = false;
-                    _receptionist = false;
-                  });
-                },
+              Container(
+                padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
+                child: RectangleButtonWidget(
+                  childText: UniversalStrings.nextButtonText,
+                  onPressed: () {
+                    if (_userType == "") {
+                      FlushbarMessage.errorMessage(
+                          context, UniversalStrings.userChoiceErrorMessage);
+                    } else {
+                      Navigator.of(context)
+                          .push(AnimationRoute(builder: (context) {
+                        return routes['/sign_up'](context);
+                      }));
+                    }
+                  },
+                  width: Get.width,
+                ),
               ),
-              Padding(padding: EdgeInsets.only(bottom: 5)),
-              RadioButtonWidget(
-                itemText: 'Doctor',
-                groupValue: 'yoyo',
-                iconSelected: _doctor,
-                onChanged: (value) {
-                  setState(() {
-                    _patient = false;
-                    _doctor = true;
-                    _receptionist = false;
-                  });
-                },
-              ),
-              Padding(padding: EdgeInsets.only(bottom: 5)),
-              RadioButtonWidget(
-                itemText: 'Receptionist',
-                groupValue: 'yoyo',
-                iconSelected: _receptionist,
-                onChanged: (value) {
-                  setState(() {
-                    _patient = false;
-                    _doctor = false;
-                    _receptionist = true;
-                  });
-                },
-              ),
-              Padding(padding: EdgeInsets.only(bottom: 15)),
-              RectangleButtonWidget(
-                childText: "NEXT",
-                onPressed: () {
-                  _patient
-                      ? UniversalStrings.userType = "Patient"
-                      : _doctor
-                          ? UniversalStrings.userType = "Doctor"
-                          : UniversalStrings.userType = "Receptionist";
-                  Navigator.of(context).push(AnimationRoute(builder: (context) {
-                    return routes['/sign_up'](context);
-                  }));
-                },
-              )
             ],
           ),
-        ));
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRadioButton(String text, String groupValue) {
+    return RadioButtonWidget(
+      itemText: text,
+      groupValue: groupValue,
+      iconSelected: _userType.toLowerCase() == text.toLowerCase(),
+      onChanged: (value) {
+        setState(() {
+          _userType = text;
+        });
+      },
+    );
+  }
+
+  Widget _cardWidget({Widget child}) {
+    return Card(
+      child: child,
+      elevation: 5.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    );
   }
 }

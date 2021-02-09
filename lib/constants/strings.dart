@@ -37,7 +37,6 @@ class UniversalStrings {
   static const String myProfile = "My Profile";
   static const String myProfileId = "my_profile";
   static const String signOut = "Sign Out";
-  static String userType = "";
 
   static const String searchDoctor = "Search Doctor";
   static const String selectDoctor = "Select Doctor";
@@ -54,4 +53,11 @@ class UniversalStrings {
   static const String gender = "Gender";
   static const String dob = "Date of Birth";
   static const String signUp = "Sign Up";
+
+  static const String patientRadioButton = "Patient";
+  static const String doctorRadioButton = "Doctor";
+  static const String receptionist = "Receptionist";
+  static const String groupValue = "userType";
+  static const String nextButtonText = "NEXT";
+  static const String userChoiceErrorMessage = "Please Select Something";
 }

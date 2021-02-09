@@ -19,18 +19,21 @@ class RadioButtonWidget extends StatelessWidget {
     return Container(
       // margin: EdgeInsets.all(8),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
             onTap: () {
               return onChanged(itemText);
             },
-            child: Icon(
-              iconSelected
-                  ? Icons.radio_button_checked
-                  : Icons.radio_button_unchecked,
-              color: UniversalColors.lightBlue,
+            child: Container(
+              padding: EdgeInsets.only(left: 20),
+              child: Text(
+                itemText,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    .copyWith(fontSize: 24),
+              ),
             ),
           ),
           GestureDetector(
@@ -38,10 +41,12 @@ class RadioButtonWidget extends StatelessWidget {
               return onChanged(itemText);
             },
             child: Container(
-              padding: EdgeInsets.only(left: 4),
-              child: Text(
-                itemText,
-                style: Theme.of(context).textTheme.headline6,
+              padding: EdgeInsets.only(right: 20),
+              child: Icon(
+                iconSelected
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                color: UniversalColors.lightBlue,
               ),
             ),
           ),
