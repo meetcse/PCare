@@ -2,11 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/patient/doctor_specialist_list.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/store/patients/appointments/search_doctor_controller.dart';
+import 'package:pcare/ui/patient/appointments/doctor_profile.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/chip_three_section_widget.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
@@ -189,7 +191,16 @@ class _SearchDoctorState extends State<SearchDoctor> {
                 controller.selectedDoctorId.value != ''
             ? FloatingActionButton(
                 onPressed: () {
-                  //TODO: Navigate to another screen
+                  Map<String, dynamic> _selectedDoctor;
+                  _totalDoctorsStaticList.forEach((element) {
+                    if (element['id'].toString() ==
+                        controller.selectedDoctorId.value) {
+                      _selectedDoctor = element;
+                    }
+                  });
+
+                  PageUtils.pushPage(
+                      DoctorProfile(doctorDetails: _selectedDoctor));
                 },
                 child: Icon(
                   UniversalIcons.forwardArrow,
@@ -391,21 +402,24 @@ class _SearchDoctorState extends State<SearchDoctor> {
                         .setSelectedDoctorId(doctors[_itemCount[index]]['id']);
                   },
                   child: _buildDoctorsCard(
-                      isSelected: doctors[_itemCount[index]]['id'] ==
-                          controller.selectedDoctorId.value,
-                      doctorName: doctors[_itemCount[index]]['name'],
-                      hospitalName: doctors[_itemCount[index]]['hospital'],
-                      typeOfDoctor: doctors[_itemCount[index]]['type'],
-                      isSpecialist: doctors[_itemCount[index]]['specialist'],
-                      isNextAvailable: true, //TODO: Get Data from backend
-                      nextAvailableTime: doctors[_itemCount[index]]
-                          ['working_day'], //TODO: Get Data from backend
-                      availableDate: doctors[_itemCount[index]]
-                          ['working_day'], //TODO: Get Data from backend
-                      imageUrl: doctors[_itemCount[index]]['image']),
+                    isSelected: doctors[_itemCount[index]]['id'] ==
+                        controller.selectedDoctorId.value,
+                    doctorName: doctors[_itemCount[index]]['name'],
+                    hospitalName: doctors[_itemCount[index]]['hospital'],
+                    typeOfDoctor: doctors[_itemCount[index]]['type'],
+                    isSpecialist: doctors[_itemCount[index]]['specialist'],
+                    isNextAvailable: true, //TODO: Get Data from backend
+                    nextAvailableTime: doctors[_itemCount[index]]
+                        ['working_day'], //TODO: Get Data from backend
+                    availableDate: doctors[_itemCount[index]]
+                        ['working_day'], //TODO: Get Data from backend
+                    imageUrl: doctors[_itemCount[index]]['image'],
+                    id: doctors[_itemCount[index]]['id'],
+                  ),
                 ),
               );
-            });
+            },
+          );
   }
 
   Widget _buildDoctorsCard({
@@ -418,6 +432,7 @@ class _SearchDoctorState extends State<SearchDoctor> {
     @required String availableDate,
     @required String imageUrl,
     @required bool isSelected,
+    @required String id,
   }) {
     return Container(
       margin: const EdgeInsets.only(
@@ -438,21 +453,24 @@ class _SearchDoctorState extends State<SearchDoctor> {
           //Profile Image
           Container(
             transform: Matrix4Transform().translate(x: -12, y: -12).matrix4,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(
-                Radius.circular(12),
-              ),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                progressIndicatorBuilder: (context, url, _) {
-                  return Center(
-                      child: CustomProgressIndicatorWidget(
-                    size: 30,
-                  ));
-                },
-                fit: BoxFit.cover,
-                height: 100,
-                width: 90,
+            child: Hero(
+              tag: id,
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12),
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  progressIndicatorBuilder: (context, url, _) {
+                    return Center(
+                        child: CustomProgressIndicatorWidget(
+                      size: 30,
+                    ));
+                  },
+                  fit: BoxFit.cover,
+                  height: 100,
+                  width: 90,
+                ),
               ),
             ),
           ),
@@ -532,7 +550,7 @@ class _SearchDoctorState extends State<SearchDoctor> {
                               color: UniversalColors.specialistColor,
                             ),
                             child: Text(
-                              'specialist',
+                              UniversalStrings.specialist,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline4
@@ -547,7 +565,7 @@ class _SearchDoctorState extends State<SearchDoctor> {
                 ),
                 isNextAvailable
                     ? Text(
-                        "Available at 7",
+                        "Available at 7", //TODO: temp - will come from backend
                         style: isSelected
                             ? Theme.of(context).textTheme.headline4.copyWith(
                                   fontSize: 13,
@@ -560,7 +578,7 @@ class _SearchDoctorState extends State<SearchDoctor> {
                                 ),
                       ) //TODO: to dynamic RIGHT NOW!!!!!
                     : Text(
-                        'TIME',
+                        'TIME', //TODO: temp - will come from backend
                         style: isSelected
                             ? Theme.of(context).textTheme.headline4.copyWith(
                                   fontSize: 13,

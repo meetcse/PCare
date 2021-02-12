@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
-import 'package:pcare/routes/animation_route.dart';
-import 'package:pcare/routes/routes.dart';
 import 'package:pcare/store/patients/patient_home_controller.dart';
+import 'package:pcare/ui/Registeration/sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PatientDrawerWidget extends StatefulWidget {
@@ -79,20 +79,14 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
                       prefs.setBool(Preferences.isLoggedIn, false);
                       //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
                       //LOGIN DURING API
-                      Navigator.of(context).pushAndRemoveUntil(
-                          AnimationRoute(builder: (context) {
-                        return routes['/sign_in'](context);
-                      }), (route) => false);
+                      PageUtils.pushPageAndRemoveAll(Signin());
                     } else if (patientController.drawerItems[index]
                             ['navigateTo'] !=
                         '') {
-                      Navigator.of(context)
-                          .push(AnimationRoute(builder: (context) {
-                        return routes[patientController.drawerItems[index]
-                            ['navigateTo']](context);
-                      }));
+                      PageUtils.pushPage(
+                          patientController.drawerItems[index]['navigateTo']);
                     } else {
-                      Navigator.of(context).pop();
+                      PageUtils.popCurrentPage();
                     }
                   },
                   title: Text(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/preferences.dart';
-import 'package:pcare/routes/animation_route.dart';
-import 'package:pcare/routes/routes.dart';
+
+import 'package:pcare/ui/Registeration/sign_in.dart';
+import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -10,21 +12,10 @@ class SplashScreen extends StatelessWidget {
       SharedPreferences _prefs = await SharedPreferences.getInstance();
       if (_prefs.getBool(Preferences.isLoggedIn) == null ||
           !_prefs.getBool(Preferences.isLoggedIn)) {
-        Navigator.pushReplacement(
-          context,
-          AnimationRoute(builder: (context) {
-            return routes['/sign_in'](context);
-          }),
-        );
+        PageUtils.pushPageAndRemoveCurrentPage(Signin());
       } else {
         //TODO: Navigate after checking doctor or patient
-
-        Navigator.pushReplacement(
-          context,
-          AnimationRoute(builder: (context) {
-            return routes['/home_page'](context);
-          }),
-        );
+        PageUtils.pushPageAndRemoveCurrentPage(HomePage());
       }
     });
   }

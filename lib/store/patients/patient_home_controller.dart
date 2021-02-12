@@ -1,5 +1,11 @@
 import 'package:get/get.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/ui/patient/HomePage.dart';
+import 'package:pcare/ui/patient/appointments/my_appointments.dart';
+import 'package:pcare/ui/patient/appointments/search_doctor.dart';
+import 'package:pcare/ui/patient/current_treatment.dart';
+import 'package:pcare/ui/patient/patient_todos.dart';
+import 'package:pcare/ui/patient/wishlist.dart';
 
 class PatientHomeController extends GetxController {
   List<Map<String, dynamic>> drawerItems = [
@@ -7,37 +13,37 @@ class PatientHomeController extends GetxController {
       "change": true,
       "id": UniversalStrings.home,
       "name": UniversalStrings.home,
-      "navigateTo": '/home_page',
+      "navigateTo": HomePage(),
     },
     {
       "change": false,
       "id": UniversalStrings.bookAppointmentId,
       "name": UniversalStrings.bookAppointment,
-      "navigateTo": '/search_doctor',
+      "navigateTo": SearchDoctor(),
     },
     {
       "change": false,
       "id": UniversalStrings.myAppointmentsId,
       "name": UniversalStrings.myAppointments,
-      "navigateTo": '/my_appointments',
+      "navigateTo": MyAppointments(),
     },
     {
       "change": false,
       "id": UniversalStrings.wishlistId,
       "name": UniversalStrings.wishlist,
-      "navigateTo": '/wishlist',
+      "navigateTo": Wishlist(),
     },
     {
       "change": false,
       "id": UniversalStrings.currentTreatmentId,
       "name": UniversalStrings.currentTreatment,
-      "navigateTo": '/current_treatment',
+      "navigateTo": CurrentTreatment(),
     },
     {
       "change": true,
       "id": UniversalStrings.todosId,
       "name": UniversalStrings.todos,
-      "navigateTo": '/patient_todos',
+      "navigateTo": PatientTodos(),
     },
     {
       "change": false,

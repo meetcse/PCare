@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pcare/routes/routes.dart';
+import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:pcare/constants/app_theme.dart';
 import 'package:pcare/ui/splash_screen/splash_screen.dart';
@@ -14,10 +14,10 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'P Care',
-      routes: routes,
+
       theme: CustomTheme.customTheme(context),
       // onGenerateRoute: (settings) {
       //   print("HELLO");

@@ -64,6 +64,7 @@ class ChipThreeSectionWidget extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyText1,
+                textAlign: TextAlign.center,
               ),
             ),
           ],
