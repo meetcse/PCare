@@ -63,4 +63,10 @@ class UniversalStrings {
 
   static const String specialist = "specialist";
   static const String at = "At";
+
+  //doctor profile
+  static const String generallyAvail = "Generally Availables on :";
+  static const String youCanMeetMe = "You Can Meet Me At :";
+  static const String instantBook = "Book Instant";
+  static const String bookNow = "Book Now";
 }
