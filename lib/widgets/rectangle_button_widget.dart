@@ -12,7 +12,7 @@ class RectangleButtonWidget extends StatelessWidget {
   RectangleButtonWidget(
       {this.onPressed,
       this.childText,
-      this.width = 80,
+      this.width,
       this.isImage = false,
       this.image,
       this.imageInsideWidth = 180,
