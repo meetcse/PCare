@@ -69,4 +69,9 @@ class UniversalStrings {
   static const String youCanMeetMe = "You Can Meet Me At :";
   static const String instantBook = "Book Instant";
   static const String bookNow = "Book Now";
+
+  //select appoint date
+  static const String selectDate = "Select Date";
+  static const String selectAnyOneDate =
+      "Please Select any one date to book an appointment";
 }

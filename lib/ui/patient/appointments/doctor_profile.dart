@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/ui/patient/appointments/select_appointment_day.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/chip_widget.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
@@ -50,7 +52,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
           _buildButton(
             UniversalStrings.bookNow,
             () {
-              //TODO: Add functionality
+              _gotoSelectAppointmentDayScreen();
             },
           ),
         ],
@@ -286,5 +288,13 @@ class _DoctorProfileState extends State<DoctorProfile> {
       _splittedString = workingDay.split(',');
     }
     return _splittedString;
+  }
+
+  void _gotoSelectAppointmentDayScreen() {
+    PageUtils.pushPage(
+      SelectAppointmentDay(
+        doctorDetails: widget.doctorDetails,
+      ),
+    );
   }
 }
