@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
-import 'package:pcare/routes/animation_route.dart';
-import 'package:pcare/routes/routes.dart';
 import 'package:pcare/store/login/registration_controller.dart';
+import 'package:pcare/ui/Registeration/doctor_registration.dart';
+import 'package:pcare/ui/Registeration/receptionist_registration.dart';
+import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
@@ -20,7 +22,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   String _date;
-  String _userType = UniversalStrings.patientRadioButton;
+  String _userType = UniversalStrings.doctorRadioButton;
 
   List<Map<String, dynamic>> _registrationList;
   RegistrationController registrationController =
@@ -164,14 +166,11 @@ class _SignUpState extends State<SignUp> {
                 Container(
                   padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
                   child: RectangleButtonWidget(
-                    childText:
-                        _userType == UniversalStrings.patientRadioButton ||
-                                _userType == UniversalStrings.receptionist
-                            ? "REGISTER"
-                            : UniversalStrings.nextButtonText,
+                    childText: _userType == UniversalStrings.patientRadioButton
+                        ? "REGISTER"
+                        : UniversalStrings.nextButtonText,
                     onPressed: () {
-                      if (_userType == UniversalStrings.patientRadioButton ||
-                          _userType == UniversalStrings.receptionist) {
+                      if (_userType == UniversalStrings.patientRadioButton) {
                         if (registrationController.firstName.value == "" ||
                             registrationController.lastName.value == "" ||
                             registrationController.mobileNumber.value == "" ||
@@ -184,11 +183,12 @@ class _SignUpState extends State<SignUp> {
                           FlushbarMessage.errorMessage(
                               context, "Please enter every field");
                         } else {
-                          Navigator.of(context)
-                              .push(AnimationRoute(builder: (context) {
-                            return routes['/home_page'](context);
-                          }));
+                          PageUtils.pushPage(HomePage());
                         }
+                      } else if (_userType == UniversalStrings.receptionist) {
+                        PageUtils.pushPage(ReceptionistRegistration());
+                      } else {
+                        PageUtils.pushPage(DoctorRegistration());
                       }
                     },
                     width: Get.width,
