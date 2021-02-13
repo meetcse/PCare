@@ -60,4 +60,7 @@ class UniversalStrings {
   static const String groupValue = "userType";
   static const String nextButtonText = "NEXT";
   static const String userChoiceErrorMessage = "Please Select Something";
+
+  static const String specialist = "specialist";
+  static const String at = "At";
 }

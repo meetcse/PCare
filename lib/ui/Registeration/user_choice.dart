@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
-import 'package:pcare/routes/animation_route.dart';
-import 'package:pcare/routes/routes.dart';
+import 'package:pcare/ui/Registeration/sign_up.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/radio_button_widget.dart';
@@ -65,10 +65,7 @@ class _UserChoiceState extends State<UserChoice> {
                       FlushbarMessage.errorMessage(
                           context, UniversalStrings.userChoiceErrorMessage);
                     } else {
-                      Navigator.of(context)
-                          .push(AnimationRoute(builder: (context) {
-                        return routes['/sign_up'](context);
-                      }));
+                      PageUtils.pushPage(SignUp());
                     }
                   },
                   width: Get.width,

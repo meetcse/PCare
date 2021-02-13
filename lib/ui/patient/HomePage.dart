@@ -1,10 +1,14 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/strings.dart';
-import 'package:pcare/routes/animation_route.dart';
-import 'package:pcare/routes/routes.dart';
+import 'package:pcare/ui/patient/appointments/my_appointments.dart';
+import 'package:pcare/ui/patient/appointments/search_doctor.dart';
+import 'package:pcare/ui/patient/current_treatment.dart';
+import 'package:pcare/ui/patient/patient_todos.dart';
+import 'package:pcare/ui/patient/wishlist.dart';
 import 'package:pcare/widgets/drawer_icon_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/patients/patient_drawer_widget.dart';
@@ -38,35 +42,35 @@ class _HomePageState extends State<HomePage> {
       'name': UniversalStrings.bookAppointment,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.bookAppointmentIcon,
-      'navigateTo': '/search_doctor',
+      'navigateTo': SearchDoctor(),
     },
     {
       "id": UniversalStrings.myAppointmentsId,
       "name": UniversalStrings.myAppointments,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.myAppointments,
-      'navigateTo': '/my_appointments',
+      'navigateTo': MyAppointments(),
     },
     {
       "id": UniversalStrings.wishlistId,
       "name": UniversalStrings.wishlist,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.wishlistDoctors,
-      'navigateTo': '/wishlist',
+      'navigateTo': Wishlist(),
     },
     {
       "id": UniversalStrings.currentTreatmentId,
       "name": UniversalStrings.currentTreatment,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.currentTreatment,
-      'navigateTo': '/current_treatment',
+      'navigateTo': CurrentTreatment(),
     },
     {
       "id": UniversalStrings.todosId,
       "name": UniversalStrings.todos,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.todos,
-      'navigateTo': '/patient_todos',
+      'navigateTo': PatientTodos(),
     }
   ];
 
@@ -171,9 +175,7 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                Navigator.of(context).push(AnimationRoute(builder: (context) {
-                  return routes[_categories[index]['navigateTo']](context);
-                }));
+                PageUtils.pushPage(_categories[index]['navigateTo']);
               },
               child: SingleChipWidget(
                 childText: _categories[index]['name'],

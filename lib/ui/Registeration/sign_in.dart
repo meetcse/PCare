@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
-import 'package:pcare/routes/animation_route.dart';
-import 'package:pcare/routes/routes.dart';
 import 'package:pcare/store/login/login_controller.dart';
+import 'package:pcare/ui/Registeration/user_choice.dart';
+import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -226,11 +227,8 @@ class _SigninState extends State<Signin> {
                           .subtitle1
                           .copyWith(decoration: TextDecoration.underline),
                     ),
-                    onTap: () => {
-                      Navigator.of(context)
-                          .push(AnimationRoute(builder: (context) {
-                        return routes['/user_choice'](context);
-                      }))
+                    onTap: () {
+                      PageUtils.pushPage(UserChoice());
                     },
                   ),
                 ),
@@ -257,10 +255,8 @@ class _SigninState extends State<Signin> {
 
             //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
             //LOGIN DURING API
-            Navigator.of(context)
-                .pushReplacement(AnimationRoute(builder: (context) {
-              return routes['/home_page'](context);
-            }));
+            PageUtils.pushPageAndRemoveCurrentPage(HomePage());
+
             // FlushbarMessage.successMessage(context, " ");
           } else {
             FlushbarMessage.errorMessage(
