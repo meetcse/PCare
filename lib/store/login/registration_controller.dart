@@ -4,6 +4,7 @@ class RegistrationController extends GetxController {
   var firstNameError = ''.obs;
   var lastNameError = ''.obs;
   var mobileNumberError = ''.obs;
+  var passwordError = ''.obs;
   var reEnterPasswordError = ''.obs;
   var addressError = ''.obs;
   var genderError = ''.obs;
@@ -12,15 +13,12 @@ class RegistrationController extends GetxController {
   var firstName = ''.obs;
   var lastName = ''.obs;
   var mobileNumber = ''.obs;
+  var password = ''.obs;
   var reEnterPassword = ''.obs;
   var address = ''.obs;
   var gender = ''.obs;
   var dob = ''.obs;
   var allow = true.obs;
-
-  var passwordError = ''.obs;
-
-  var password = ''.obs;
 
   // bool get canForgetPassword => email.value.isNotEmpty;
 

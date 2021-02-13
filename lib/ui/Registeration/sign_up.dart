@@ -2,17 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/routes/animation_route.dart';
+import 'package:pcare/routes/routes.dart';
 import 'package:pcare/store/login/registration_controller.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
+import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
 class SignUp extends StatefulWidget {
+  // final String text;
+
+  // SignUp({Key key, @required this.text}) : super(key: key);
   @override
   _SignUpState createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
   String _date;
+  String _userType = UniversalStrings.patientRadioButton;
 
   List<Map<String, dynamic>> _registrationList;
   RegistrationController registrationController =
@@ -151,6 +159,40 @@ class _SignUpState extends State<SignUp> {
 
                 SizedBox(
                   height: 10,
+                ),
+
+                Container(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
+                  child: RectangleButtonWidget(
+                    childText:
+                        _userType == UniversalStrings.patientRadioButton ||
+                                _userType == UniversalStrings.receptionist
+                            ? "REGISTER"
+                            : UniversalStrings.nextButtonText,
+                    onPressed: () {
+                      if (_userType == UniversalStrings.patientRadioButton ||
+                          _userType == UniversalStrings.receptionist) {
+                        if (registrationController.firstName.value == "" ||
+                            registrationController.lastName.value == "" ||
+                            registrationController.mobileNumber.value == "" ||
+                            registrationController.password.value == "" ||
+                            registrationController.reEnterPassword.value ==
+                                "" ||
+                            registrationController.address.value == "" ||
+                            registrationController.gender.value == "" ||
+                            registrationController.dob.value == "") {
+                          FlushbarMessage.errorMessage(
+                              context, "Please enter every field");
+                        } else {
+                          Navigator.of(context)
+                              .push(AnimationRoute(builder: (context) {
+                            return routes['/home_page'](context);
+                          }));
+                        }
+                      }
+                    },
+                    width: Get.width,
+                  ),
                 ),
               ],
             ),
