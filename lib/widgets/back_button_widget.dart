@@ -6,7 +6,10 @@ import 'package:pcare/constants/dimensions.dart';
 
 class BackButtonWidget extends StatelessWidget {
   bool isBlackColor;
-  BackButtonWidget({this.isBlackColor = false});
+
+  /// On using on pressed dont use pop again.
+  Function onPressed;
+  BackButtonWidget({this.isBlackColor = false, this.onPressed});
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -18,6 +21,9 @@ class BackButtonWidget extends StatelessWidget {
           size: Dimensions.iconSize,
         ),
         onPressed: () {
+          if (onPressed != null) {
+            onPressed();
+          }
           PageUtils.popCurrentPage();
         });
   }

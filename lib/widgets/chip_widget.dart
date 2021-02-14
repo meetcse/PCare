@@ -5,9 +5,14 @@ import 'package:pcare/constants/app_colors.dart';
 class ChipWidget extends StatelessWidget {
   final List<String> labelList;
   final TextStyle labelStyle;
+  final TextStyle selectedLabelStyle;
+
   final Color chipBgColor;
+  bool isCompare;
+  final String compareText;
+  final Color chipSelectedBgColor;
   final Widget leadingWidget;
-  final Function onChipPressed;
+  final Function(String) onChipPressed;
 
   ChipWidget({
     @required this.labelList,
@@ -15,6 +20,10 @@ class ChipWidget extends StatelessWidget {
     this.chipBgColor,
     this.leadingWidget,
     this.onChipPressed,
+    this.isCompare = false,
+    this.chipSelectedBgColor,
+    this.selectedLabelStyle,
+    this.compareText,
   });
 
   @override
@@ -26,12 +35,24 @@ class ChipWidget extends StatelessWidget {
         children: List.generate(
           labelList.length,
           (index) {
+            bool isSelectd = false;
+            if (isCompare != null && isCompare) {
+              if (compareText == '' || compareText == null) {
+                isSelectd = false;
+              } else {
+                isSelectd =
+                    compareText.toLowerCase() == labelList[index].toLowerCase();
+              }
+            } else {
+              isSelectd = false;
+            }
             return GestureDetector(
               onTap: () {
-                return onChipPressed(index);
+                return onChipPressed(labelList[index]);
               },
               child: _buildChip(
                 labelList[index],
+                isSelectd,
               ),
             );
           },
@@ -40,14 +61,16 @@ class ChipWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildChip(String label) {
+  Widget _buildChip(String label, bool isSelected) {
     return Chip(
       label: Text(
         label,
-        style: labelStyle ??
-            Theme.of(Get.context).textTheme.button.copyWith(
-                  fontSize: 12,
-                ),
+        style: isSelected != null && isSelected
+            ? selectedLabelStyle
+            : labelStyle ??
+                Theme.of(Get.context).textTheme.button.copyWith(
+                      fontSize: 12,
+                    ),
       ),
       elevation: 2,
       labelPadding: const EdgeInsets.only(
@@ -62,7 +85,9 @@ class ChipWidget extends StatelessWidget {
         ),
       ),
       avatar: leadingWidget ?? null,
-      backgroundColor: chipBgColor ?? UniversalColors.gradientColorStart,
+      backgroundColor: isSelected != null && isSelected
+          ? chipSelectedBgColor
+          : chipBgColor ?? UniversalColors.gradientColorStart,
     );
   }
 }
