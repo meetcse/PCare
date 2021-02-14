@@ -4,6 +4,7 @@ import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/store/patients/appointments/select_appointment_day_controller.dart';
+import 'package:pcare/ui/patient/appointments/select_appointment_time.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/chip_widget.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
@@ -27,6 +28,7 @@ class SelectAppointmentDay extends StatelessWidget {
   Widget build(BuildContext context) {
     _loadDates();
     return Scaffold(
+      backgroundColor: UniversalColors.whiteColor,
       appBar: MainAppBarWidget(
         title: UniversalStrings.selectDate,
         leading: BackButtonWidget(
@@ -50,30 +52,39 @@ class SelectAppointmentDay extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //text - select any one date
-          Text(
-            UniversalStrings.selectAnyOneDate,
-            style: Theme.of(Get.context).textTheme.headline4,
+    return LayoutBuilder(builder: (context, constraints) {
+      return SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: IntrinsicHeight(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //text - select any one date
+                  Text(
+                    UniversalStrings.selectAnyOneDate,
+                    style: Theme.of(Get.context).textTheme.headline4,
+                  ),
+
+                  SizedBox(
+                    height: 20,
+                  ),
+
+                  //build dates
+                  Expanded(child: _buildDates()),
+
+                  //next button
+                  _buildNextButton(),
+                ],
+              ),
+            ),
           ),
-
-          SizedBox(
-            height: 20,
-          ),
-
-          //build dates
-          Expanded(child: _buildDates()),
-
-          //next button
-          _buildNextButton(),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 
   Widget _buildNextButton() {
@@ -83,7 +94,9 @@ class SelectAppointmentDay extends StatelessWidget {
         if (controller.selectedDay.value == '' ||
             controller.selectedDay.value == null) {
         } else {
-          //TODO: Add functionality
+          PageUtils.pushPage(SelectAppointmentTime(
+            doctorDetails: doctorDetails,
+          ));
         }
       },
     );

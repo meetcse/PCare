@@ -23,6 +23,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: _buildBookButton(),
+      backgroundColor: UniversalColors.whiteColor,
       appBar: _buildAppBar(),
       body: _buildChildWidget(),
     );
@@ -36,6 +37,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
         top: 8,
         bottom: 8,
       ),
+      color: Colors.transparent,
       height: 50,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
