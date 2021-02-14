@@ -5,15 +5,11 @@ import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/store/login/doctor_registration_controller.dart';
 import 'package:pcare/ui/Registeration/doctor_registration_2.dart';
-import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
 class DoctorRegistration extends StatefulWidget {
-  // final String text;
-
-  // SignUp({Key key, @required this.text}) : super(key: key);
   @override
   _DoctorRegistrationState createState() => _DoctorRegistrationState();
 }
@@ -98,13 +94,12 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
                   child: RectangleButtonWidget(
                     childText: UniversalStrings.nextButtonText,
                     onPressed: () {
-                      //TODO:Please uncomment it after you develop related screens
-                      // if (registrationController.isAnyFieldEmpty()) {
-                      //   FlushbarMessage.errorMessage(
-                      //       context, "Please enter your details properly");
-                      // } else {
+                      if (registrationController.isAnyFieldEmpty()) {
+                        FlushbarMessage.errorMessage(
+                            context, "Please enter your details properly");
+                      } else {
                         PageUtils.pushPage(DoctorRegistration2());
-                      // }
+                      }
                     },
                     width: Get.width,
                   ),

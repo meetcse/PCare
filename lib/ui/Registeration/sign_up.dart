@@ -13,16 +13,15 @@ import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
 class SignUp extends StatefulWidget {
-  // final String text;
+  String userType;
 
-  // SignUp({Key key, @required this.text}) : super(key: key);
+  SignUp({@required this.userType});
   @override
   _SignUpState createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
   String _date;
-  String _userType = UniversalStrings.doctorRadioButton;
 
   List<Map<String, dynamic>> _registrationList;
   RegistrationController registrationController =
@@ -166,29 +165,34 @@ class _SignUpState extends State<SignUp> {
                 Container(
                   padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
                   child: RectangleButtonWidget(
-                    childText: _userType == UniversalStrings.patientRadioButton
-                        ? "REGISTER"
-                        : UniversalStrings.nextButtonText,
+                    childText:
+                        widget.userType == UniversalStrings.patientRadioButton
+                            ? "REGISTER"
+                            : UniversalStrings.nextButtonText,
                     onPressed: () {
-                      if (_userType == UniversalStrings.patientRadioButton) {
-                        if (registrationController.firstName.value == "" ||
-                            registrationController.lastName.value == "" ||
-                            registrationController.mobileNumber.value == "" ||
-                            registrationController.password.value == "" ||
-                            registrationController.reEnterPassword.value ==
-                                "" ||
-                            registrationController.address.value == "" ||
-                            registrationController.gender.value == "" ||
-                            registrationController.dob.value == "") {
+                      if (widget.userType ==
+                          UniversalStrings.patientRadioButton) {
+                        if (!registrationController.validateForm()) {
                           FlushbarMessage.errorMessage(
-                              context, "Please enter every field");
+                              context, "Please enter every field properly");
                         } else {
                           PageUtils.pushPage(HomePage());
                         }
-                      } else if (_userType == UniversalStrings.receptionist) {
-                        PageUtils.pushPage(ReceptionistRegistration());
+                      } else if (widget.userType ==
+                          UniversalStrings.receptionist) {
+                        if (!registrationController.validateForm()) {
+                          FlushbarMessage.errorMessage(
+                              context, "Please enter every field properly");
+                        } else {
+                          PageUtils.pushPage(ReceptionistRegistration());
+                        }
                       } else {
-                        PageUtils.pushPage(DoctorRegistration());
+                        if (!registrationController.validateForm()) {
+                          FlushbarMessage.errorMessage(
+                              context, "Please enter every field properly");
+                        } else {
+                          PageUtils.pushPage(DoctorRegistration());
+                        }
                       }
                     },
                     width: Get.width,
