@@ -10,6 +10,7 @@ class UniversalColors {
   static const Color gradientColorEnd2 = Color(0xff7bc6cc);
 
   static const Color lightBlue = Color(0xff5FE5BC);
+  static const Color darkBlue = Color(0xff0D47A1);
   static const Color black = Color(0xff3E3E3E);
   static const Color lightGrey = Color(0xffEBEBEB);
   static const Color errorGradientStart = Color(0xffef5350);

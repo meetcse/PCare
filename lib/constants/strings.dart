@@ -78,4 +78,10 @@ class UniversalStrings {
   //select appoint time
   static const String selectTime = "Select Time";
   static const String selectYourTime = "Please Select your favourable time";
+  static const String congratulations = "Congratulations";
+  static const String yourAppointmentIsBooked =
+      "Your Appointment is booked with";
+  static const String onText = "On";
+  static const String myAppointment = "My Appointments";
+  static const String between = "between";
 }

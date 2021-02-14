@@ -6,17 +6,20 @@ class RectangleButtonWidget extends StatelessWidget {
   final String childText;
   final double width;
   final bool isImage;
+  final bool isColor;
   final String image;
   final double imageOutsideBorderWidth;
   final double imageInsideWidth;
-  RectangleButtonWidget(
-      {this.onPressed,
-      this.childText,
-      this.width,
-      this.isImage = false,
-      this.image,
-      this.imageInsideWidth = 180,
-      this.imageOutsideBorderWidth = 200});
+  RectangleButtonWidget({
+    this.onPressed,
+    this.childText,
+    this.width,
+    this.isImage = false,
+    this.image,
+    this.imageInsideWidth = 180,
+    this.imageOutsideBorderWidth = 200,
+    this.isColor = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +30,12 @@ class RectangleButtonWidget extends StatelessWidget {
         // color: Colors.red,
         decoration: isImage
             ? BoxDecoration()
-            : BoxDecoration(
-                gradient: UniversalColors.primaryGradient,
-                borderRadius: BorderRadius.circular(4),
-              ),
+            : isColor
+                ? BoxDecoration(
+                    gradient: UniversalColors.primaryGradient,
+                    borderRadius: BorderRadius.circular(4),
+                  )
+                : BoxDecoration(),
         margin: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Center(
@@ -49,7 +54,12 @@ class RectangleButtonWidget extends StatelessWidget {
                 )
               : Text(
                   childText != null ? childText : "",
-                  style: Theme.of(context).textTheme.button,
+                  style: isColor
+                      ? Theme.of(context).textTheme.button
+                      : Theme.of(context).textTheme.button.copyWith(
+                            color: UniversalColors.darkBlue,
+                            fontWeight: FontWeight.w500,
+                          ),
                 ),
         ),
       ),
