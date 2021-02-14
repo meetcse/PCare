@@ -98,12 +98,13 @@ class _DoctorRegistrationState extends State<DoctorRegistration> {
                   child: RectangleButtonWidget(
                     childText: UniversalStrings.nextButtonText,
                     onPressed: () {
-                      if (registrationController.isAnyFieldEmpty()) {
-                        FlushbarMessage.errorMessage(
-                            context, "Please enter your details properly");
-                      } else {
+                      //TODO:Please uncomment it after you develop related screens
+                      // if (registrationController.isAnyFieldEmpty()) {
+                      //   FlushbarMessage.errorMessage(
+                      //       context, "Please enter your details properly");
+                      // } else {
                         PageUtils.pushPage(DoctorRegistration2());
-                      }
+                      // }
                     },
                     width: Get.width,
                   ),

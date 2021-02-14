@@ -28,7 +28,7 @@ class ChipWidget extends StatelessWidget {
           (index) {
             return GestureDetector(
               onTap: () {
-                return onChipPressed();
+                return onChipPressed(index);
               },
               child: _buildChip(
                 labelList[index],
