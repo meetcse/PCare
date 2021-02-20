@@ -4,6 +4,7 @@ class RegistrationController extends GetxController {
   var firstNameError = ''.obs;
   var lastNameError = ''.obs;
   var mobileNumberError = ''.obs;
+  var passwordError = ''.obs;
   var reEnterPasswordError = ''.obs;
   var addressError = ''.obs;
   var genderError = ''.obs;
@@ -12,15 +13,12 @@ class RegistrationController extends GetxController {
   var firstName = ''.obs;
   var lastName = ''.obs;
   var mobileNumber = ''.obs;
+  var password = ''.obs;
   var reEnterPassword = ''.obs;
   var address = ''.obs;
   var gender = ''.obs;
   var dob = ''.obs;
   var allow = true.obs;
-
-  var passwordError = ''.obs;
-
-  var password = ''.obs;
 
   // bool get canForgetPassword => email.value.isNotEmpty;
 
@@ -29,6 +27,29 @@ class RegistrationController extends GetxController {
   //   // _setupValidations();
   //   validateEmail(email.value);
   // }
+
+  bool validateForm() {
+    if (firstName.value == "" ||
+        lastName.value == "" ||
+        mobileNumber.value == "" ||
+        password.value == "" ||
+        reEnterPassword.value == "" ||
+        address.value == "" ||
+        gender.value == "" ||
+        dob.value == "" ||
+        firstNameError.value != null ||
+        lastNameError.value != null ||
+        mobileNumberError.value != null ||
+        passwordError.value != null ||
+        reEnterPasswordError.value != null ||
+        addressError.value != null ||
+        genderError.value != null ||
+        dobError.value != null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   bool validateField(
     String value,
@@ -43,6 +64,8 @@ class RegistrationController extends GetxController {
     address.value = value;
     if (!validateField(value)) {
       addressError.value = 'Address is required';
+    } else {
+      addressError.value = null;
     }
   }
 
@@ -50,6 +73,8 @@ class RegistrationController extends GetxController {
     gender.value = value;
     if (!validateField(value)) {
       genderError.value = 'Gender is required';
+    } else {
+      genderError.value = null;
     }
   }
 
@@ -57,6 +82,8 @@ class RegistrationController extends GetxController {
     dob.value = value;
     if (!validateField(value)) {
       dobError.value = 'DOB is required';
+    } else {
+      dobError.value = null;
     }
   }
 
@@ -70,13 +97,17 @@ class RegistrationController extends GetxController {
     firstName.value = value;
     if (!validateField(value)) {
       firstNameError.value = 'First Name is required';
+    } else {
+      firstNameError.value = null;
     }
   }
 
   void setLastName(String value) {
     lastName.value = value;
     if (!validateField(value)) {
-      firstNameError.value = 'Last Name is required';
+      lastNameError.value = 'Last Name is required';
+    } else {
+      lastNameError.value = null;
     }
   }
 

@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/store/login/registration_controller.dart';
+import 'package:pcare/ui/Registeration/doctor_registration.dart';
+import 'package:pcare/ui/Registeration/receptionist_registration.dart';
+import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
+import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
 class SignUp extends StatefulWidget {
+  String userType;
+
+  SignUp({@required this.userType});
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -151,6 +160,43 @@ class _SignUpState extends State<SignUp> {
 
                 SizedBox(
                   height: 10,
+                ),
+
+                Container(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
+                  child: RectangleButtonWidget(
+                    childText:
+                        widget.userType == UniversalStrings.patientRadioButton
+                            ? "REGISTER"
+                            : UniversalStrings.nextButtonText,
+                    onPressed: () {
+                      if (widget.userType ==
+                          UniversalStrings.patientRadioButton) {
+                        if (!registrationController.validateForm()) {
+                          FlushbarMessage.errorMessage(
+                              context, "Please enter every field properly");
+                        } else {
+                          PageUtils.pushPage(HomePage());
+                        }
+                      } else if (widget.userType ==
+                          UniversalStrings.receptionist) {
+                        if (!registrationController.validateForm()) {
+                          FlushbarMessage.errorMessage(
+                              context, "Please enter every field properly");
+                        } else {
+                          PageUtils.pushPage(ReceptionistRegistration());
+                        }
+                      } else {
+                        if (!registrationController.validateForm()) {
+                          FlushbarMessage.errorMessage(
+                              context, "Please enter every field properly");
+                        } else {
+                          PageUtils.pushPage(DoctorRegistration());
+                        }
+                      }
+                    },
+                    width: Get.width,
+                  ),
                 ),
               ],
             ),

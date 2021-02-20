@@ -65,7 +65,7 @@ class _UserChoiceState extends State<UserChoice> {
                       FlushbarMessage.errorMessage(
                           context, UniversalStrings.userChoiceErrorMessage);
                     } else {
-                      PageUtils.pushPage(SignUp());
+                      PageUtils.pushPage(SignUp(userType: _userType));
                     }
                   },
                   width: Get.width,
