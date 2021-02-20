@@ -40,8 +40,9 @@ class ChipWidget extends StatelessWidget {
               if (compareText == '' || compareText == null) {
                 isSelectd = false;
               } else {
-                isSelectd =
-                    compareText.toLowerCase() == labelList[index].toLowerCase();
+                isSelectd = compareText
+                    .toLowerCase()
+                    .contains(labelList[index].toLowerCase());
               }
             } else {
               isSelectd = false;

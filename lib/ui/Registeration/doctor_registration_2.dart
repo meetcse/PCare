@@ -27,15 +27,13 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
 
   String isSpecialist = "";
 
-  String selectedDay = "";
+  List<String> selectedDay = List<String>();
 
   String typeOfSpecialist = "";
 
   List<String> timings = [];
 
   List<int> weekDayNumber = [];
-
-  List<String> finalSelectedWeekDays = [];
 
   List<String> weekdays = [
     "Sunday",
@@ -116,83 +114,53 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
         });
   }
 
-  buildWeekDayList(String weekDay) {
-    if (weekDay == "Sunday") {
-      if (!weekDayNumber.contains(0)) {
+  buildWeekDayList() {
+    print("SELECTED 1: " + selectedDay.toString());
+    weekDayNumber.clear();
+    selectedDay.forEach((element) {
+      if (element == "Sunday") {
         weekDayNumber.add(0);
-      } else {
-        var index = weekDayNumber.indexOf(0);
-        weekDayNumber.removeAt(index);
-      }
-    } else if (weekDay == "Monday") {
-      if (!weekDayNumber.contains(1)) {
+      } else if (element == "Monday") {
         weekDayNumber.add(1);
-      } else {
-        var index = weekDayNumber.indexOf(1);
-        weekDayNumber.removeAt(index);
-      }
-    } else if (weekDay == "Tuesday") {
-      if (!weekDayNumber.contains(2)) {
+      } else if (element == "Tuesday") {
         weekDayNumber.add(2);
-      } else {
-        var index = weekDayNumber.indexOf(2);
-        weekDayNumber.removeAt(index);
-      }
-    } else if (weekDay == "Wednesday") {
-      if (!weekDayNumber.contains(3)) {
+      } else if (element == "Wednesday") {
         weekDayNumber.add(3);
-      } else {
-        var index = weekDayNumber.indexOf(3);
-        weekDayNumber.removeAt(index);
-      }
-    } else if (weekDay == "Thursday") {
-      if (!weekDayNumber.contains(4)) {
+      } else if (element == "Thursday") {
         weekDayNumber.add(4);
-      } else {
-        var index = weekDayNumber.indexOf(4);
-        weekDayNumber.removeAt(index);
-      }
-    } else if (weekDay == "Friday") {
-      if (!weekDayNumber.contains(5)) {
+      } else if (element == "Friday") {
         weekDayNumber.add(5);
-      } else {
-        var index = weekDayNumber.indexOf(5);
-        weekDayNumber.removeAt(index);
-      }
-    } else if (weekDay == "Saturday") {
-      if (!weekDayNumber.contains(6)) {
+      } else if (element == "Saturday") {
         weekDayNumber.add(6);
-      } else {
-        var index = weekDayNumber.indexOf(6);
-        weekDayNumber.removeAt(index);
       }
-    }
+    });
     weekDayNumber.sort();
 
 //converting number to string weekDay
-    finalSelectedWeekDays.clear();
+    print("SELECTED 2: " + selectedDay.toString());
+    selectedDay.clear();
     weekDayNumber.forEach((element) {
       switch (element) {
         case 0:
-          finalSelectedWeekDays.add("Sunday");
+          selectedDay.add("Sunday");
           break;
         case 1:
-          finalSelectedWeekDays.add("Monday");
+          selectedDay.add("Monday");
           break;
         case 2:
-          finalSelectedWeekDays.add("Tuesday");
+          selectedDay.add("Tuesday");
           break;
         case 3:
-          finalSelectedWeekDays.add("Wednesday");
+          selectedDay.add("Wednesday");
           break;
         case 4:
-          finalSelectedWeekDays.add("Thursday");
+          selectedDay.add("Thursday");
           break;
         case 5:
-          finalSelectedWeekDays.add("Friday");
+          selectedDay.add("Friday");
           break;
         case 6:
-          finalSelectedWeekDays.add("Saturday");
+          selectedDay.add("Saturday");
           break;
       }
     });
@@ -274,13 +242,26 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
                   labelList: weekdays,
                   chipBgColor: UniversalColors.doctorListBackgroundColor,
                   chipSelectedBgColor: UniversalColors.gradientColorStart,
+                  selectedLabelStyle:
+                      Theme.of(Get.context).textTheme.button.copyWith(
+                            fontSize: 14,
+                            color: UniversalColors.whiteColor,
+                            fontWeight: FontWeight.w300,
+                          ),
+                  labelStyle:
+                      Theme.of(Get.context).textTheme.headline6.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w300,
+                          ),
                   isCompare: true,
-                  compareText: selectedDay,
+                  compareText: selectedDay.toString(),
                   onChipPressed: (weekDay) {
-                    setState(() {
-                      selectedDay = weekDay;
-                    });
-                    buildWeekDayList(weekDay);
+                    if (selectedDay.contains(weekDay)) {
+                      selectedDay.removeWhere((element) => element == weekDay);
+                    } else {
+                      selectedDay.add(weekDay);
+                    }
+                    setState(() {});
                   },
                 ),
 
@@ -321,8 +302,7 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
                         });
                       } else {
                         FlushbarMessage.errorMessage(context,
-                            """
-Sorry you cannot add more than 3 time slots""");
+                            "Sorry you cannot add more than 3 time slots");
                       }
                     },
                     width: Get.width,
@@ -349,7 +329,7 @@ Sorry you cannot add more than 3 time slots""");
                       if (isSpecialist == "Yes") {
                         typeOfSpecialist = specialistController.text;
                       }
-                      if (finalSelectedWeekDays.length == 0 ||
+                      if (selectedDay.length == 0 ||
                               timings.length == 0 ||
                               isSpecialist == "" ||
                               isSpecialist == "Yes"
@@ -358,7 +338,9 @@ Sorry you cannot add more than 3 time slots""");
                         FlushbarMessage.errorMessage(
                             context, "Please enter your details properly");
                       } else {
-                        PageUtils.pushPage(HomePage());
+                        buildWeekDayList();
+                        print("selected " + selectedDay.toString());
+                        // PageUtils.pushPage(HomePage());
                       }
                     },
                     width: Get.width,
