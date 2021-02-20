@@ -340,7 +340,7 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
                       } else {
                         buildWeekDayList();
                         print("selected " + selectedDay.toString());
-                        // PageUtils.pushPage(HomePage());
+                        PageUtils.pushPage(HomePage());
                       }
                     },
                     width: Get.width,
