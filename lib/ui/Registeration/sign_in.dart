@@ -261,7 +261,7 @@ class _SigninState extends State<Signin> {
               prefs.setString(Preferences.userType, Preferences.patient);
             }
 
-            controller.reset();
+            // controller.reset();
 
             if (prefs.getString(Preferences.userType) == Preferences.doctor) {
               PageUtils.pushPageAndRemoveCurrentPage(DoctorHomePage());
@@ -270,6 +270,11 @@ class _SigninState extends State<Signin> {
               //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
               //LOGIN DURING API
               PageUtils.pushPageAndRemoveCurrentPage(HomePage());
+            } else {
+              FlushbarMessage.errorMessage(
+                context,
+                "No Valid User",
+              );
             }
 
             // FlushbarMessage.successMessage(context, " ");
