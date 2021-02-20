@@ -6,8 +6,8 @@ import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/ui/patient/appointments/my_appointments.dart';
 import 'package:pcare/ui/patient/appointments/search_doctor.dart';
-import 'package:pcare/ui/patient/current_treatment.dart';
 import 'package:pcare/ui/patient/patient_todos.dart';
+import 'package:pcare/ui/patient/view_appointments/view_single_appointment.dart';
 import 'package:pcare/ui/patient/wishlist.dart';
 import 'package:pcare/widgets/drawer_icon_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
       "name": UniversalStrings.currentTreatment,
       "color": UniversalColors.gradientColorStart,
       "icon": UniversalIcons.currentTreatment,
-      'navigateTo': CurrentTreatment(),
+      'navigateTo': ViewSingleAppointment(),
     },
     {
       "id": UniversalStrings.todosId,

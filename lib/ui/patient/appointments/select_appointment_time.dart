@@ -16,14 +16,28 @@ import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 
-class SelectAppointmentTime extends StatelessWidget {
+class SelectAppointmentTime extends StatefulWidget {
   final Map<String, dynamic> doctorDetails;
   SelectAppointmentTime({this.doctorDetails});
+
+  @override
+  _SelectAppointmentTimeState createState() => _SelectAppointmentTimeState();
+}
+
+class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
   ConfettiController _confettiControllerCenter;
+
   SelectAppointmentTimeController controller =
       Get.put(SelectAppointmentTimeController());
 
   SelectAppointmentDayController dayController = Get.find();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _confettiControllerCenter.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +110,7 @@ class SelectAppointmentTime extends StatelessWidget {
       builder: (sATController) {
         return sATController.isTimeLoaded.value
             ? ChipWidget(
-                labelList: doctorDetails['working_hour'],
+                labelList: widget.doctorDetails['working_hour'],
                 onChipPressed: (value) {
                   sATController.setSelectedTime(value);
                 },
@@ -151,7 +165,7 @@ class SelectAppointmentTime extends StatelessWidget {
         children: [
           //doc name
           TextSpan(
-            text: doctorDetails['name'] + ' ',
+            text: widget.doctorDetails['name'] + ' ',
             style: Theme.of(Get.context).textTheme.headline4.copyWith(
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -240,7 +254,7 @@ class SelectAppointmentTime extends StatelessWidget {
           Radius.circular(100),
         ),
         child: CachedNetworkImage(
-          imageUrl: doctorDetails['image'],
+          imageUrl: widget.doctorDetails['image'],
           progressIndicatorBuilder: (context, url, _) {
             return Center(
               child: CustomProgressIndicatorWidget(
@@ -256,7 +270,6 @@ class SelectAppointmentTime extends StatelessWidget {
     );
   }
 
-  //dialogs
   _showConfirmDialog() {
     showDialog(
       context: Get.context,
