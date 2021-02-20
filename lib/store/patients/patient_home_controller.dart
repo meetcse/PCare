@@ -3,8 +3,8 @@ import 'package:pcare/constants/strings.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/ui/patient/appointments/my_appointments.dart';
 import 'package:pcare/ui/patient/appointments/search_doctor.dart';
-import 'package:pcare/ui/patient/current_treatment.dart';
 import 'package:pcare/ui/patient/patient_todos.dart';
+import 'package:pcare/ui/patient/view_appointments/view_single_appointment.dart';
 import 'package:pcare/ui/patient/wishlist.dart';
 
 class PatientHomeController extends GetxController {
@@ -37,7 +37,7 @@ class PatientHomeController extends GetxController {
       "change": false,
       "id": UniversalStrings.currentTreatmentId,
       "name": UniversalStrings.currentTreatment,
-      "navigateTo": CurrentTreatment(),
+      "navigateTo": ViewSingleAppointment(),
     },
     {
       "change": true,

@@ -7,6 +7,7 @@ import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/ui/Registeration/user_choice.dart';
+import 'package:pcare/ui/doctor/doctor_home_page.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
@@ -251,11 +252,25 @@ class _SigninState extends State<Signin> {
           if (controller.canLogin) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setBool(Preferences.isLoggedIn, true);
+
+            if (controller.email.value == "doctor@doctor.com" &&
+                controller.password.value == "doc123") {
+              prefs.setString(Preferences.userType, Preferences.doctor);
+            } else if (controller.email.value == "p@patient.com" &&
+                controller.password.value == "pat123") {
+              prefs.setString(Preferences.userType, Preferences.patient);
+            }
+
             controller.reset();
 
-            //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
-            //LOGIN DURING API
-            PageUtils.pushPageAndRemoveCurrentPage(HomePage());
+            if (prefs.getString(Preferences.userType) == Preferences.doctor) {
+              PageUtils.pushPageAndRemoveCurrentPage(DoctorHomePage());
+            } else if (prefs.getString(Preferences.userType) ==
+                Preferences.patient) {
+              //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
+              //LOGIN DURING API
+              PageUtils.pushPageAndRemoveCurrentPage(HomePage());
+            }
 
             // FlushbarMessage.successMessage(context, " ");
           } else {

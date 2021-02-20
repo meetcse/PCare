@@ -10,6 +10,7 @@ class UniversalColors {
   static const Color gradientColorEnd2 = Color(0xff7bc6cc);
 
   static const Color lightBlue = Color(0xff5FE5BC);
+  static const Color darkBlue = Color(0xff0D47A1);
   static const Color black = Color(0xff3E3E3E);
   static const Color lightGrey = Color(0xffEBEBEB);
   static const Color errorGradientStart = Color(0xffef5350);
@@ -18,6 +19,9 @@ class UniversalColors {
   static const Color doctorListBackgroundColor = Color(0xffe0e0e0);
   static const Color specialistColor = Color(0xffffba00);
   static const Color darkBlack = Color(0xff080808);
+  static const Color yellow = Color(0xfffbc02D);
+
+  static const Color green = Color(0xff2EFF2E);
 
   static final Gradient primaryGradient = LinearGradient(
       colors: [gradientColorStart, gradientColorEnd],

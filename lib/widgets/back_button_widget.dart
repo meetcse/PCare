@@ -12,15 +12,15 @@ class BackButtonWidget extends StatelessWidget {
   BackButtonWidget({this.isBlackColor = false, this.onPressed});
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        icon: Icon(
+    return GestureDetector(
+        child: Icon(
           UniversalIcons.backArrow,
           color: !isBlackColor
               ? UniversalColors.whiteColor
               : UniversalColors.black,
           size: Dimensions.iconSize,
         ),
-        onPressed: () {
+        onTap: () {
           if (onPressed != null) {
             onPressed();
           }

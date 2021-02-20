@@ -74,4 +74,21 @@ class UniversalStrings {
   static const String selectDate = "Select Date";
   static const String selectAnyOneDate =
       "Please Select any one date to book an appointment";
+
+  //select appoint time
+  static const String selectTime = "Select Time";
+  static const String selectYourTime = "Please Select your favourable time";
+  static const String congratulations = "Congratulations";
+  static const String yourAppointmentIsBooked =
+      "Your Appointment is booked with";
+  static const String onText = "On";
+  static const String myAppointment = "My Appointments";
+  static const String between = "between";
+
+  //view appointment
+  static const String yourAppointment = "Your Appointment";
+  static const String yourAppointmentIs = "Your Appointment is";
+  static const String yourAppointmentTime = "Your Appointment Time is between";
+  static const String bookedOn = "Booked On";
+  static const String viewTreatment = "View Treatment";
 }

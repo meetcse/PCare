@@ -38,6 +38,7 @@ dependencies:
   cached_network_image: ^2.5.0
   matrix4_transform: ^1.1.7
   intl: ^0.16.1
+  confetti: ^0.5.4+1
 
 dev_dependencies:
   flutter_test:
