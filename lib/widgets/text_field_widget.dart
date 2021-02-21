@@ -16,6 +16,7 @@ class TextFieldWidget extends StatelessWidget {
   final List<TextInputFormatter> textInputFormatter;
   final EdgeInsets margin;
   final double width;
+  final Widget prefixIcon;
 
   TextFieldWidget(
       {@required this.labelText,
@@ -29,7 +30,8 @@ class TextFieldWidget extends StatelessWidget {
       this.margin,
       this.onTap,
       this.readOnly = false,
-      this.width});
+      this.width,
+      this.prefixIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -45,20 +47,20 @@ class TextFieldWidget extends StatelessWidget {
         controller: textEditingController,
         inputFormatters: textInputFormatter != null ? textInputFormatter : null,
         decoration: InputDecoration(
-          labelText: labelText ?? "",
-          labelStyle: Theme.of(context).textTheme.subtitle1,
-          errorText: isError ? errorText : null,
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: UniversalColors.gradientColorEnd, width: 2.0),
-            borderRadius:
-                BorderRadius.circular(Dimensions.textfieldBorderRadius),
-          ),
-          border: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(Dimensions.textfieldBorderRadius),
-          ),
-        ),
+            labelText: labelText ?? "",
+            labelStyle: Theme.of(context).textTheme.subtitle1,
+            errorText: isError ? errorText : null,
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                  color: UniversalColors.gradientColorEnd, width: 2.0),
+              borderRadius:
+                  BorderRadius.circular(Dimensions.textfieldBorderRadius),
+            ),
+            border: OutlineInputBorder(
+              borderRadius:
+                  BorderRadius.circular(Dimensions.textfieldBorderRadius),
+            ),
+            prefixIcon: prefixIcon),
       ),
     );
   }

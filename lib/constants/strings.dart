@@ -96,4 +96,6 @@ class UniversalStrings {
 
   static String yourTreatmentsAccToDate =
       "Your Treatments according to date are as below :";
+
+  static var searchPatient = "Search Patient";
 }
