@@ -5,4 +5,8 @@ class DoctorUniversalStrings {
   static const String nextAppointment = "Next";
   static const String age = "Age";
   static const String appointTime = "Appointment Time";
+
+  static var myPatients = "My Patients";
+
+  static var profile = "Profile";
 }

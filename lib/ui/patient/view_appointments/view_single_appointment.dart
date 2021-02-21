@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/ui/patient/view_appointments/view_treatment.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
@@ -95,7 +97,7 @@ class _ViewSingleAppointmentState extends State<ViewSingleAppointment> {
     return RectangleButtonWidget(
       childText: UniversalStrings.viewTreatment,
       onPressed: () {
-        //TODO:
+        PageUtils.pushPage(ViewTreatment());
       },
     );
   }
