@@ -206,7 +206,7 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
       onTap: onPressed,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //image
           _buildImage(imagePath),
@@ -227,7 +227,7 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
                     patientName,
                     style: Theme.of(context)
                         .textTheme
-                        .headline5
+                        .headline4
                         .copyWith(fontSize: 16),
                   ),
 
@@ -245,7 +245,7 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
                   ),
 
                   SizedBox(
-                    height: 8,
+                    height: 4,
                   ),
                   //Appointment time
                   Text(
@@ -309,9 +309,12 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
           // Spacer(),
 
           isRunning
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(
+                      height: 30,
+                    ),
                     _buildForwardIcon(),
                   ],
                 )
