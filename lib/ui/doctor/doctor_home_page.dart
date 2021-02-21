@@ -40,8 +40,8 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
     return CurvedNavigationBar(
       index: _page,
       height: 50,
-      backgroundColor: UniversalColors.whiteColor,
-      color: UniversalColors.doctorListBackgroundColor,
+      backgroundColor: UniversalColors.gradientColorStart.withOpacity(0.7),
+      color: UniversalColors.whiteColor,
       buttonBackgroundColor: UniversalColors.whiteColor,
       // key: _bottomNavigationKey,
       items: <Widget>[
@@ -65,7 +65,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
         _changePage(index);
         _pageController.animateToPage(
           _page,
-          duration: Duration(milliseconds: 250),
+          duration: Duration(milliseconds: 300),
           curve: Curves.easeInCubic,
         );
       },

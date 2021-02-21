@@ -57,9 +57,15 @@ class _ViewTreatmentState extends State<ViewTreatment> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              SizedBox(
+                height: 12,
+              ),
               Row(
                 children: [
-                  Expanded(child: Divider()),
+                  Expanded(
+                      child: Divider(
+                    endIndent: 8,
+                  )),
                   Text(
                     _treatmentDetails[index]["date"],
                     style: Theme.of(context).textTheme.headline4.copyWith(
@@ -67,8 +73,14 @@ class _ViewTreatmentState extends State<ViewTreatment> {
                           fontWeight: FontWeight.normal,
                         ),
                   ),
-                  Expanded(child: Divider()),
+                  Expanded(
+                      child: Divider(
+                    indent: 8,
+                  )),
                 ],
+              ),
+              SizedBox(
+                height: 12,
               ),
               buildAppointDetailsRow(
                   "Disease :", _treatmentDetails[index]["details"]["disease"]),
@@ -156,14 +168,14 @@ class _ViewTreatmentState extends State<ViewTreatment> {
             Divider(),
             buildAppointDetailsRow(
                 "Hospital :", _appointmentDetails["hospitalName"]),
-            SizedBox(height: 10),
+            SizedBox(height: 14),
             Text(
               UniversalStrings.yourTreatmentsAccToDate,
               textAlign: TextAlign.center,
               style:
                   Theme.of(context).textTheme.headline2.copyWith(fontSize: 22),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 4),
             buildListForTreatmentDetails(),
             SizedBox(
               height: 20,

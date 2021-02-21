@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/ui/Registeration/sign_up.dart';
@@ -20,7 +21,9 @@ class _UserChoiceState extends State<UserChoice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: UniversalColors.whiteColor,
       appBar: MainAppBarWidget(
+        appBarColorWhenIsColorFalse: UniversalColors.whiteColor,
         isColor: false,
         leading: BackButtonWidget(
           isBlackColor: true,
@@ -94,7 +97,7 @@ class _UserChoiceState extends State<UserChoice> {
   Widget _cardWidget({Widget child}) {
     return Card(
       child: child,
-      elevation: 5.0,
+      elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),

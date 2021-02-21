@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/store/login/registration_controller.dart';
@@ -9,6 +10,7 @@ import 'package:pcare/ui/Registeration/doctor_registration.dart';
 import 'package:pcare/ui/Registeration/receptionist_registration.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
+import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
@@ -123,6 +125,14 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: UniversalColors.whiteColor,
+      appBar: MainAppBarWidget(
+        appBarColorWhenIsColorFalse: UniversalColors.whiteColor,
+        isColor: false,
+        leading: BackButtonWidget(
+          isBlackColor: true,
+        ),
+      ),
       body: _buildChildWidget(),
     );
   }
@@ -132,13 +142,7 @@ class _SignUpState extends State<SignUp> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 20,
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 8),
-          child: BackButtonWidget(
-            isBlackColor: true,
-          ),
+          height: 10,
         ),
         Expanded(
           child: SingleChildScrollView(
@@ -152,9 +156,9 @@ class _SignUpState extends State<SignUp> {
                 //sign up text
                 _buildSignUpText(),
 
-                // SizedBox(
-                //   height: 12,
-                // ),
+                SizedBox(
+                  height: 20,
+                ),
                 //registration list
                 _buildList(),
 

@@ -84,6 +84,7 @@ class _MyAppointmentsState extends State<MyAppointments> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: UniversalColors.whiteColor,
       appBar: _buildAppBar(),
       body: _buildBody(),
     );
@@ -91,58 +92,68 @@ class _MyAppointmentsState extends State<MyAppointments> {
 
   Widget _buildBody() {
     return SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+      physics: BouncingScrollPhysics(),
+      child: Container(
+        padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
         child: ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: _appointmentDetails.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  PageUtils.pushPage(ViewTreatment());
-                },
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(child: Divider()),
-                        Text(
-                          _appointmentDetails[index]["date"],
-                          style: Theme.of(context).textTheme.headline4.copyWith(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                              ),
-                        ),
-                        Expanded(child: Divider()),
-                      ],
-                    ),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: _appointmentDetails[index]["details"].length,
-                        itemBuilder: (context, innerIndex) {
-                          return Column(
-                            children: [
-                              _buildDoctorsCard(
-                                  doctorName: _appointmentDetails[index]
-                                      ["details"][innerIndex]["docName"],
-                                  hospitalName: _appointmentDetails[index]
-                                      ["details"][innerIndex]["hospitalName"],
-                                  imageUrl: _appointmentDetails[index]
-                                      ["details"][innerIndex]["docImage"],
-                                  id: innerIndex.toString(),
-                                  appointmentTime: _appointmentDetails[index]
-                                          ["details"][innerIndex]
-                                      ["appointmentTime"],
-                                  status: _appointmentDetails[index]["details"]
-                                      [innerIndex]["status"])
-                            ],
-                          );
-                        })
-                  ],
-                ),
-              );
-            }));
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: _appointmentDetails.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                PageUtils.pushPage(ViewTreatment());
+              },
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Divider(
+                        endIndent: 8,
+                      )),
+                      Text(
+                        _appointmentDetails[index]["date"],
+                        style: Theme.of(context).textTheme.headline4.copyWith(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                      ),
+                      Expanded(
+                          child: Divider(
+                        indent: 8,
+                      )),
+                    ],
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _appointmentDetails[index]["details"].length,
+                    itemBuilder: (context, innerIndex) {
+                      return _buildDoctorsCard(
+                          doctorName: _appointmentDetails[index]["details"]
+                              [innerIndex]["docName"],
+                          hospitalName: _appointmentDetails[index]["details"]
+                              [innerIndex]["hospitalName"],
+                          imageUrl: _appointmentDetails[index]["details"]
+                              [innerIndex]["docImage"],
+                          id: innerIndex.toString(),
+                          appointmentTime: _appointmentDetails[index]["details"]
+                              [innerIndex]["appointmentTime"],
+                          status: _appointmentDetails[index]["details"]
+                              [innerIndex]["status"]);
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 
   Widget _buildAppBar() {
@@ -162,12 +173,12 @@ class _MyAppointmentsState extends State<MyAppointments> {
   }) {
     return Container(
       margin: const EdgeInsets.only(
-        left: 22,
-        right: 12,
-        top: 5,
+        left: 12,
+        // right: 4,
+        top: 16,
       ),
       decoration: BoxDecoration(
-        color: UniversalColors.doctorListBackgroundColor,
+        color: UniversalColors.doctorListBackgroundColor.withOpacity(0.5),
         borderRadius: BorderRadius.all(
           Radius.circular(14),
         ),

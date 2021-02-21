@@ -6,6 +6,7 @@ import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/chip_widget.dart';
+import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/radio_button_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
@@ -54,6 +55,14 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: UniversalColors.whiteColor,
+      appBar: MainAppBarWidget(
+        appBarColorWhenIsColorFalse: UniversalColors.whiteColor,
+        isColor: false,
+        leading: BackButtonWidget(
+          isBlackColor: true,
+        ),
+      ),
       body: _buildChildWidget(),
     );
   }
@@ -171,13 +180,7 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 20,
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 8),
-          child: BackButtonWidget(
-            isBlackColor: true,
-          ),
+          height: 8,
         ),
         Expanded(
           child: SingleChildScrollView(
@@ -349,6 +352,9 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
               ],
             ),
           ),
+        ),
+        SizedBox(
+          height: 20,
         ),
       ],
     );
