@@ -241,7 +241,7 @@ class _SearchDoctorState extends State<SearchDoctor> {
 
             //Search Text
             TextFieldWidget(
-              margin: EdgeInsets.all(8),
+              margin: EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 12),
               textEditingController: _searchTextEditingController,
               labelText: UniversalStrings.searchDoctor,
               isError: false,
@@ -443,7 +443,7 @@ class _SearchDoctorState extends State<SearchDoctor> {
       decoration: BoxDecoration(
         color: isSelected
             ? UniversalColors.gradientColorStart
-            : UniversalColors.doctorListBackgroundColor,
+            : UniversalColors.doctorListBackgroundColor.withOpacity(0.5),
         borderRadius: BorderRadius.all(
           Radius.circular(14),
         ),

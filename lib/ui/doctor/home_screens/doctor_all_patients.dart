@@ -77,7 +77,11 @@ class DoctorAllPatients extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: _buildAppBar(), body: _buildBody());
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: _buildBody(),
+      backgroundColor: UniversalColors.whiteColor,
+    );
   }
 
   Widget _buildAppBar() {
@@ -87,12 +91,19 @@ class DoctorAllPatients extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
+          SizedBox(height: 16),
           _buildSearchBar(),
-          _buildPatientsList(),
+          // SizedBox(height: 20),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: _buildPatientsList(),
+            ),
+          ),
         ],
       ),
     );
@@ -101,6 +112,7 @@ class DoctorAllPatients extends StatelessWidget {
   Widget _buildSearchBar() {
     return TextFieldWidget(
       labelText: UniversalStrings.searchPatient,
+      margin: const EdgeInsets.all(0),
       prefixIcon: Icon(
         CupertinoIcons.search,
       ),
@@ -108,18 +120,27 @@ class DoctorAllPatients extends StatelessWidget {
   }
 
   Widget _buildPatientsList() {
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: _patients.length,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: _patientCard(
-              _patients[index],
-            ),
-          );
-        });
+    return Container(
+      padding: const EdgeInsets.only(top: 20, bottom: 20),
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: _patients.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.only(bottom: 10),
+              child: Column(
+                children: [
+                  _patientCard(
+                    _patients[index],
+                  ),
+                  SizedBox(height: 8),
+                  index == _patients.length - 1 ? Container() : Divider(),
+                ],
+              ),
+            );
+          }),
+    );
   }
 
   Widget _patientCard(Map<String, dynamic> patient) {
@@ -134,9 +155,10 @@ class DoctorAllPatients extends StatelessWidget {
             imageUrl: patient["image"],
             height: 50,
             width: 50,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
           ),
         ),
+        SizedBox(width: 12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -147,20 +169,21 @@ class DoctorAllPatients extends StatelessWidget {
                     fontWeight: FontWeight.normal,
                   ),
             ),
+            SizedBox(height: 4),
             Row(
               children: [
                 Text(
                   patient["city"],
-                  style: Theme.of(Get.context).textTheme.headline4.copyWith(
-                        fontSize: 16,
+                  style: Theme.of(Get.context).textTheme.headline5.copyWith(
+                        fontSize: 14,
                         fontWeight: FontWeight.normal,
                       ),
                 ),
                 SizedBox(width: 15),
                 Text(
                   patient["age"],
-                  style: Theme.of(Get.context).textTheme.headline4.copyWith(
-                        fontSize: 16,
+                  style: Theme.of(Get.context).textTheme.headline5.copyWith(
+                        fontSize: 14,
                         fontWeight: FontWeight.normal,
                       ),
                 ),
@@ -177,14 +200,14 @@ class DoctorAllPatients extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
                       decoration: BoxDecoration(
                         color: UniversalColors.green,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         DoctorUniversalStrings.onGoing,
                         style:
                             Theme.of(Get.context).textTheme.headline5.copyWith(
-                                  fontSize: 14,
-                                  color: UniversalColors.whiteColor,
+                                  fontSize: 12,
+                                  color: UniversalColors.black,
                                 ),
                       ),
                     ),

@@ -77,6 +77,7 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       prefs.setBool(Preferences.isLoggedIn, false);
+                      prefs.setString(Preferences.userType, "");
                       //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
                       //LOGIN DURING API
                       PageUtils.pushPageAndRemoveAll(Signin());

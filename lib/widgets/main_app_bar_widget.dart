@@ -5,6 +5,7 @@ import 'package:pcare/constants/dimensions.dart';
 class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Widget leading;
   final bool isColor;
+  final Color appBarColorWhenIsColorFalse;
   final String title;
   final List<Widget> actions;
   final String animatedTitle;
@@ -16,6 +17,7 @@ class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.actions,
     this.animatedTitle,
+    this.appBarColorWhenIsColorFalse,
   });
 
   @override
@@ -36,7 +38,8 @@ class MainAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           // alignment: Alignment.centerLeft,
           decoration: isColor
               ? BoxDecoration(gradient: UniversalColors.primaryGradient)
-              : BoxDecoration(color: Colors.transparent),
+              : BoxDecoration(
+                  color: appBarColorWhenIsColorFalse ?? Colors.transparent),
           child: Stack(
             children: [
               Container(
