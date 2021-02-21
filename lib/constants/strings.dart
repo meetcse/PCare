@@ -91,4 +91,9 @@ class UniversalStrings {
   static const String yourAppointmentTime = "Your Appointment Time is between";
   static const String bookedOn = "Booked On";
   static const String viewTreatment = "View Treatment";
+
+  static var myTreatment = "My Treatment";
+
+  static String yourTreatmentsAccToDate =
+      "Your Treatments according to date are as below :";
 }
