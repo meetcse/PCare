@@ -268,12 +268,7 @@ class _SearchDoctorState extends State<SearchDoctor> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.09,
-                    margin: const EdgeInsets.only(
-                      // left: 8,
-                      right: 8,
-                    ),
+                  Expanded(
                     child: Divider(),
                   ),
                   Text(
@@ -283,13 +278,7 @@ class _SearchDoctorState extends State<SearchDoctor> {
                         .headline6
                         .copyWith(fontWeight: FontWeight.w600),
                   ),
-                  Container(
-                      width: MediaQuery.of(context).size.width * 0.68,
-                      margin: const EdgeInsets.only(
-                        left: 8,
-                        // right: 8,
-                      ),
-                      child: Divider()),
+                  Expanded(child: Divider()),
                 ],
               ),
             ),
@@ -319,13 +308,10 @@ class _SearchDoctorState extends State<SearchDoctor> {
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.09,
-                          margin: const EdgeInsets.only(
-                            // left: 8,
-                            right: 8,
+                        Expanded(
+                          child: Divider(
+                            endIndent: 8,
                           ),
-                          child: Divider(),
                         ),
                         Text(
                           UniversalStrings.specialities,
@@ -334,13 +320,10 @@ class _SearchDoctorState extends State<SearchDoctor> {
                               .headline6
                               .copyWith(fontWeight: FontWeight.w600),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.63,
-                          margin: const EdgeInsets.only(
-                            left: 8,
-                            // right: 8,
+                        Expanded(
+                          child: Divider(
+                            indent: 8,
                           ),
-                          child: Divider(),
                         ),
                       ],
                     ),
