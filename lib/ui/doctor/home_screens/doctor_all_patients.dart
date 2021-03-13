@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/ui/doctor/patient/doctor_patient_detail.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
@@ -144,78 +146,85 @@ class DoctorAllPatients extends StatelessWidget {
   }
 
   Widget _patientCard(Map<String, dynamic> patient) {
-    return Row(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(100),
-          child: CachedNetworkImage(
-            progressIndicatorBuilder: (context, _, __) {
-              return CustomProgressIndicatorWidget();
-            },
-            imageUrl: patient["image"],
-            height: 50,
-            width: 50,
-            fit: BoxFit.cover,
-          ),
-        ),
-        SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              patient["name"],
-              style: Theme.of(Get.context).textTheme.headline4.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
-                  ),
+    return GestureDetector(
+      onTap: () {
+        PageUtils.pushPage(DoctorPatientDetail(patient));
+      },
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: CachedNetworkImage(
+              progressIndicatorBuilder: (context, _, __) {
+                return CustomProgressIndicatorWidget();
+              },
+              imageUrl: patient["image"],
+              height: 50,
+              width: 50,
+              fit: BoxFit.cover,
             ),
-            SizedBox(height: 4),
-            Row(
-              children: [
-                Text(
-                  patient["city"],
-                  style: Theme.of(Get.context).textTheme.headline5.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                      ),
-                ),
-                SizedBox(width: 15),
-                Text(
-                  patient["age"],
-                  style: Theme.of(Get.context).textTheme.headline5.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                      ),
-                ),
-              ],
-            )
-          ],
-        ),
-        patient["status"] == "On Going"
-            ? Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-                      decoration: BoxDecoration(
-                        color: UniversalColors.green,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        DoctorUniversalStrings.onGoing,
-                        style:
-                            Theme.of(Get.context).textTheme.headline5.copyWith(
-                                  fontSize: 12,
-                                  color: UniversalColors.black,
-                                ),
-                      ),
+          ),
+          SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                patient["name"],
+                style: Theme.of(Get.context).textTheme.headline4.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
                     ),
-                  ],
-                ),
+              ),
+              SizedBox(height: 4),
+              Row(
+                children: [
+                  Text(
+                    patient["city"],
+                    style: Theme.of(Get.context).textTheme.headline5.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
+                  ),
+                  SizedBox(width: 15),
+                  Text(
+                    patient["age"],
+                    style: Theme.of(Get.context).textTheme.headline5.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
+                  ),
+                ],
               )
-            : Container(),
-      ],
+            ],
+          ),
+          patient["status"] == "On Going"
+              ? Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+                        decoration: BoxDecoration(
+                          color: UniversalColors.green,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          DoctorUniversalStrings.onGoing,
+                          style: Theme.of(Get.context)
+                              .textTheme
+                              .headline5
+                              .copyWith(
+                                fontSize: 12,
+                                color: UniversalColors.black,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Container(),
+        ],
+      ),
     );
   }
 }

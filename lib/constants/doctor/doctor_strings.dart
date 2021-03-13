@@ -6,7 +6,11 @@ class DoctorUniversalStrings {
   static const String age = "Age";
   static const String appointTime = "Appointment Time";
 
-  static var myPatients = "My Patients";
+  static const String myPatients = "My Patients";
 
-  static var profile = "Profile";
+  static const String profile = "Profile";
+
+  static const String upcomingAppointments = "Upcoming Appointments";
+
+  static const String appointmentsHistory = "Appointments History";
 }
