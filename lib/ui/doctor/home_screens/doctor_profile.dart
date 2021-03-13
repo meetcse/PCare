@@ -11,6 +11,9 @@ import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../appointments_history.dart';
+import '../upcoming_appointments.dart';
+
 class DoctorProfile extends StatefulWidget {
   @override
   _DoctorProfileState createState() => _DoctorProfileState();
@@ -51,6 +54,38 @@ class _DoctorProfileState extends State<DoctorProfile> {
             ),
             title: Text(
               'Edit Profile',
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          Divider(),
+          ListTile(
+            onTap: () {
+              PageUtils.pushPage(UpcomingAppointments());
+            },
+            leading: Icon(
+              //TODO: change icon and make all strings global
+              Icons.power_settings_new,
+              color: UniversalColors.gradientColorStart,
+              size: 24,
+            ),
+            title: Text(
+              DoctorUniversalStrings.upcomingAppointments,
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          Divider(),
+          ListTile(
+            onTap: () {
+              PageUtils.pushPage(AppointmentsHistory());
+            },
+            leading: Icon(
+              //TODO: change icon and make all strings global
+              Icons.power_settings_new,
+              color: UniversalColors.gradientColorStart,
+              size: 24,
+            ),
+            title: Text(
+              DoctorUniversalStrings.appointmentsHistory,
               style: TextStyle(fontSize: 18),
             ),
           ),
