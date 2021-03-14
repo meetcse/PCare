@@ -19,11 +19,16 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
+  int i = 1;
   bool isRemember = false;
   bool canMoveToNextPage = false;
   String email;
   String password;
   LoginController controller = LoginController();
+  TextEditingController textEditingControllerForEmail =
+      new TextEditingController();
+  TextEditingController textEditingControllerForPassword =
+      new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,124 +44,148 @@ class _SigninState extends State<Signin> {
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Obx(() {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 60,
-              ),
-              //SIGN IN TEXT
-              _buildSignInText(),
-
-              SizedBox(
-                height: 40,
-              ),
-
-              //EMAIL FIELD
-              controller.loginWith.value == 'email'
-                  ? _buildEmailTextField(controller)
-                  : Container(),
-
-              //MOBILE NUMBER FIELD
-              controller.loginWith.value == 'mobile'
-                  ? _buildMobileNumberTextField(controller)
-                  : Container(),
-
-              //PASSWORD FIELD
-              _buildPasswordTextField(controller),
-
-              //FORGOT PASSWORD
-              Container(
-                margin: EdgeInsets.only(left: 14, right: 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: GestureDetector(
-                        onTap: () {
-                          //TODO: Add functionality here
-                        },
-                        child: Text(
-                          UniversalStrings.forgetPassword,
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                      ),
-                    ),
-                  ],
+          return GestureDetector(
+            onDoubleTap: () {
+              if (i == 1) {
+                textEditingControllerForEmail.text = "p@patient.com";
+                textEditingControllerForPassword.text = "pat123";
+                controller.setEmail(textEditingControllerForEmail.text);
+                controller.setPassword(textEditingControllerForPassword.text);
+                i++;
+              } else if (i == 2) {
+                textEditingControllerForEmail.text = "doctor@doctor.com";
+                textEditingControllerForPassword.text = "doc123";
+                controller.setEmail(textEditingControllerForEmail.text);
+                controller.setPassword(textEditingControllerForPassword.text);
+                i++;
+              } else {
+                //TODO: implement receptionist credentials
+                i = 1;
+                textEditingControllerForEmail.text = "p@patient.com";
+                textEditingControllerForPassword.text = "pat123";
+                controller.setEmail(textEditingControllerForEmail.text);
+                controller.setPassword(textEditingControllerForPassword.text);
+              }
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 60,
                 ),
-              ),
+                //SIGN IN TEXT
+                _buildSignInText(),
 
-              //sign in button
-              _buildSignInButton(controller),
-
-              //OR text
-              Container(
-                padding: EdgeInsets.only(
-                  top: 10,
-                  bottom: 10,
-                  // left: MediaQuery.of(context).size.width * 0.47,
-                  // right: MediaQuery.of(context).size.width * 0.49,
+                SizedBox(
+                  height: 40,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(UniversalStrings.or,
-                        style: Theme.of(context).textTheme.headline6,
-                        maxLines: 1),
-                  ],
-                ),
-              ),
 
-              //FB AND GOOGLE SIGN IN
-              Expanded(
-                flex: 0,
-                child: Container(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                //EMAIL FIELD
+                controller.loginWith.value == 'email'
+                    ? _buildEmailTextField(controller)
+                    : Container(),
+
+                //MOBILE NUMBER FIELD
+                controller.loginWith.value == 'mobile'
+                    ? _buildMobileNumberTextField(controller)
+                    : Container(),
+
+                //PASSWORD FIELD
+                _buildPasswordTextField(controller),
+
+                //FORGOT PASSWORD
+                Container(
+                  margin: EdgeInsets.only(left: 14, right: 14),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      RectangleButtonWidget(
-                        isImage: true,
-                        imageOutsideBorderWidth:
-                            MediaQuery.of(context).size.width * 0.48,
-                        image: "assets/images/fb.png",
-                        imageInsideWidth:
-                            MediaQuery.of(context).size.width * 0.45,
-                        onPressed: () {
-                          //TODO: Add functionality
-                          print("Pressed FB");
-                        },
-                      ),
-                      Expanded(
-                        child: RectangleButtonWidget(
-                          isImage: true,
-                          imageOutsideBorderWidth:
-                              MediaQuery.of(context).size.width * 0.48,
-                          image: "assets/images/gplus.png",
-                          imageInsideWidth:
-                              MediaQuery.of(context).size.width * 0.45,
-                          onPressed: () {
-                            //TODO: Add functionality
-                            print("Pressed GPlus");
+                      Container(
+                        child: GestureDetector(
+                          onTap: () {
+                            //TODO: Add functionality here
                           },
+                          child: Text(
+                            UniversalStrings.forgetPassword,
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              //Login with mobile or email and crete acc text
-              Flexible(
-                fit: FlexFit.loose,
-                // flex: 0,
-                child: _buildBottomTextItems(controller),
-              ),
-            ],
+
+                //sign in button
+                _buildSignInButton(controller),
+
+                //OR text
+                Container(
+                  padding: EdgeInsets.only(
+                    top: 10,
+                    bottom: 10,
+                    // left: MediaQuery.of(context).size.width * 0.47,
+                    // right: MediaQuery.of(context).size.width * 0.49,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(UniversalStrings.or,
+                          style: Theme.of(context).textTheme.headline6,
+                          maxLines: 1),
+                    ],
+                  ),
+                ),
+
+                //FB AND GOOGLE SIGN IN
+                Expanded(
+                  flex: 0,
+                  child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RectangleButtonWidget(
+                          isImage: true,
+                          imageOutsideBorderWidth:
+                              MediaQuery.of(context).size.width * 0.48,
+                          image: "assets/images/fb.png",
+                          imageInsideWidth:
+                              MediaQuery.of(context).size.width * 0.45,
+                          onPressed: () {
+                            //TODO: Add functionality
+                            print("Pressed FB");
+                          },
+                        ),
+                        Expanded(
+                          child: RectangleButtonWidget(
+                            isImage: true,
+                            imageOutsideBorderWidth:
+                                MediaQuery.of(context).size.width * 0.48,
+                            image: "assets/images/gplus.png",
+                            imageInsideWidth:
+                                MediaQuery.of(context).size.width * 0.45,
+                            onPressed: () {
+                              //TODO: Add functionality
+                              print("Pressed GPlus");
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                //Login with mobile or email and crete acc text
+                Flexible(
+                  fit: FlexFit.loose,
+                  // flex: 0,
+                  child: _buildBottomTextItems(controller),
+                ),
+              ],
+            ),
           );
         }),
       ),
@@ -297,6 +326,7 @@ class _SigninState extends State<Signin> {
 
   Widget _buildPasswordTextField(LoginController controller) {
     return TextFieldWidget(
+      textEditingController: textEditingControllerForPassword,
       labelText: UniversalStrings.password,
       isError: controller.passwordError.value == null ||
               controller.passwordError.value == ''
@@ -330,6 +360,7 @@ class _SigninState extends State<Signin> {
 
   Widget _buildEmailTextField(LoginController controller) {
     return TextFieldWidget(
+      textEditingController: textEditingControllerForEmail,
       isError: controller.emailError.value == null ||
               controller.emailError.value == ''
           ? false
