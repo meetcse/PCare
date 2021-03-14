@@ -4,22 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
-import 'package:pcare/constants/doctor/doctor_strings.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/ui/Registeration/sign_in.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../appointments_history.dart';
-import '../upcoming_appointments.dart';
-
-class DoctorProfile extends StatefulWidget {
+class ReceptionistProfile extends StatefulWidget {
   @override
-  _DoctorProfileState createState() => _DoctorProfileState();
+  _ReceptionistProfileState createState() => _ReceptionistProfileState();
 }
 
-class _DoctorProfileState extends State<DoctorProfile> {
-  Map<String, dynamic> doctorDetails = {
+class _ReceptionistProfileState extends State<ReceptionistProfile> {
+  Map<String, dynamic> receptionistDetails = {
     "name": "John Doe",
     "email": "johndoe@gmail.com",
     "mobile": "9789773456",
@@ -29,9 +25,11 @@ class _DoctorProfileState extends State<DoctorProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: UniversalColors.whiteColor,
-      body: _buildChildWidget(),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: UniversalColors.whiteColor,
+        body: _buildChildWidget(),
+      ),
     );
   }
 
@@ -53,38 +51,6 @@ class _DoctorProfileState extends State<DoctorProfile> {
             ),
             title: Text(
               'Edit Profile',
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-          Divider(),
-          ListTile(
-            onTap: () {
-              PageUtils.pushPage(UpcomingAppointments());
-            },
-            leading: Icon(
-              //TODO: change icon and make all strings global
-              Icons.power_settings_new,
-              color: UniversalColors.gradientColorStart,
-              size: 24,
-            ),
-            title: Text(
-              DoctorUniversalStrings.upcomingAppointments,
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-          Divider(),
-          ListTile(
-            onTap: () {
-              PageUtils.pushPage(AppointmentsHistory());
-            },
-            leading: Icon(
-              //TODO: change icon and make all strings global
-              Icons.power_settings_new,
-              color: UniversalColors.gradientColorStart,
-              size: 24,
-            ),
-            title: Text(
-              DoctorUniversalStrings.appointmentsHistory,
               style: TextStyle(fontSize: 18),
             ),
           ),
@@ -118,7 +84,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                doctorDetails["name"],
+                receptionistDetails["name"],
                 style: Theme.of(Get.context).textTheme.headline1.copyWith(
                       color: UniversalColors.gradientColorStart,
                       fontSize: 28,
@@ -128,7 +94,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
               ),
               SizedBox(height: 12),
               Text(
-                doctorDetails["email"],
+                receptionistDetails["email"],
                 style: Theme.of(Get.context).textTheme.headline5.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -136,7 +102,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
               ),
               SizedBox(height: 4),
               Text(
-                doctorDetails["mobile"],
+                receptionistDetails["mobile"],
                 style: Theme.of(Get.context).textTheme.headline5.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -154,7 +120,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                     progressIndicatorBuilder: (context, _, __) {
                       return CustomProgressIndicatorWidget();
                     },
-                    imageUrl: doctorDetails["image"],
+                    imageUrl: receptionistDetails["image"],
                     height: 120,
                     width: 120,
                     fit: BoxFit.cover,
