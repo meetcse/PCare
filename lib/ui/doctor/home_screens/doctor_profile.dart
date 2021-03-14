@@ -8,7 +8,6 @@ import 'package:pcare/constants/doctor/doctor_strings.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/ui/Registeration/sign_in.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
-import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../appointments_history.dart';
