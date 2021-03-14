@@ -9,6 +9,7 @@ import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/ui/Registeration/user_choice.dart';
 import 'package:pcare/ui/doctor/doctor_home_page.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
+import 'package:pcare/ui/reception/reception_home_page.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,10 +60,9 @@ class _SigninState extends State<Signin> {
                 controller.setPassword(textEditingControllerForPassword.text);
                 i++;
               } else {
-                //TODO: implement receptionist credentials
                 i = 1;
-                textEditingControllerForEmail.text = "p@patient.com";
-                textEditingControllerForPassword.text = "pat123";
+                textEditingControllerForEmail.text = "r@reception.com";
+                textEditingControllerForPassword.text = "recep123";
                 controller.setEmail(textEditingControllerForEmail.text);
                 controller.setPassword(textEditingControllerForPassword.text);
               }
@@ -288,6 +288,9 @@ class _SigninState extends State<Signin> {
             } else if (controller.email.value == "p@patient.com" &&
                 controller.password.value == "pat123") {
               prefs.setString(Preferences.userType, Preferences.patient);
+            } else if (controller.email.value == "r@reception.com" &&
+                controller.password.value == "recep123") {
+              prefs.setString(Preferences.userType, Preferences.reception);
             }
 
             // controller.reset();
@@ -299,6 +302,9 @@ class _SigninState extends State<Signin> {
               //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
               //LOGIN DURING API
               PageUtils.pushPageAndRemoveCurrentPage(HomePage());
+            } else if (prefs.getString(Preferences.userType) ==
+                Preferences.reception) {
+              PageUtils.pushPageAndRemoveCurrentPage(ReceptionHomePage());
             } else {
               FlushbarMessage.errorMessage(
                 context,

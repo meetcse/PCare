@@ -5,6 +5,7 @@ import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/ui/Registeration/sign_in.dart';
 import 'package:pcare/ui/doctor/doctor_home_page.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
+import 'package:pcare/ui/reception/reception_home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -22,6 +23,11 @@ class SplashScreen extends StatelessWidget {
           //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
           //LOGIN DURING API
           PageUtils.pushPageAndRemoveCurrentPage(HomePage());
+        } else if (_prefs.getString(Preferences.userType) ==
+            Preferences.reception) {
+          //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
+          //LOGIN DURING API
+          PageUtils.pushPageAndRemoveCurrentPage(ReceptionHomePage());
         } else {
           PageUtils.pushPageAndRemoveCurrentPage(Signin());
         }
