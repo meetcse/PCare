@@ -1,4 +1,4 @@
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
@@ -8,7 +8,7 @@ class FlushbarMessage {
     return Flushbar(
       title: UniversalStrings.error,
       message: error,
-      borderRadius: 20,
+      borderRadius: BorderRadius.circular(20),
       backgroundGradient: UniversalColors.errorGradient,
       margin: EdgeInsets.all(10),
       flushbarPosition: FlushbarPosition.BOTTOM,
@@ -22,7 +22,7 @@ class FlushbarMessage {
       message: message,
       // leftBarIndicatorColor: UniversalColors.gradientColorStart,
       backgroundGradient: UniversalColors.primaryGradient,
-      borderRadius: 20,
+      borderRadius: BorderRadius.circular(20),
       margin: EdgeInsets.all(10),
       flushbarPosition: FlushbarPosition.BOTTOM,
       duration: Duration(seconds: 2),

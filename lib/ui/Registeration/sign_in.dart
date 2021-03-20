@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/api/login/login_api.dart';
-import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/models/login/login_model.dart';
@@ -12,9 +11,9 @@ import 'package:pcare/ui/Registeration/user_choice.dart';
 import 'package:pcare/ui/doctor/doctor_home_page.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/ui/reception/reception_home_page.dart';
+import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Signin extends StatefulWidget {
   @override
@@ -22,7 +21,6 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
-  int i = 1;
   bool isRemember = false;
   bool canMoveToNextPage = false;
   String email;
@@ -33,163 +31,167 @@ class _SigninState extends State<Signin> {
   TextEditingController textEditingControllerForPassword =
       new TextEditingController();
 
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
-      // appBar: MainAppBarWidget(
-      //   isColor: false,
+      body: _buildChildWidget(),
+    );
+  }
 
-      //   // leading: BackButtonWidget(
-      //   //   isBlackColor: true,
-      //   // ),
-      // ),
-      body: SingleChildScrollView(
+  Widget _buildChildWidget() {
+    return Stack(
+      children: [
+        _buildBody(),
+        _buildProgressIndicator(),
+      ],
+    );
+  }
+
+  Widget _buildBody() {
+    return LayoutBuilder(
+      builder: (context, constraint) => SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: Obx(() {
-          return GestureDetector(
-            onDoubleTap: () {
-              if (i == 1) {
-                textEditingControllerForEmail.text = "p@patient.com";
-                textEditingControllerForPassword.text = "pat123";
-                controller.setEmail(textEditingControllerForEmail.text);
-                controller.setPassword(textEditingControllerForPassword.text);
-                i++;
-              } else if (i == 2) {
-                textEditingControllerForEmail.text = "doctor@doctor.com";
-                textEditingControllerForPassword.text = "doc123";
-                controller.setEmail(textEditingControllerForEmail.text);
-                controller.setPassword(textEditingControllerForPassword.text);
-                i++;
-              } else {
-                i = 1;
-                textEditingControllerForEmail.text = "r@reception.com";
-                textEditingControllerForPassword.text = "recep123";
-                controller.setEmail(textEditingControllerForEmail.text);
-                controller.setPassword(textEditingControllerForPassword.text);
-              }
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 60,
-                ),
-                //SIGN IN TEXT
-                _buildSignInText(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraint.maxHeight),
+          child: IntrinsicHeight(
+            child: Obx(() {
+              return Column(
+                // mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 60,
+                  ),
+                  //SIGN IN TEXT
+                  _buildSignInText(),
 
-                SizedBox(
-                  height: 40,
-                ),
+                  SizedBox(
+                    height: 40,
+                  ),
 
-                //EMAIL FIELD
-                controller.loginWith.value == 'email'
-                    ? _buildEmailTextField(controller)
-                    : Container(),
+                  _buildMobileNumberTextField(controller),
 
-                //MOBILE NUMBER FIELD
-                controller.loginWith.value == 'mobile'
-                    ? _buildMobileNumberTextField(controller)
-                    : Container(),
+                  //PASSWORD FIELD
+                  _buildPasswordTextField(controller),
 
-                //PASSWORD FIELD
-                _buildPasswordTextField(controller),
-
-                //FORGOT PASSWORD
-                Container(
-                  margin: EdgeInsets.only(left: 14, right: 14),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  //sign in button
+                  Expanded(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Container(
-                        child: GestureDetector(
-                          onTap: () {
-                            //TODO: Add functionality here
-                          },
-                          child: Text(
-                            UniversalStrings.forgetPassword,
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                        ),
-                      ),
+                      //FORGOT PASSWORD
+                      _forgotPassword(),
+                      //Login with mobile or email and crete acc text
+                      // _bottomWidget(),
+                      _buildBottomTextItems(controller),
+                      _buildSignInButton(controller),
+
+                      SizedBox(height: 30),
                     ],
-                  ),
-                ),
+                  )),
+                ],
+              );
+            }),
+          ),
+        ),
+      ),
+    );
+  }
 
-                //sign in button
-                _buildSignInButton(controller),
+  Widget _buildProgressIndicator() {
+    return Visibility(
+      visible: _isLoading,
+      child: CustomProgressIndicatorWidget(),
+    );
+  }
 
-                //OR text
-                Container(
-                  padding: EdgeInsets.only(
-                    top: 10,
-                    bottom: 10,
-                    // left: MediaQuery.of(context).size.width * 0.47,
-                    // right: MediaQuery.of(context).size.width * 0.49,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(UniversalStrings.or,
-                          style: Theme.of(context).textTheme.headline6,
-                          maxLines: 1),
-                    ],
-                  ),
-                ),
+  Widget _orText() {
+    return Container(
+      padding: EdgeInsets.only(
+        top: 10,
+        bottom: 10,
+        // left: MediaQuery.of(context).size.width * 0.47,
+        // right: MediaQuery.of(context).size.width * 0.49,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(UniversalStrings.or,
+              style: Theme.of(context).textTheme.headline6, maxLines: 1),
+        ],
+      ),
+    );
+  }
 
-                //FB AND GOOGLE SIGN IN
-                Expanded(
-                  flex: 0,
-                  child: Container(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RectangleButtonWidget(
-                          isImage: true,
-                          imageOutsideBorderWidth:
-                              MediaQuery.of(context).size.width * 0.48,
-                          image: "assets/images/fb.png",
-                          imageInsideWidth:
-                              MediaQuery.of(context).size.width * 0.45,
-                          onPressed: () {
-                            //TODO: Add functionality
-                            print("Pressed FB");
-                          },
-                        ),
-                        Expanded(
-                          child: RectangleButtonWidget(
-                            isImage: true,
-                            imageOutsideBorderWidth:
-                                MediaQuery.of(context).size.width * 0.48,
-                            image: "assets/images/gplus.png",
-                            imageInsideWidth:
-                                MediaQuery.of(context).size.width * 0.45,
-                            onPressed: () {
-                              //TODO: Add functionality
-                              print("Pressed GPlus");
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                //Login with mobile or email and crete acc text
-                Flexible(
-                  fit: FlexFit.loose,
-                  // flex: 0,
-                  child: _buildBottomTextItems(controller),
-                ),
-              ],
+  Widget _forgotPassword() {
+    return Container(
+      margin: EdgeInsets.only(left: 14, right: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            child: GestureDetector(
+              onTap: () {
+                //TODO: Add functionality here
+              },
+              child: Text(
+                UniversalStrings.forgetPassword,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    .copyWith(decoration: TextDecoration.underline),
+              ),
             ),
-          );
-        }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _bottomWidget() {
+    return Flexible(
+      fit: FlexFit.loose,
+      // flex: 0,
+      child: _buildBottomTextItems(controller),
+    );
+  }
+
+  Widget _buildFbAndGoogleSignInButton() {
+    return Expanded(
+      flex: 0,
+      child: Container(
+        padding: EdgeInsets.only(top: 10, bottom: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            RectangleButtonWidget(
+              isImage: true,
+              imageOutsideBorderWidth: MediaQuery.of(context).size.width * 0.48,
+              image: "assets/images/fb.png",
+              imageInsideWidth: MediaQuery.of(context).size.width * 0.45,
+              onPressed: () {
+                //TODO: Add functionality
+                print("Pressed FB");
+              },
+            ),
+            Expanded(
+              child: RectangleButtonWidget(
+                isImage: true,
+                imageOutsideBorderWidth:
+                    MediaQuery.of(context).size.width * 0.48,
+                image: "assets/images/gplus.png",
+                imageInsideWidth: MediaQuery.of(context).size.width * 0.45,
+                onPressed: () {
+                  //TODO: Add functionality
+                  print("Pressed GPlus");
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -203,43 +205,6 @@ class _SigninState extends State<Signin> {
         mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
-          controller.loginWith.value == 'email'
-              ? Container(
-                  padding: EdgeInsets.only(bottom: 8),
-                  child: GestureDetector(
-                    onTap: () {
-                      print("ENTER");
-                      controller.setLoginWith('mobile');
-                    },
-                    child: Text(
-                      UniversalStrings.loginWithMobile,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(decoration: TextDecoration.underline),
-                    ),
-                  ),
-                )
-              : Container(),
-          controller.loginWith.value == 'mobile'
-              ? Container(
-                  padding: EdgeInsets.only(bottom: 8),
-                  child: GestureDetector(
-                    onTap: () {
-                      print("ENTERED");
-
-                      controller.setLoginWith('email');
-                    },
-                    child: Text(
-                      UniversalStrings.loginWithEmail,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(decoration: TextDecoration.underline),
-                    ),
-                  ),
-                )
-              : Container(),
           Container(
             padding: EdgeInsets.only(bottom: 8),
             child: Row(
@@ -259,9 +224,7 @@ class _SigninState extends State<Signin> {
                           .subtitle1
                           .copyWith(decoration: TextDecoration.underline),
                     ),
-                    onTap: () {
-                      PageUtils.pushPage(UserChoice());
-                    },
+                    onTap: _gotoUserChoiceScreen,
                   ),
                 ),
               ],
@@ -272,61 +235,52 @@ class _SigninState extends State<Signin> {
     );
   }
 
+  Widget _loginWithEmailText() {
+    return Container(
+      padding: EdgeInsets.only(bottom: 8),
+      child: GestureDetector(
+        onTap: () {
+          print("ENTERED");
+
+          controller.setLoginWith('email');
+        },
+        child: Text(
+          UniversalStrings.loginWithEmail,
+          style: Theme.of(context)
+              .textTheme
+              .headline6
+              .copyWith(decoration: TextDecoration.underline),
+        ),
+      ),
+    );
+  }
+
+  Widget _loginWithMobileText() {
+    return Container(
+      padding: EdgeInsets.only(bottom: 8),
+      child: GestureDetector(
+        onTap: () {
+          print("ENTER");
+          controller.setLoginWith('mobile');
+        },
+        child: Text(
+          UniversalStrings.loginWithMobile,
+          style: Theme.of(context)
+              .textTheme
+              .headline6
+              .copyWith(decoration: TextDecoration.underline),
+        ),
+      ),
+    );
+  }
+
   Widget _buildSignInButton(LoginController controller) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 14, vertical: 0),
       child: RectangleButtonWidget(
         isImage: false,
-        onPressed: () async {
-          //TODO: ADD functionality for validating and then route
-          controller.validateAll();
-          if (controller.canLogin) {
-            _loginPressed();
-
-            // SharedPreferences prefs = await SharedPreferences.getInstance();
-            // prefs.setBool(Preferences.isLoggedIn, true);
-
-            // if (controller.email.value == "doctor@doctor.com" &&
-            //     controller.password.value == "doc123") {
-            //   prefs.setString(Preferences.userType, Preferences.doctor);
-            // } else if (controller.email.value == "p@patient.com" &&
-            //     controller.password.value == "pat123") {
-            //   prefs.setString(Preferences.userType, Preferences.patient);
-            // } else if (controller.email.value == "r@reception.com" &&
-            //     controller.password.value == "recep123") {
-            //   prefs.setString(Preferences.userType, Preferences.reception);
-            // }
-
-            // controller.reset();
-
-            // if (prefs.getString(Preferences.userType) == Preferences.doctor) {
-            //   PageUtils.pushPageAndRemoveCurrentPage(DoctorHomePage());
-            // } else if (prefs.getString(Preferences.userType) ==
-            //     Preferences.patient) {
-            //   //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
-            //   //LOGIN DURING API
-            //   PageUtils.pushPageAndRemoveCurrentPage(HomePage());
-            // } else if (prefs.getString(Preferences.userType) ==
-            //     Preferences.reception) {
-            //   PageUtils.pushPageAndRemoveCurrentPage(ReceptionHomePage());
-            // } else {
-            //   FlushbarMessage.errorMessage(
-            //     context,
-            //     "No Valid User",
-            //   );
-            // }
-
-            // FlushbarMessage.successMessage(context, " ");
-          } else {
-            FlushbarMessage.errorMessage(
-              context,
-              controller.emailError.value != null
-                  ? controller.emailError.value
-                  : controller.passwordError.value != null
-                      ? controller.passwordError.value
-                      : "TRY AGAIN",
-            );
-          }
+        onPressed: () {
+          _onSignInButtonPressed();
         },
         childText: UniversalStrings.signIn,
         width: MediaQuery.of(context).size.width,
@@ -360,6 +314,7 @@ class _SigninState extends State<Signin> {
       errorText: controller.mobileNumberError.value,
       textInputFormatter: [
         FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(10),
       ],
       onChanged: (value) {
         controller.setMobileNumber(value);
@@ -401,15 +356,62 @@ class _SigninState extends State<Signin> {
 
   //methods
 
-  void _loginPressed() async {
+  void _onSignInButtonPressed() {
+    controller.validateAll();
+    if (controller.canLogin) {
+      _changeLoading(true);
+      _callApi();
+    } else {
+      FlushbarMessage.errorMessage(
+        context,
+        controller.mobileNumberError.value != null
+            ? controller.mobileNumberError.value
+            : controller.passwordError.value != null
+                ? controller.passwordError.value
+                : "TRY AGAIN",
+      );
+    }
+  }
+
+  void _callApi() async {
     LoginApi _loginApi = LoginApi();
-    LoginModel _loginModel = await _loginApi
-        .loginUser(controller.mobileNumber.value, controller.password.value)
-        .catchError((error) {
+    try {
+      LoginModel _loginModel = await _loginApi.loginUser(
+          controller.mobileNumber.value, controller.password.value);
+
+      if (_loginModel.user.userType.toLowerCase() == "patient") {
+        _gotoPatientHomePage();
+      } else if (_loginModel.user.userType.toLowerCase() == "doctor") {
+        _gotoDoctorHomePage();
+      } else if (_loginModel.user.userType.toLowerCase() == "receptionist") {
+        _gotoReceptionistHomePage();
+      }
+      _changeLoading(false);
+    } catch (error) {
+      _changeLoading(false);
       print("ERROR IN LOGIN : " + error.toString());
       FlushbarMessage.errorMessage(Get.context, "Error in login");
-    });
+    }
+  }
 
-    print("LOGIN MODEL : " + _loginModel.toString());
+  void _changeLoading(bool isLoading) {
+    _isLoading = isLoading;
+    setState(() {});
+  }
+
+  void _gotoUserChoiceScreen() {
+    PageUtils.pushPage(UserChoice());
+  }
+
+  void _gotoPatientHomePage() {
+    PageUtils.pushPageAndRemoveAll(HomePage());
+  }
+
+  void _gotoDoctorHomePage() {
+    PageUtils.pushPageAndRemoveAll(DoctorHomePage());
+  }
+
+  void _gotoReceptionistHomePage() {
+    PageUtils.pushPageAndRemoveAll(ReceptionHomePage());
   }
 }

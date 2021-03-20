@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pcare/constants/app_colors.dart';
 
 class CustomProgressIndicatorWidget extends StatelessWidget {
@@ -9,9 +11,16 @@ class CustomProgressIndicatorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SpinKitFadingFour(
-      color: UniversalColors.gradientColorStart,
-      size: size,
+    return Center(
+      child: Lottie.asset(
+        'assets/videos/loading.json',
+        height: Get.height * 0.4,
+        width: Get.width * 0.5,
+      ),
     );
+    // SpinKitFadingFour(
+    //   color: UniversalColors.gradientColorStart,
+    //   size: size,
+    // );
   }
 }

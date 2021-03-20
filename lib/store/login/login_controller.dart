@@ -11,7 +11,7 @@ class LoginController extends GetxController {
 
   var passwordError = ''.obs;
 
-  var loginWith = 'email'.obs;
+  var loginWith = 'mobile'.obs;
 
   var password = ''.obs;
 
