@@ -6,4 +6,7 @@ class Preferences {
   static const String doctor = "doctor";
   static const String reception = "receptionist";
   static const String userType = "user_type";
+
+  //api
+  static const String authToken = "authToken";
 }
