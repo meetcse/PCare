@@ -76,6 +76,7 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
                         UniversalStrings.signOut) {
                       SharedPrefsServices _sfService = SharedPrefsServices();
                       _sfService.setBoolToPref(Preferences.isLoggedIn, false);
+                      _sfService.setStringToPref(Preferences.authToken, '');
                       //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
                       //LOGIN DURING API
                       PageUtils.pushPageAndRemoveAll(Signin());

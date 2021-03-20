@@ -173,6 +173,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
   void _logOut() async {
     SharedPrefsServices _sfService = SharedPrefsServices();
     _sfService.setBoolToPref(Preferences.isLoggedIn, false);
+    _sfService.setStringToPref(Preferences.authToken, '');
 
     //LOGIN DURING API
     PageUtils.pushPageAndRemoveAll(Signin());
