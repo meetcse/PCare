@@ -17,10 +17,10 @@ class ReceptionistAppbarWidget extends StatelessWidget
       leading: leading,
       title: title != null
           ? Text(title,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  .copyWith(fontSize: 20, fontWeight: FontWeight.w600))
+              style: Theme.of(context).textTheme.headline4.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white))
           : Container(),
       elevation: 2,
     );
