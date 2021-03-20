@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/api/login/login_api.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/login/login_model.dart';
 import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/ui/Registeration/user_choice.dart';
 import 'package:pcare/ui/doctor/doctor_home_page.dart';
@@ -279,38 +281,40 @@ class _SigninState extends State<Signin> {
           //TODO: ADD functionality for validating and then route
           controller.validateAll();
           if (controller.canLogin) {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setBool(Preferences.isLoggedIn, true);
+            _loginPressed();
 
-            if (controller.email.value == "doctor@doctor.com" &&
-                controller.password.value == "doc123") {
-              prefs.setString(Preferences.userType, Preferences.doctor);
-            } else if (controller.email.value == "p@patient.com" &&
-                controller.password.value == "pat123") {
-              prefs.setString(Preferences.userType, Preferences.patient);
-            } else if (controller.email.value == "r@reception.com" &&
-                controller.password.value == "recep123") {
-              prefs.setString(Preferences.userType, Preferences.reception);
-            }
+            // SharedPreferences prefs = await SharedPreferences.getInstance();
+            // prefs.setBool(Preferences.isLoggedIn, true);
+
+            // if (controller.email.value == "doctor@doctor.com" &&
+            //     controller.password.value == "doc123") {
+            //   prefs.setString(Preferences.userType, Preferences.doctor);
+            // } else if (controller.email.value == "p@patient.com" &&
+            //     controller.password.value == "pat123") {
+            //   prefs.setString(Preferences.userType, Preferences.patient);
+            // } else if (controller.email.value == "r@reception.com" &&
+            //     controller.password.value == "recep123") {
+            //   prefs.setString(Preferences.userType, Preferences.reception);
+            // }
 
             // controller.reset();
 
-            if (prefs.getString(Preferences.userType) == Preferences.doctor) {
-              PageUtils.pushPageAndRemoveCurrentPage(DoctorHomePage());
-            } else if (prefs.getString(Preferences.userType) ==
-                Preferences.patient) {
-              //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
-              //LOGIN DURING API
-              PageUtils.pushPageAndRemoveCurrentPage(HomePage());
-            } else if (prefs.getString(Preferences.userType) ==
-                Preferences.reception) {
-              PageUtils.pushPageAndRemoveCurrentPage(ReceptionHomePage());
-            } else {
-              FlushbarMessage.errorMessage(
-                context,
-                "No Valid User",
-              );
-            }
+            // if (prefs.getString(Preferences.userType) == Preferences.doctor) {
+            //   PageUtils.pushPageAndRemoveCurrentPage(DoctorHomePage());
+            // } else if (prefs.getString(Preferences.userType) ==
+            //     Preferences.patient) {
+            //   //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
+            //   //LOGIN DURING API
+            //   PageUtils.pushPageAndRemoveCurrentPage(HomePage());
+            // } else if (prefs.getString(Preferences.userType) ==
+            //     Preferences.reception) {
+            //   PageUtils.pushPageAndRemoveCurrentPage(ReceptionHomePage());
+            // } else {
+            //   FlushbarMessage.errorMessage(
+            //     context,
+            //     "No Valid User",
+            //   );
+            // }
 
             // FlushbarMessage.successMessage(context, " ");
           } else {
@@ -393,5 +397,19 @@ class _SigninState extends State<Signin> {
         ],
       ),
     );
+  }
+
+  //methods
+
+  void _loginPressed() async {
+    LoginApi _loginApi = LoginApi();
+    LoginModel _loginModel = await _loginApi
+        .loginUser(controller.mobileNumber.value, controller.password.value)
+        .catchError((error) {
+      print("ERROR IN LOGIN : " + error.toString());
+      FlushbarMessage.errorMessage(Get.context, "Error in login");
+    });
+
+    print("LOGIN MODEL : " + _loginModel.toString());
   }
 }
