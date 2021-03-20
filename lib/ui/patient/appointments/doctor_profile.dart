@@ -274,7 +274,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
   Widget _buildButton(String text, Function onPressed) {
     return RectangleButtonWidget(
       childText: text,
-      isImage: false,
+      // isImage: false,
       onPressed: onPressed,
       // width: Get.width,
     );

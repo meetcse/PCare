@@ -168,10 +168,11 @@ class _SigninState extends State<Signin> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             RectangleButtonWidget(
-              isImage: true,
-              imageOutsideBorderWidth: MediaQuery.of(context).size.width * 0.48,
+              childText: '',
+              // isImage: true,
+              // imageOutsideBorderWidth: MediaQuery.of(context).size.width * 0.48,
               image: "assets/images/fb.png",
-              imageInsideWidth: MediaQuery.of(context).size.width * 0.45,
+              // imageInsideWidth: MediaQuery.of(context).size.width * 0.45,
               onPressed: () {
                 //TODO: Add functionality
                 print("Pressed FB");
@@ -179,11 +180,12 @@ class _SigninState extends State<Signin> {
             ),
             Expanded(
               child: RectangleButtonWidget(
-                isImage: true,
-                imageOutsideBorderWidth:
-                    MediaQuery.of(context).size.width * 0.48,
+                childText: '',
+                // isImage: true,
+                // imageOutsideBorderWidth:
+                //     MediaQuery.of(context).size.width * 0.48,
                 image: "assets/images/gplus.png",
-                imageInsideWidth: MediaQuery.of(context).size.width * 0.45,
+                // imageInsideWidth: MediaQuery.of(context).size.width * 0.45,
                 onPressed: () {
                   //TODO: Add functionality
                   print("Pressed GPlus");
@@ -278,7 +280,6 @@ class _SigninState extends State<Signin> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 14, vertical: 0),
       child: RectangleButtonWidget(
-        isImage: false,
         onPressed: () {
           _onSignInButtonPressed();
         },

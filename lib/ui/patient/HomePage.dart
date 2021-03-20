@@ -1,5 +1,6 @@
-import 'package:carousel_pro/carousel_pro.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_icons.dart';
@@ -12,6 +13,7 @@ import 'package:pcare/ui/patient/wishlist.dart';
 import 'package:pcare/widgets/drawer_icon_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/patients/patient_drawer_widget.dart';
+import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/single_chip_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -77,14 +79,6 @@ class _HomePageState extends State<HomePage> {
   bool _isChange = false;
   int _currentIndexForCarousel = 0;
 
-  changeAppBarTitle() async {
-    Future.delayed(Duration(seconds: 5), () {
-      setState(() {
-        _isChange = true;
-      });
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -92,12 +86,18 @@ class _HomePageState extends State<HomePage> {
     // changeAppBarTitle();
   }
 
-  _getCarouselImages() {
-    List _images = [];
+  List<Widget> _getCarouselImages() {
+    List<Widget> _images = [];
     _carouselImages.forEach((element) {
       _images.add(
-        Image(
-          image: AssetImage(element['image']),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image(
+            image: AssetImage(
+              element['image'],
+            ),
+            fit: BoxFit.fill,
+          ),
         ),
       );
     });
@@ -132,28 +132,33 @@ class _HomePageState extends State<HomePage> {
               height: 10,
             ),
             //Image Slider
-            Container(
-              alignment: Alignment.topCenter,
-              height: 200,
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(left: 8, right: 8),
-              child: Carousel(
-                images: _getCarouselImages(),
-                dotBgColor: Colors.transparent,
-                autoplay: true,
-                boxFit: BoxFit.fill,
-              ),
-            ),
+            _buildCarouselSlider(),
 
             Flexible(
               fit: FlexFit.loose,
-              child: _buildChips(),
+              child: _buildListView(),
+              // _buildChips(),
             ),
-            SizedBox(
-              height: 12,
-            ),
+            SizedBox(height: 20),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCarouselSlider() {
+    return Container(
+      alignment: Alignment.topCenter,
+      child: CarouselSlider(
+        options: CarouselOptions(
+          autoPlay: true,
+          aspectRatio: 2.0,
+          enlargeCenterPage: true,
+          autoPlayAnimationDuration: Duration(milliseconds: 500),
+          viewportFraction: 0.74,
+          autoPlayCurve: Curves.easeInCirc,
+        ),
+        items: _getCarouselImages(),
       ),
     );
   }
@@ -187,5 +192,44 @@ class _HomePageState extends State<HomePage> {
             );
           }),
     );
+  }
+
+  Widget _buildListView() {
+    return Container(
+      margin: const EdgeInsets.only(left: 12, right: 12, top: 12),
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: _categories.length,
+          itemBuilder: (context, index) {
+            Map<String, dynamic> _category = _categories[index];
+            return _buildBodyCard(
+              _category['name'],
+              _category['icon'],
+              _category['navigateTo'],
+            );
+          }),
+    );
+  }
+
+  Widget _buildBodyCard(String name, IconData icon, Widget navigateTo) {
+    return Container(
+      margin: const EdgeInsets.only(top: 16),
+      child: RectangleButtonWidget(
+        childText: name,
+        width: Get.width,
+        icon: Icon(
+          icon,
+        ),
+        onPressed: () {
+          _changeScreen(navigateTo);
+        },
+      ),
+    );
+  }
+
+  //methods and on clicks
+  void _changeScreen(Widget page) {
+    PageUtils.pushPage(page);
   }
 }
