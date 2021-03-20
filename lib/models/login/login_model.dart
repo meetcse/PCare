@@ -11,6 +11,15 @@ class LoginModel {
   DoctorDetailsModel doctorDetails;
   ReceptionistModel receptionistDetails;
 
+  LoginModel({
+    this.success,
+    this.token,
+    this.user,
+    this.patientModel,
+    this.doctorDetails,
+    this.receptionistDetails,
+  });
+
   LoginModel.fromMap(Map<String, dynamic> json) {
     success = json['success'];
     token = json['token'];

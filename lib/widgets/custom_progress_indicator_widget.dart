@@ -6,17 +6,28 @@ import 'package:pcare/constants/app_colors.dart';
 
 class CustomProgressIndicatorWidget extends StatelessWidget {
   final double size;
+  final double height;
+  // final double size;
 
-  CustomProgressIndicatorWidget({this.size = 50});
+  CustomProgressIndicatorWidget({this.size = 50, this.height});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Lottie.asset(
-        'assets/videos/loading.json',
-        height: Get.height * 0.4,
-        width: Get.width * 0.5,
-      ),
+    return Stack(
+      children: [
+        Container(
+          height: Get.height,
+          width: Get.width,
+          color: UniversalColors.lightGrey.withOpacity(0.1),
+        ),
+        Center(
+          child: Lottie.asset(
+            'assets/videos/loading.json',
+            height: height ?? Get.height * 0.4,
+            width: Get.width * 0.5,
+          ),
+        ),
+      ],
     );
     // SpinKitFadingFour(
     //   color: UniversalColors.gradientColorStart,

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:pcare/models/login/login_model.dart';
 
 class LoginController extends GetxController {
   var email = ''.obs;
@@ -20,6 +21,8 @@ class LoginController extends GetxController {
   var loading = false.obs;
 
   var isRemember = false.obs;
+
+  LoginModel loginModel = LoginModel();
 
   bool get canLogin => loginWith.value == 'email'
       ? email.value.isNotEmpty &&

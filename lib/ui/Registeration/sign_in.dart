@@ -3,9 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/api/login/login_api.dart';
+import 'package:pcare/constants/app_colors.dart';
+import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
 import 'package:pcare/models/login/login_model.dart';
+import 'package:pcare/services/SharedPrefsServices.dart';
 import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/ui/Registeration/user_choice.dart';
 import 'package:pcare/ui/doctor/doctor_home_page.dart';
@@ -25,13 +28,14 @@ class _SigninState extends State<Signin> {
   bool canMoveToNextPage = false;
   String email;
   String password;
-  LoginController controller = LoginController();
+  LoginController controller = Get.find<LoginController>();
   TextEditingController textEditingControllerForEmail =
       new TextEditingController();
   TextEditingController textEditingControllerForPassword =
       new TextEditingController();
 
   bool _isLoading = false;
+  SharedPrefsServices _sfService = SharedPrefsServices();
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +178,6 @@ class _SigninState extends State<Signin> {
               image: "assets/images/fb.png",
               // imageInsideWidth: MediaQuery.of(context).size.width * 0.45,
               onPressed: () {
-                //TODO: Add functionality
                 print("Pressed FB");
               },
             ),
@@ -187,7 +190,6 @@ class _SigninState extends State<Signin> {
                 image: "assets/images/gplus.png",
                 // imageInsideWidth: MediaQuery.of(context).size.width * 0.45,
                 onPressed: () {
-                  //TODO: Add functionality
                   print("Pressed GPlus");
                 },
               ),
@@ -377,14 +379,19 @@ class _SigninState extends State<Signin> {
   void _callApi() async {
     LoginApi _loginApi = LoginApi();
     try {
-      LoginModel _loginModel = await _loginApi.loginUser(
+      controller.loginModel = await _loginApi.loginUser(
           controller.mobileNumber.value, controller.password.value);
 
-      if (_loginModel.user.userType.toLowerCase() == "patient") {
+      if (controller.loginModel.user.userType.toLowerCase() == "patient") {
+        _saveDetailsToSharedPrefs(controller.loginModel.token);
         _gotoPatientHomePage();
-      } else if (_loginModel.user.userType.toLowerCase() == "doctor") {
+      } else if (controller.loginModel.user.userType.toLowerCase() ==
+          "doctor") {
+        _saveDetailsToSharedPrefs(controller.loginModel.token);
         _gotoDoctorHomePage();
-      } else if (_loginModel.user.userType.toLowerCase() == "receptionist") {
+      } else if (controller.loginModel.user.userType.toLowerCase() ==
+          "receptionist") {
+        _saveDetailsToSharedPrefs(controller.loginModel.token);
         _gotoReceptionistHomePage();
       }
       _changeLoading(false);
@@ -414,5 +421,13 @@ class _SigninState extends State<Signin> {
 
   void _gotoReceptionistHomePage() {
     PageUtils.pushPageAndRemoveAll(ReceptionHomePage());
+  }
+
+  void _saveDetailsToSharedPrefs(String token) {
+    _sfService.setBoolToPref(Preferences.isLoggedIn, true);
+    _sfService.setStringToPref(
+        Preferences.mobileNumber, controller.mobileNumber.value);
+    _sfService.setStringToPref(Preferences.password, controller.password.value);
+    _sfService.setStringToPref(Preferences.authToken, token);
   }
 }
