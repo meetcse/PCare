@@ -13,4 +13,14 @@ class DoctorUniversalStrings {
   static const String upcomingAppointments = "Upcoming Appointments";
 
   static const String appointmentsHistory = "Appointments History";
+
+  static const String enterPrescription = "Enter Prescription";
+
+  static const String enterDisease = "Enter Disease";
+
+  static const String enterSpecialNote = "Enter Special Note";
+
+  static const String enterExperiments = "Enter Experiments";
+
+  static const String enterObservation = "Enter Observation";
 }

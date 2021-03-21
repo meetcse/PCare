@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/preferences.dart';
-
 import 'package:pcare/ui/Registeration/sign_in.dart';
 import 'package:pcare/ui/doctor/doctor_home_page.dart';
 import 'package:pcare/ui/patient/HomePage.dart';

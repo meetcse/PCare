@@ -98,4 +98,6 @@ class UniversalStrings {
       "Your Treatments according to date are as below :";
 
   static var searchPatient = "Search Patient";
+
+  static String webBrowserError="You should be on a web browser to view this screen";
 }
