@@ -23,10 +23,11 @@ class UniversalColors {
 
   static const Color green = Color(0xff2EFF2E);
 
-  static final Gradient primaryGradient = LinearGradient(
-      colors: [gradientColorStart, gradientColorEnd],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight);
+  static final Gradient primaryGradient = LinearGradient(colors: [
+    gradientColorStart,
+    gradientColorStart,
+    // gradientColorEnd,
+  ], begin: Alignment.topLeft, end: Alignment.bottomRight);
 
   static final Gradient secondaryGradient = LinearGradient(
     colors: [gradientColorStart, gradientColorEnd2],

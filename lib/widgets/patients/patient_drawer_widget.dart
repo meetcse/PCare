@@ -4,9 +4,9 @@ import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/services/SharedPrefsServices.dart';
 import 'package:pcare/store/patients/patient_home_controller.dart';
 import 'package:pcare/ui/Registeration/sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PatientDrawerWidget extends StatefulWidget {
   @override
@@ -74,10 +74,9 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
                   onTap: () async {
                     if (patientController.drawerItems[index]['id'] ==
                         UniversalStrings.signOut) {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setBool(Preferences.isLoggedIn, false);
-                      prefs.setString(Preferences.userType, "");
+                      SharedPrefsServices _sfService = SharedPrefsServices();
+                      _sfService.setBoolToPref(Preferences.isLoggedIn, false);
+                      _sfService.setStringToPref(Preferences.authToken, '');
                       //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
                       //LOGIN DURING API
                       PageUtils.pushPageAndRemoveAll(Signin());

@@ -6,9 +6,9 @@ import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
 import 'package:pcare/constants/preferences.dart';
+import 'package:pcare/services/SharedPrefsServices.dart';
 import 'package:pcare/ui/Registeration/sign_in.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../appointments_history.dart';
 import '../upcoming_appointments.dart';
@@ -171,10 +171,10 @@ class _DoctorProfileState extends State<DoctorProfile> {
 
   //methods and onClicks
   void _logOut() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(Preferences.isLoggedIn, false);
-    prefs.setString(Preferences.userType, "");
-    //TODO: ADD EMAIL AND PASS TO SHARED PREF WHEN
+    SharedPrefsServices _sfService = SharedPrefsServices();
+    _sfService.setBoolToPref(Preferences.isLoggedIn, false);
+    _sfService.setStringToPref(Preferences.authToken, '');
+
     //LOGIN DURING API
     PageUtils.pushPageAndRemoveAll(Signin());
   }
