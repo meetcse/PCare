@@ -17,7 +17,7 @@ class TextFieldWidget extends StatelessWidget {
   final EdgeInsets margin;
   final double width;
   final Widget prefixIcon;
-  int maxLines = 1;
+  int maxLines ;
 
   TextFieldWidget(
       {@required this.labelText,
@@ -33,7 +33,7 @@ class TextFieldWidget extends StatelessWidget {
       this.readOnly = false,
       this.width,
       this.prefixIcon,
-      this.maxLines});
+      this.maxLines=1});
 
   @override
   Widget build(BuildContext context) {

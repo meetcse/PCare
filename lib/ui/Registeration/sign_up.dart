@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/api/registration/registration_api.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/login/login_model.dart';
+import 'package:pcare/models/user/user_model.dart';
+import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/store/login/registration_controller.dart';
 import 'package:pcare/ui/Registeration/doctor_registration.dart';
 import 'package:pcare/ui/Registeration/receptionist_registration.dart';
@@ -26,6 +30,9 @@ class _SignUpState extends State<SignUp> {
   String _date;
 
   List<Map<String, dynamic>> _registrationList;
+
+  LoginController loginController = Get.find<LoginController>();
+
   RegistrationController registrationController =
       Get.put(RegistrationController());
 
@@ -173,14 +180,35 @@ class _SignUpState extends State<SignUp> {
                         widget.userType == UniversalStrings.patientRadioButton
                             ? "REGISTER"
                             : UniversalStrings.nextButtonText,
-                    onPressed: () {
+                    onPressed: () async {
                       if (widget.userType ==
                           UniversalStrings.patientRadioButton) {
+                        //Patient Side
+
                         if (!registrationController.validateForm()) {
                           FlushbarMessage.errorMessage(
                               context, "Please enter every field properly");
                         } else {
-                          PageUtils.pushPage(HomePage());
+                          UserModel userModel = UserModel(
+                              firstname: registrationController.firstName.value,
+                              lastname: registrationController.lastName.value,
+                              mobilenumber:
+                                  registrationController.mobileNumber.value,
+                              password: registrationController.password.value,
+                              society: registrationController.address.value,
+                              gender: registrationController.gender.value,
+                              dob: registrationController.dob.value,
+                              userType: widget.userType);
+
+                          RegistrationApi registrationApi = RegistrationApi();
+                          try {
+                            loginController.loginModel =
+                                await registrationApi.registerUser(userModel);
+
+                            PageUtils.pushPage(HomePage());
+                          } catch (error) {
+                            print("ERROR : " + error);
+                          }
                         }
                       } else if (widget.userType ==
                           UniversalStrings.receptionist) {
@@ -188,7 +216,22 @@ class _SignUpState extends State<SignUp> {
                           FlushbarMessage.errorMessage(
                               context, "Please enter every field properly");
                         } else {
-                          PageUtils.pushPage(ReceptionistRegistration());
+                          UserModel userModel = UserModel(
+                              firstname: registrationController.firstName.value,
+                              lastname: registrationController.lastName.value,
+                              mobilenumber:
+                                  registrationController.mobileNumber.value,
+                              password: registrationController.password.value,
+                              society: registrationController.address.value,
+                              gender: registrationController.gender.value,
+                              dob: registrationController.dob.value,
+                              userType: widget.userType);
+
+                          PageUtils.pushPage(
+                            ReceptionistRegistration(
+                              userModel: userModel,
+                            ),
+                          );
                         }
                       } else {
                         if (!registrationController.validateForm()) {
@@ -304,6 +347,6 @@ class _SignUpState extends State<SignUp> {
     );
 
     registrationController.setDob(
-        d.day.toString() + "/" + d.month.toString() + "/" + d.year.toString());
+        d.day.toString() + "-" + d.month.toString() + "-" + d.year.toString());
   }
 }

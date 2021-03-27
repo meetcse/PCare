@@ -4,23 +4,27 @@ import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/user/user_model.dart';
 import 'package:pcare/store/login/receptionist_registration_controller.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
+import 'package:pcare/ui/reception/reception_home_page.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
 class ReceptionistRegistration extends StatefulWidget {
-  // final String text;
+  UserModel userModel;
 
-  // SignUp({Key key, @required this.text}) : super(key: key);
+  ReceptionistRegistration({@required this.userModel});
   @override
   _ReceptionistRegistrationState createState() =>
       _ReceptionistRegistrationState();
 }
 
 class _ReceptionistRegistrationState extends State<ReceptionistRegistration> {
+  UserModel userModel;
+
   List<Map<String, dynamic>> _registrationList;
   ReceptionistRegistrationController registrationController =
       Get.put(ReceptionistRegistrationController());
@@ -40,8 +44,7 @@ class _ReceptionistRegistrationState extends State<ReceptionistRegistration> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
+    userModel = widget.userModel;
     loadList();
   }
 
@@ -99,7 +102,7 @@ class _ReceptionistRegistrationState extends State<ReceptionistRegistration> {
                         FlushbarMessage.errorMessage(
                             context, "Please enter every field");
                       } else {
-                        PageUtils.pushPage(HomePage());
+                        PageUtils.pushPage(ReceptionHomePage());
                       }
                     },
                     width: Get.width,

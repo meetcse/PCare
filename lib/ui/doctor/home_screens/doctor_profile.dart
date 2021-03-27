@@ -44,18 +44,18 @@ class _DoctorProfileState extends State<DoctorProfile> {
           Padding(padding: EdgeInsets.only(top: 15)),
           _buildBody(),
           Padding(padding: EdgeInsets.only(top: 10)),
-          Divider(),
-          ListTile(
-            leading: Icon(
-              CupertinoIcons.profile_circled,
-              color: UniversalColors.gradientColorStart,
-              size: 24,
-            ),
-            title: Text(
-              'Edit Profile',
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
+          // Divider(),
+          // ListTile(
+          //   leading: Icon(
+          //     CupertinoIcons.profile_circled,
+          //     color: UniversalColors.gradientColorStart,
+          //     size: 24,
+          //   ),
+          //   title: Text(
+          //     DoctorUniversalStrings.editProfile,
+          //     style: TextStyle(fontSize: 18),
+          //   ),
+          // ),
           Divider(),
           ListTile(
             onTap: () {

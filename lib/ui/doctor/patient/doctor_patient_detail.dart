@@ -14,6 +14,7 @@ class DoctorPatientDetail extends StatefulWidget {
   Map<String, dynamic> patient;
 
   DoctorPatientDetail(this.patient);
+
   @override
   _DoctorPatientDetailState createState() => _DoctorPatientDetailState();
 }
@@ -62,14 +63,12 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
       "started_date": "01-01-2021",
       "case": "Bone Issue",
       "status": "on-going",
-      "end-date": "02-01-2021"
     },
     {
       "id": "7",
       "started_date": "01-01-2021",
       "case": "Fracture",
       "status": "completed",
-      "end-date": "02-01-2021"
     },
   ];
 
@@ -93,7 +92,7 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
       leading: BackButtonWidget(
         isBlackColor: true,
       ),
-      title: DoctorUniversalStrings.myPatients,
+      title: DoctorUniversalStrings.patientDetails,
     );
   }
 
@@ -164,7 +163,7 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
     return Column(
       children: [
         Text(
-          "APPOINTMENTS",
+          DoctorUniversalStrings.appointments,
           style: Theme.of(Get.context).textTheme.headline4.copyWith(
               fontSize: 20, color: UniversalColors.gradientColorStart),
         ),
@@ -186,6 +185,7 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
         return Column(
           children: [
             buildTreatmentCard(_treatments[index]),
+            SizedBox(height: 10),
             Divider(),
           ],
         );
@@ -201,6 +201,7 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
       child: Container(
         margin: const EdgeInsets.only(
           left: 12,
+          right: 12,
           top: 16,
         ),
         decoration: BoxDecoration(
@@ -211,28 +212,36 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(Icons.date_range),
-                SizedBox(width: 5),
-                Text(treatment["started_date"]),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            (treatment["end-date"] == null
+                ? Row(children: [
+                    Icon(Icons.date_range),
+                    SizedBox(width: 5),
+                    Text(treatment["started_date"])
+                  ])
+                : Row(
                     children: [
-                      Text("to"),
+                      Icon(Icons.date_range),
+                      SizedBox(width: 5),
+                      Text(treatment["started_date"]),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(DoctorUniversalStrings.to),
+                          ],
+                        ),
+                      ),
+                      Text(treatment["end-date"]),
                     ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Text(treatment["end-date"]),
-                ),
+                  )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                buildTreamentRow(treatment["case"],
+                    Icons.domain_verification_rounded, false),
+                buildTreamentRow(treatment["status"], "", true),
               ],
             ),
-            buildTreamentRow(treatment["status"], "", true),
-            buildTreamentRow(
-                treatment["case"], Icons.domain_verification_rounded, false),
           ],
         ),
       ),
@@ -244,9 +253,9 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
       children: [
         icon != "" ? Icon(icon) : Container(),
         icon != "" ? SizedBox(width: 5) : Container(),
-        value == "on-going"
+        value == DoctorUniversalStrings.on_Going
             ? Chip(
-                label: Text("ON - GOING"),
+                label: Text(DoctorUniversalStrings.onGoing),
                 backgroundColor: UniversalColors.green,
               )
             : showchip

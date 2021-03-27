@@ -62,7 +62,12 @@ class _FullTreatmentState extends State<FullTreatment> {
   Widget _buildBody() {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
-      child: _buildTreatmentList(),
+      child: Column(
+        children: [
+          _buildTreatmentList(),
+          SizedBox(height: 50,)
+        ],
+      ),
     );
   }
 

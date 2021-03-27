@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
+import 'package:pcare/ui/doctor/patient/add_patient_observation.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
-import 'package:pcare/widgets/main_app_bar_widget.dart';
 
 class DoctorTodaysAppointment extends StatefulWidget {
   @override
@@ -196,6 +197,9 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
       true,
       false,
       currentAppointment['appointment_time'],
+      onPressed: () {
+        PageUtils.pushPage(AddPatientObservation());
+      },
     );
   }
 

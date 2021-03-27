@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
-import 'package:pcare/widgets/back_button_widget.dart';
+import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
-import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
 import 'package:pcare/widgets/receptionist/receptionist_app_bar_widget.dart';
 
 class UpcomingAppointments extends StatefulWidget {
@@ -144,13 +142,13 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
   Widget _appointmentCard(upcoming_appointment_card) {
     return GestureDetector(
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(45)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         elevation: 5,
         child: Container(
           padding: EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               //image
               _buildImage(upcoming_appointment_card["image"]),
@@ -232,7 +230,7 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
 
   Widget _buildImage(String imagePath) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(14),
       child: CachedNetworkImage(
         progressIndicatorBuilder: (context, _, __) {
           return CustomProgressIndicatorWidget();

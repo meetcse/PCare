@@ -23,4 +23,14 @@ class DoctorUniversalStrings {
   static const String enterExperiments = "Enter Experiments";
 
   static const String enterObservation = "Enter Observation";
+
+  static const String appointments="APPOINTMENTS";
+
+  static const String to="to";
+
+  static const String on_Going="on-going";
+
+  static const String patientDetails="Patient Details";
+
+  static const String editProfile="Edit Profile";
 }
