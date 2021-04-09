@@ -186,169 +186,109 @@ class _SearchDoctorState extends State<SearchDoctor> {
         title: UniversalStrings.selectDoctor,
       ),
       body: Container(child: _buildChildWidget()),
-      floatingActionButton: GetX<SearchDoctorController>(builder: (controller) {
-        return controller.selectedDoctorId.value != null &&
-                controller.selectedDoctorId.value != ''
-            ? FloatingActionButton(
-                onPressed: () {
-                  Map<String, dynamic> _selectedDoctor;
-                  _totalDoctorsStaticList.forEach((element) {
-                    if (element['id'].toString() ==
-                        controller.selectedDoctorId.value) {
-                      _selectedDoctor = element;
-                    }
-                  });
+      floatingActionButton: GetX<SearchDoctorController>(
+        builder: (controller) {
+          return controller.selectedDoctorId.value != null &&
+                  controller.selectedDoctorId.value != ''
+              ? _buildFloatingActionButton()
+              : Container();
+        },
+      ),
+    );
+  }
 
-                  PageUtils.pushPage(
-                      DoctorProfile(doctorDetails: _selectedDoctor));
-                },
-                child: Icon(
-                  UniversalIcons.forwardArrow,
-                ),
-              )
-            : Container();
-      }),
+  Widget _buildFloatingActionButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        _onFloatingActionButtonClicked();
+      },
+      child: Icon(
+        UniversalIcons.forwardArrow,
+      ),
     );
   }
 
   Widget _buildChildWidget() {
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: GetX<SearchDoctorController>(builder: (searchController) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            //Location
-            Container(
-              margin: const EdgeInsets.only(left: 8, right: 8, top: 4),
-              child: Row(
-                children: [
-                  //Location Icon
-                  Icon(
-                    UniversalIcons.locationIcon,
-                    size: 16,
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-
-                  //Locatin Text
-                  Text(_loggedInUser['city'],
-                      style: Theme.of(context).textTheme.bodyText1),
-                ],
+        physics: BouncingScrollPhysics(),
+        child: Obx(()
+            // <SearchDoctorController>
+            // (builder: (searchController)
+            {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: 4,
               ),
-            ),
 
-            //Search Text
-            TextFieldWidget(
-              margin: EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 12),
-              textEditingController: _searchTextEditingController,
-              labelText: UniversalStrings.searchDoctor,
-              isError: false,
-              onChanged: (value) {
-                //TODO: CALL API FOR SEARCHING DOCTOR
-                if (value.isEmpty) {
-                  searchController.setIsSearching(false);
-                } else {
-                  searchController.setIsSearching(true);
+              //Location
+              _buildLocationIconAndText(),
 
-                  searchController.searchDoctors(_totalDoctorsStaticList,
-                      _searchTextEditingController.text);
-                }
-              },
-            ),
+              //Search Text
+              _searchTextField(),
 
-            //Doctors Divider
-            Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(
-                left: 8,
-                right: 8,
+              //Doctors Divider
+              _searchDoctorDivider(),
+
+              //doctor list
+              _doctorList(),
+              SizedBox(
+                height: 16,
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Divider(),
-                  ),
-                  Text(
-                    UniversalStrings.doctors,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        .copyWith(fontWeight: FontWeight.w600),
-                  ),
-                  Expanded(child: Divider()),
-                ],
-              ),
-            ),
 
-            //doctor list
-            Flexible(
-              fit: FlexFit.loose,
-              child: searchController.isSearching.value
-                  ? _buildDoctorsList(searchController.searchResults, true)
-                  : _buildDoctorsList(_totalDoctorsStaticList, false),
-            ),
+              searchDoctorController.isSearching.value
+                  ? Container()
+                  :
+                  //specialist divider
+                  _specialistDivider(),
 
-            SizedBox(
-              height: 16,
-            ),
+              searchDoctorController.isSearching.value
+                  ? Container()
+                  :
+                  //specialities list
+                  Flexible(fit: FlexFit.loose, child: _buildSpecialitiesList()),
 
-            searchController.isSearching.value
-                ? Container()
-                :
-                //specialist divider
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(
-                      left: 8,
-                      right: 8,
+              searchDoctorController.isSearching.value
+                  ? Container()
+                  : SizedBox(
+                      height: 16,
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            endIndent: 8,
-                          ),
-                        ),
-                        Text(
-                          UniversalStrings.specialities,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              .copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            indent: 8,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
 
-            searchController.isSearching.value
-                ? Container()
-                :
-                //specialities list
-                Flexible(fit: FlexFit.loose, child: _buildSpecialitiesList()),
-            searchController.isSearching.value
-                ? Container()
-                : SizedBox(
-                    height: 16,
-                  ),
-          ],
-        );
-      }),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          );
+        }));
+  }
+
+  Widget _doctorList() {
+    return Flexible(
+      fit: FlexFit.loose,
+      child: searchDoctorController.isSearching.value
+          ? _buildDoctorsList(searchDoctorController.searchResults, true)
+          : _buildDoctorsList(_totalDoctorsStaticList, false),
+    );
+  }
+
+  Widget _searchTextField() {
+    return TextFieldWidget(
+      margin: EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 12),
+      textEditingController: _searchTextEditingController,
+      labelText: UniversalStrings.searchDoctor,
+      isError: false,
+      onChanged: (value) {
+        _onSearchTextFieldChanged(value);
+      },
     );
   }
 
   Widget _buildDoctorsList(
       List<Map<String, dynamic>> doctors, bool isSearching) {
+    List<int> _itemCount = [];
     //TODO: Remove item count when data is coming from backend
-    List<int> _itemCount = List<int>();
+
     if (isSearching) {
       for (int i = 0; i < doctors.length; i++) {
         _itemCount.add(i);
@@ -403,6 +343,28 @@ class _SearchDoctorState extends State<SearchDoctor> {
               );
             },
           );
+  }
+
+  Widget _buildLocationIconAndText() {
+    return Container(
+      margin: const EdgeInsets.only(left: 8, right: 8, top: 4),
+      child: Row(
+        children: [
+          //Location Icon
+          Icon(
+            UniversalIcons.locationIcon,
+            size: 16,
+          ),
+          SizedBox(
+            width: 8,
+          ),
+
+          //Locatin Text
+          Text(_loggedInUser['city'],
+              style: Theme.of(context).textTheme.bodyText1),
+        ],
+      ),
+    );
   }
 
   Widget _buildDoctorsCard({
@@ -592,32 +554,122 @@ class _SearchDoctorState extends State<SearchDoctor> {
         right: 12,
         top: 10,
       ),
-      child: GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: _list.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 14,
-          crossAxisSpacing: 14,
-          childAspectRatio: 80 / 90,
+      height: 200,
+      // width: 180,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: BouncingScrollPhysics(),
+        child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: _list.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: const EdgeInsets.only(right: 8),
+              child: GestureDetector(
+                onTap: () {
+                  //TODO: Add search using title
+                },
+                child: ChipThreeSectionWidget(
+                  imageUrl: _list[index]['image'],
+                  title: _list[index]['title'],
+                  description: _list[index]['description'],
+                ),
+              ),
+            );
+          },
         ),
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              //TODO: Add search using title
-            },
-            child: ChipThreeSectionWidget(
-              imageUrl: _list[index]['image'],
-              title: _list[index]['title'],
-              description: _list[index]['description'],
+      ),
+    );
+  }
+
+  Widget _specialistDivider() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.only(
+        left: 8,
+        right: 8,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: Divider(
+              endIndent: 8,
             ),
-          );
-        },
+          ),
+          Text(
+            UniversalStrings.specialities,
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                .copyWith(fontWeight: FontWeight.w600),
+          ),
+          Expanded(
+            child: Divider(
+              indent: 8,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _searchDoctorDivider() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.only(
+        left: 8,
+        right: 8,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: Divider(),
+          ),
+          Text(
+            UniversalStrings.doctors,
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                .copyWith(fontWeight: FontWeight.w600),
+          ),
+          Expanded(child: Divider()),
+        ],
       ),
     );
   }
 
   //Methods------------------------------
 
+  void _onFloatingActionButtonClicked() {
+    Map<String, dynamic> _selectedDoctor;
+    _totalDoctorsStaticList.forEach((element) {
+      if (element['id'].toString() ==
+          searchDoctorController.selectedDoctorId.value) {
+        _selectedDoctor = element;
+      }
+    });
+    _gotoDoctorProfileScreen(_selectedDoctor);
+  }
+
+  void _onSearchTextFieldChanged(
+    String value,
+  ) {
+    //TODO: CALL API FOR SEARCHING DOCTOR
+    if (value.isEmpty) {
+      searchDoctorController.setIsSearching(false);
+    } else {
+      searchDoctorController.setIsSearching(true);
+
+      searchDoctorController.searchDoctors(
+          _totalDoctorsStaticList, _searchTextEditingController.text);
+    }
+  }
+
+  void _gotoDoctorProfileScreen(Map<String, dynamic> selectedDoctor) {
+    PageUtils.pushPage(DoctorProfile(doctorDetails: selectedDoctor));
+  }
 }

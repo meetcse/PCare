@@ -40,7 +40,7 @@ class _UserChoiceState extends State<UserChoice> {
         Padding(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Text(
-            "Choose Any One",
+            UniversalStrings.letUsKnowYourRole,
             style: Theme.of(context).textTheme.headline2.copyWith(
                   fontSize: 34,
                 ),

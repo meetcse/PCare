@@ -214,28 +214,55 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
   }
 
   Widget _buildNavigateToHomeButton() {
-    return RectangleButtonWidget(
-      childText: UniversalStrings.home,
+    return Container(
       // width: 100,
-      onPressed: () {
-        //TODO: ADD FUNCTIONALITY
-        _confettiControllerCenter.dispose();
-        PageUtils.pushPageAndRemoveAll(HomePage());
-      },
-      isColor: false,
+      child: InkWell(
+        onTap: () {
+          PageUtils.pushPageAndRemoveAll(HomePage());
+        },
+        child: Text(
+          UniversalStrings.home,
+          style: Theme.of(context).textTheme.button.copyWith(
+                color: UniversalColors.gradientColorStart,
+              ),
+        ),
+      ),
+
+      //  RectangleButtonWidget(
+      //   childText: UniversalStrings.home,
+      //   onPressed: () {
+      //     //TODO: ADD FUNCTIONALITY
+      //     _confettiControllerCenter.dispose();
+      //     PageUtils.pushPageAndRemoveAll(HomePage());
+      //   },
+      //   isColor: false,
+      // ),
     );
   }
 
   Widget _buildNavigateToAppointment() {
-    return RectangleButtonWidget(
-      childText: UniversalStrings.myAppointments,
-      // width: 100,
-      onPressed: () {
-        //TODO: ADD FUNCTIONALITY
-        _confettiControllerCenter.dispose();
+    return InkWell(
+      onTap: () {
         PageUtils.pushPageAndRemoveAll(MyAppointments());
       },
-      isColor: false,
+      child: Container(
+        // width: 100,
+        child: Text(
+          UniversalStrings.myAppointments,
+          style: Theme.of(context).textTheme.button.copyWith(
+                color: UniversalColors.gradientColorStart,
+              ),
+        ),
+        // RectangleButtonWidget(
+        //   childText: UniversalStrings.myAppointments,
+        //   onPressed: () {
+        //     //TODO: ADD FUNCTIONALITY
+        //     _confettiControllerCenter.dispose();
+        //     PageUtils.pushPageAndRemoveAll(MyAppointments());
+        //   },
+        //   isColor: false,
+        // ),
+      ),
     );
   }
 

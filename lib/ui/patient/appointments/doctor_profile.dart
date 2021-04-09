@@ -43,19 +43,25 @@ class _DoctorProfileState extends State<DoctorProfile> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           //TODO: DISPLAY ONLY IF NEXT AVAILABLE - FROM BACKEND
-          _buildButton(
-            UniversalStrings.instantBook,
-            () {
-              //TODO: Add functionality
-            },
+          Container(
+            width: Get.width * 0.4,
+            child: _buildButton(
+              UniversalStrings.instantBook,
+              () {
+                //TODO: Add functionality
+              },
+            ),
           ),
 
           //book now
-          _buildButton(
-            UniversalStrings.bookNow,
-            () {
-              _gotoSelectAppointmentDayScreen();
-            },
+          Container(
+            width: Get.width * 0.4,
+            child: _buildButton(
+              UniversalStrings.bookNow,
+              () {
+                _gotoSelectAppointmentDayScreen();
+              },
+            ),
           ),
         ],
       ),
@@ -276,7 +282,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
       childText: text,
       // isImage: false,
       onPressed: onPressed,
-      // width: Get.width,
+      width: Get.width * 0.1,
     );
   }
 

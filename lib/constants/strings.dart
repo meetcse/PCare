@@ -92,10 +92,12 @@ class UniversalStrings {
   static const String bookedOn = "Booked On";
   static const String viewTreatment = "View Treatment";
 
-  static var myTreatment = "My Treatment";
+  static String myTreatment = "My Treatment";
 
   static String yourTreatmentsAccToDate =
       "Your Treatments according to date are as below :";
 
-  static var searchPatient = "Search Patient";
+  static String searchPatient = "Search Patient";
+
+  static const letUsKnowYourRole = "Let us know your Role";
 }

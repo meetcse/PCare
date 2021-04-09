@@ -231,11 +231,13 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
                   margin: EdgeInsets.only(top: 0, left: 20),
                   child: Row(
                     children: [
-                      Text(
-                        "What are your Working Days?",
-                        style: Theme.of(context).textTheme.headline2.copyWith(
-                              fontSize: 24,
-                            ),
+                      Expanded(
+                        child: Text(
+                          "What are your Working Days?",
+                          style: Theme.of(context).textTheme.headline2.copyWith(
+                                fontSize: 24,
+                              ),
+                        ),
                       ),
                     ],
                   ),
