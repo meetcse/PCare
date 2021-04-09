@@ -59,7 +59,10 @@ class UniversalStrings {
   static const String receptionist = "Receptionist";
   static const String groupValue = "userType";
   static const String nextButtonText = "NEXT";
+  static const String register = "REGISTER";
   static const String userChoiceErrorMessage = "Please Select Something";
+
+  static String selectGender = "Select Gender";
 
   static const String specialist = "specialist";
   static const String at = "At";

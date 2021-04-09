@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/api/registration/SignupApi.dart';
 import 'package:pcare/constants/app_colors.dart';
+import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/signup/SignupModel.dart';
+import 'package:pcare/services/SharedPrefsServices.dart';
+import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/store/login/registration_controller.dart';
 import 'package:pcare/ui/Registeration/doctor_registration.dart';
 import 'package:pcare/ui/Registeration/receptionist_registration.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
+import 'package:pcare/widgets/AppWidgets.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
+import 'package:pcare/widgets/radio_button_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
 class SignUp extends StatefulWidget {
-  String userType;
+  SignupModel signupModel;
 
-  SignUp({@required this.userType});
+  SignUp({@required this.signupModel});
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -26,8 +34,10 @@ class _SignUpState extends State<SignUp> {
   String _date;
 
   List<Map<String, dynamic>> _registrationList;
+  String _groupValue = "Gender";
   RegistrationController registrationController =
       Get.put(RegistrationController());
+  LoginController _loginController = Get.find<LoginController>();
 
   loadList() {
     _registrationList = [
@@ -97,9 +107,10 @@ class _SignUpState extends State<SignUp> {
         'input_type': TextInputType.text,
         "error_text": registrationController.genderError,
         "obscure": false,
-        "read_only": false,
+        "read_only": true,
         "required": true,
-        "text_editing_controller": false
+        "text_editing_controller": true,
+        'onTap': 'Yes',
       },
       {
         "id": UniversalStrings.dob,
@@ -169,36 +180,11 @@ class _SignUpState extends State<SignUp> {
                 Container(
                   padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
                   child: RectangleButtonWidget(
-                    childText:
-                        widget.userType == UniversalStrings.patientRadioButton
-                            ? "REGISTER"
-                            : UniversalStrings.nextButtonText,
-                    onPressed: () {
-                      if (widget.userType ==
-                          UniversalStrings.patientRadioButton) {
-                        if (!registrationController.validateForm()) {
-                          FlushbarMessage.errorMessage(
-                              context, "Please enter every field properly");
-                        } else {
-                          PageUtils.pushPage(HomePage());
-                        }
-                      } else if (widget.userType ==
-                          UniversalStrings.receptionist) {
-                        if (!registrationController.validateForm()) {
-                          FlushbarMessage.errorMessage(
-                              context, "Please enter every field properly");
-                        } else {
-                          PageUtils.pushPage(ReceptionistRegistration());
-                        }
-                      } else {
-                        if (!registrationController.validateForm()) {
-                          FlushbarMessage.errorMessage(
-                              context, "Please enter every field properly");
-                        } else {
-                          PageUtils.pushPage(DoctorRegistration());
-                        }
-                      }
-                    },
+                    childText: widget.signupModel.usertype.toLowerCase() ==
+                            UniversalStrings.patientRadioButton.toLowerCase()
+                        ? UniversalStrings.register
+                        : UniversalStrings.nextButtonText,
+                    onPressed: _onButtonPressed,
                     width: Get.width,
                   ),
                 ),
@@ -236,16 +222,33 @@ class _SignUpState extends State<SignUp> {
             return registrationController.allow.value
                 ? TextFieldWidget(
                     textEditingController: _registrationList[index]
-                            ['text_editing_controller']
+                                ['text_editing_controller'] &&
+                            _registrationList[index]['id'] ==
+                                UniversalStrings.dob
                         ? new TextEditingController(
                             text: registrationController.dob.value)
-                        : null,
+                        : _registrationList[index]['text_editing_controller'] &&
+                                _registrationList[index]['id'] ==
+                                    UniversalStrings.gender
+                            ? new TextEditingController(
+                                text: registrationController.gender.value)
+                            : null,
                     margin: const EdgeInsets.only(
                         left: 12, right: 12, top: 10, bottom: 6),
                     labelText: _registrationList[index]['text'],
-                    onTap: _registrationList[index]['onTap'] == "Yes"
-                        ? () => {_selectDate(context)}
-                        : null,
+                    onTap: _registrationList[index]['onTap'] == "Yes" &&
+                            _registrationList[index]['id'] ==
+                                UniversalStrings.dob
+                        ? () {
+                            _selectDate(context);
+                          }
+                        : _registrationList[index]['onTap'] == "Yes" &&
+                                _registrationList[index]['id'] ==
+                                    UniversalStrings.gender
+                            ? () {
+                                _openGenderDialog();
+                              }
+                            : null,
                     readOnly: _registrationList[index]['read_only'],
                     isObscureText: _registrationList[index]['obscure'],
                     onChanged: (value) {
@@ -295,15 +298,186 @@ class _SignUpState extends State<SignUp> {
         });
   }
 
+  Widget _buildSelectGenderText() {
+    return Container(
+      margin: const EdgeInsets.only(left: 12),
+      child: Text(
+        UniversalStrings.selectGender,
+        style: Theme.of(context).textTheme.headline2,
+      ),
+    );
+  }
+
+  Widget _buildSelectionRow() {
+    return Obx(
+      () => Row(
+        children: [
+          Expanded(
+            flex: 4,
+            child: RadioButtonWidget(
+              itemText: "Male",
+              groupValue: _groupValue,
+              iconSelected:
+                  registrationController.gender.value.toLowerCase() == "male",
+              onChanged: (value) {
+                registrationController.setGender(value);
+              },
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(),
+          ),
+          Expanded(
+            flex: 5,
+            child: RadioButtonWidget(
+              itemText: "Female",
+              groupValue: _groupValue,
+              iconSelected:
+                  registrationController.gender.value.toLowerCase() == "female",
+              onChanged: (value) {
+                registrationController.setGender(value);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime d = await showDatePicker(
+    final DateTime _date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1960),
       lastDate: DateTime.now(),
     );
+    if (_date != null) {
+      _saveDate(_date);
+    }
+  }
 
-    registrationController.setDob(
-        d.day.toString() + "/" + d.month.toString() + "/" + d.year.toString());
+  void _openGenderDialog() {
+    showDialog(
+      context: Get.context,
+      barrierDismissible: true,
+      useSafeArea: true,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CloseButton(),
+                  Container(
+                    // margin: const EdgeInsets.only(left: 20),
+                    alignment: Alignment.center,
+                    child: _buildSelectGenderText(),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              _buildSelectionRow(),
+              SizedBox(
+                height: 12,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //methods and on clicks
+
+  void _saveDate(DateTime date) {
+    String _date = DateFormat("dd-MM-yyyy").format(date);
+    registrationController.setDob(_date);
+  }
+
+  void _onButtonPressed() {
+    if (!registrationController.validateForm()) {
+      FlushbarMessage.errorMessage(
+          context, "Please enter every field properly");
+    } else {
+      if (widget.signupModel.usertype.toLowerCase() ==
+          UniversalStrings.patientRadioButton.toLowerCase()) {
+        //patient
+        _callPatientRegisterAPI();
+      } else if (widget.signupModel.usertype.toLowerCase() ==
+          UniversalStrings.receptionist.toLowerCase()) {
+        //receptionist
+        _gotoReceptionistRegisteration();
+      } else {
+        //doctor
+        _gotoDoctorRegisteration();
+      }
+    }
+  }
+
+  void _callPatientRegisterAPI() async {
+    AppWidgets.customProgressDialog();
+    SignupModel _signupModel;
+    _signupModel = _saveDataToModel();
+
+    SignupApi _signupApi = SignupApi();
+
+    try {
+      _loginController.loginModel = await _signupApi.registerUser(_signupModel);
+
+      AppWidgets.closeDialog();
+      _saveDetailsToSharedPrefs(_loginController.loginModel.token);
+      _gotoPatientHomePage();
+    } catch (error) {
+      AppWidgets.closeDialog();
+      print("ERROR IN Signup : " + error.toString());
+      FlushbarMessage.errorMessage(Get.context, "Error in registering");
+    }
+  }
+
+  SignupModel _saveDataToModel() {
+    widget.signupModel.firstname = registrationController.firstName.value;
+    widget.signupModel.lastname = registrationController.lastName.value;
+    widget.signupModel.mobilenumber = registrationController.mobileNumber.value;
+    widget.signupModel.password = registrationController.password.value;
+    widget.signupModel.area = registrationController.address.value;
+    widget.signupModel.gender = registrationController.gender.value;
+    widget.signupModel.dob = registrationController.dob.value;
+
+    return widget.signupModel;
+  }
+
+  void _saveDetailsToSharedPrefs(String token) {
+    SharedPrefsServices _sfService = SharedPrefsServices();
+    _sfService.setBoolToPref(Preferences.isLoggedIn, true);
+    _sfService.setStringToPref(
+        Preferences.mobileNumber, _loginController.mobileNumber.value);
+    _sfService.setStringToPref(
+        Preferences.password, _loginController.password.value);
+    _sfService.setStringToPref(Preferences.authToken, token);
+  }
+
+  void _gotoPatientHomePage() {
+    PageUtils.pushPageAndRemoveAll(HomePage());
+  }
+
+  void _gotoReceptionistRegisteration() {
+    PageUtils.pushPage(ReceptionistRegistration());
+  }
+
+  void _gotoDoctorRegisteration() {
+    PageUtils.pushPage(DoctorRegistration());
   }
 }

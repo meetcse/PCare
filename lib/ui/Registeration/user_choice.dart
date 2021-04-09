@@ -4,6 +4,7 @@ import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/signup/SignupModel.dart';
 import 'package:pcare/ui/Registeration/sign_up.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
@@ -63,14 +64,7 @@ class _UserChoiceState extends State<UserChoice> {
                 padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
                 child: RectangleButtonWidget(
                   childText: UniversalStrings.nextButtonText,
-                  onPressed: () {
-                    if (_userType == "") {
-                      FlushbarMessage.errorMessage(
-                          context, UniversalStrings.userChoiceErrorMessage);
-                    } else {
-                      PageUtils.pushPage(SignUp(userType: _userType));
-                    }
-                  },
+                  onPressed: _onNextButtonPressed,
                   width: Get.width,
                 ),
               ),
@@ -102,5 +96,15 @@ class _UserChoiceState extends State<UserChoice> {
         borderRadius: BorderRadius.circular(12),
       ),
     );
+  }
+
+  //methods and on clicks
+  void _onNextButtonPressed() {
+    if (_userType == "") {
+      FlushbarMessage.errorMessage(
+          context, UniversalStrings.userChoiceErrorMessage);
+    } else {
+      PageUtils.pushPage(SignUp(signupModel: SignupModel(usertype: _userType)));
+    }
   }
 }

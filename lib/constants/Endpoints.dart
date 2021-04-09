@@ -17,4 +17,6 @@ class Endpoints {
 
   //login endpoints
   static const String loginUser = '/api/auth/login';
+
+  static const String signup = '/api/auth/register';
 }
