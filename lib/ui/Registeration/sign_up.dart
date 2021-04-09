@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:pcare/Utils/AppMethods.dart';
 import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/api/registration/SignupApi.dart';
 import 'package:pcare/constants/app_colors.dart';
@@ -412,33 +413,36 @@ class _SignUpState extends State<SignUp> {
       FlushbarMessage.errorMessage(
           context, "Please enter every field properly");
     } else {
+      SignupModel _signupModel;
+      _signupModel = _saveDataToModel();
       if (widget.signupModel.usertype.toLowerCase() ==
           UniversalStrings.patientRadioButton.toLowerCase()) {
         //patient
-        _callPatientRegisterAPI();
+        _callPatientRegisterAPI(_signupModel);
       } else if (widget.signupModel.usertype.toLowerCase() ==
           UniversalStrings.receptionist.toLowerCase()) {
         //receptionist
-        _gotoReceptionistRegisteration();
+        _gotoReceptionistRegisteration(_signupModel);
       } else {
         //doctor
-        _gotoDoctorRegisteration();
+        _gotoDoctorRegisteration(_signupModel);
       }
     }
   }
 
-  void _callPatientRegisterAPI() async {
+  void _callPatientRegisterAPI(SignupModel signupModel) async {
     AppWidgets.customProgressDialog();
-    SignupModel _signupModel;
-    _signupModel = _saveDataToModel();
 
     SignupApi _signupApi = SignupApi();
 
     try {
-      _loginController.loginModel = await _signupApi.registerUser(_signupModel);
+      _loginController.loginModel = await _signupApi.registerUser(signupModel);
 
+      AppMethods.saveLoginDetailsToSharedPrefs(
+          _loginController.loginModel.token,
+          _loginController.mobileNumber.value,
+          _loginController.password.value);
       AppWidgets.closeDialog();
-      _saveDetailsToSharedPrefs(_loginController.loginModel.token);
       _gotoPatientHomePage();
     } catch (error) {
       AppWidgets.closeDialog();
@@ -459,25 +463,17 @@ class _SignUpState extends State<SignUp> {
     return widget.signupModel;
   }
 
-  void _saveDetailsToSharedPrefs(String token) {
-    SharedPrefsServices _sfService = SharedPrefsServices();
-    _sfService.setBoolToPref(Preferences.isLoggedIn, true);
-    _sfService.setStringToPref(
-        Preferences.mobileNumber, _loginController.mobileNumber.value);
-    _sfService.setStringToPref(
-        Preferences.password, _loginController.password.value);
-    _sfService.setStringToPref(Preferences.authToken, token);
-  }
-
   void _gotoPatientHomePage() {
     PageUtils.pushPageAndRemoveAll(HomePage());
   }
 
-  void _gotoReceptionistRegisteration() {
+  void _gotoReceptionistRegisteration(SignupModel signupModel) {
     PageUtils.pushPage(ReceptionistRegistration());
   }
 
-  void _gotoDoctorRegisteration() {
-    PageUtils.pushPage(DoctorRegistration());
+  void _gotoDoctorRegisteration(SignupModel signupModel) {
+    PageUtils.pushPage(DoctorRegistration(
+      signupModel: signupModel,
+    ));
   }
 }

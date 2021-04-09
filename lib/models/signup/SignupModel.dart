@@ -62,7 +62,7 @@ class SignupModel {
       'usertype': usertype ?? '',
       'mci_id': mci_id ?? '',
       'specialist': specialist ?? false,
-      'specialist_in': specialist_in ?? '',
+      'specialist_in': specialist_in ?? 'No Specialist',
       'doctor_type': doctor_type ?? '',
       'hospital_id': hospital_id ?? '',
       'approx_appoint_per_slot': approx_appoint_per_slot ?? 1,
