@@ -468,7 +468,9 @@ class _SignUpState extends State<SignUp> {
   }
 
   void _gotoReceptionistRegisteration(SignupModel signupModel) {
-    PageUtils.pushPage(ReceptionistRegistration());
+    PageUtils.pushPage(ReceptionistRegistration(
+      signupModel: signupModel,
+    ));
   }
 
   void _gotoDoctorRegisteration(SignupModel signupModel) {

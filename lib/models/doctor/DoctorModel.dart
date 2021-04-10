@@ -1,15 +1,19 @@
+import 'package:pcare/models/signup/HospitalModel.dart';
+import 'package:pcare/models/user/user_model.dart';
+
 class DoctorDetailsModel {
   List<String> workingDays;
   List<String> workingHours;
-  List<Null> treatmentId;
+  List<String> treatmentId;
   String sId;
-  String user;
+  UserModel user;
   String mciId;
   bool specialist;
   String specialistIn;
   String doctorType;
   int approxAppointPerSlot;
   String receptionistId;
+  HospitalModel hospital_id;
 
   DoctorDetailsModel({
     this.workingDays,
@@ -23,6 +27,7 @@ class DoctorDetailsModel {
     this.doctorType,
     this.approxAppointPerSlot,
     this.receptionistId,
+    this.hospital_id,
   });
 
   DoctorDetailsModel.fromJson(Map<String, dynamic> json) {
@@ -30,12 +35,18 @@ class DoctorDetailsModel {
     workingHours = json['working_hours'].cast<String>();
     if (json['treatment_id'] != null) {
       treatmentId = [];
-      // json['treatment_id'].forEach((v) {
-      //   treatmentId.add(new Null.fromJson(v));
-      // });
+      json['treatment_id'].forEach((v) {
+        treatmentId.add(v);
+      });
     }
     sId = json['_id'];
-    user = json['user'];
+    if (json['user'] != null) {
+      user = UserModel.fromMap(json['user']);
+    }
+    if (json['hospital_id'] != null) {
+      hospital_id = HospitalModel.fromJson(json['hospital_id']);
+    }
+
     mciId = json['mci_id'];
     specialist = json['specialist'];
     specialistIn = json['specialist_in'];
