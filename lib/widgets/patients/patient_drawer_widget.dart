@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
@@ -5,8 +6,10 @@ import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/constants/strings.dart';
 import 'package:pcare/services/SharedPrefsServices.dart';
+import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/store/patients/patient_home_controller.dart';
 import 'package:pcare/ui/Registeration/sign_in.dart';
+import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 
 class PatientDrawerWidget extends StatefulWidget {
   @override
@@ -16,14 +19,7 @@ class PatientDrawerWidget extends StatefulWidget {
 class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
   PatientHomeController patientHomeController =
       Get.put(PatientHomeController());
-  //TODO: CHange with dynamic
-  Map<String, dynamic> _loggedInUser = {
-    "username": "John",
-    "age": "20",
-    "gender": "Male",
-    "mobile": "+91 8980772697",
-    "city": "Vadodara"
-  };
+ LoginController _loginController = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
@@ -132,8 +128,11 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
               width: 50,
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: Image(
-                  image: AssetImage('assets/images/profiledefault.png'),
+                child: CachedNetworkImage(
+                   progressIndicatorBuilder: (context, _, __) {
+          return CustomProgressIndicatorWidget();
+        },
+              imageUrl: _loginController.loginModel.user.profilePic,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -150,7 +149,7 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //Name
-                    Text(_loggedInUser['username'],
+                    Text( _loginController.loginModel.user.firstName +" "+  _loginController.loginModel.user.lastName,
                         style: Theme.of(context).textTheme.headline3),
                     //Age and Gender in row
                     // Row(
@@ -173,18 +172,18 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
                     // ),
 
                     //Mobile NUmber
-                    Text(_loggedInUser['mobile'],
+                    Text( _loginController.loginModel.user.mobileNumber,
                         style: Theme.of(context)
                             .textTheme
                             .button
                             .copyWith(fontSize: 14)),
 
                     //City
-                    Text(_loggedInUser['city'],
-                        style: Theme.of(context)
-                            .textTheme
-                            .button
-                            .copyWith(fontSize: 14)),
+                    // Text( _loginController.loginModel.user.,
+                    //     style: Theme.of(context)
+                    //         .textTheme
+                    //         .button
+                    //         .copyWith(fontSize: 14)),
                   ],
                 ),
               ),

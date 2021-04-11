@@ -12,16 +12,16 @@ class UserModel {
   String id;
 
   UserModel.fromMap(Map<String, dynamic> user) {
-    id = user['_id'];
-    firstName = user['firstname'];
-    lastName = user['lastname'];
-    mobileNumber = user['mobilenumber'];
-    password = user['password'];
-    gender = user['gender'];
-    dob = user['dob'];
-    age = user['age'];
-    userType = user['usertype'];
-    profilePic = user['profilepic'];
+    id = user['_id'] ?? '';
+    firstName = user['firstname'] ?? '';
+    lastName = user['lastname'] ?? '';
+    mobileNumber = user['mobilenumber'] ?? '';
+    password = user['password'] ?? '';
+    gender = user['gender'] ?? '';
+    dob = user['dob'] ?? '';
+    age = user['age'] ?? '';
+    userType = user['usertype'] ?? '';
+    profilePic = user['profilepic'] ?? '';
 
     if (user['address'] != null) {
       Map<String, dynamic> _address = user['address'];
@@ -39,11 +39,11 @@ class AddressModel {
   String state;
 
   AddressModel.fromMap(Map<String, dynamic> address) {
-    this.country = address['country'];
-    this.houseno = address['houseno'];
-    this.society = address['society'];
-    this.area = address['area'];
-    this.city = address['city'];
-    this.state = address['state'];
+    this.country = address['country'] ?? '';
+    this.houseno = address['houseno'] ?? '';
+    this.society = address['society'] ?? '';
+    this.area = address['area'] ?? '';
+    this.city = address['city'] ?? '';
+    this.state = address['state'] ?? '';
   }
 }

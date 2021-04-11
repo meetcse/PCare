@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/api/patient/appointment/SearchDoctorInPatientAPI.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/patient/doctor_specialist_list.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/patient/appointment/SearchDoctorInPatientModel.dart';
 import 'package:pcare/store/patients/appointments/search_doctor_controller.dart';
 import 'package:pcare/ui/patient/appointments/doctor_profile.dart';
+import 'package:pcare/widgets/AppWidgets.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/chip_three_section_widget.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
@@ -21,153 +25,19 @@ class SearchDoctor extends StatefulWidget {
 }
 
 class _SearchDoctorState extends State<SearchDoctor> {
-  //TODO: CHANGE TO DYNAMIC
-  Map<String, dynamic> _loggedInUser = {
-    "username": "John",
-    "age": "20",
-    "gender": "Male",
-    "mobile": "+91 8980772697",
-    "city": "Vadodara"
-  };
-
-  //TODO: CHange with dynamic list from database
-  List<Map<String, dynamic>> _totalDoctorsStaticList = [
-    {
-      "id": "1",
-      "name": "Dr. Joe Biden",
-      "hospital": "Bhailal Amin",
-      "type": "Cardialogist",
-      "specialist": true,
-      "address": "23 street 1, Gotri, vadodara",
-      "working_day": "Monday-Saturday",
-      "working_hour": ["10:00 AM to 12:00 PM", "4:00 PM to 6:00 PM"],
-      "image":
-          "https://cdn.sanity.io/images/0vv8moc6/hcplive/0ebb6a8f0c2850697532805d09d4ff10e838a74b-200x200.jpg?auto=format",
-    },
-    {
-      "id": "2",
-      "name": "Dr. Shriya Shah",
-      "hospital": "MVC",
-      "type": "Audiologist",
-      "specialist": true,
-      "address": "23 street 1, Gorwa, vadodara",
-      "working_day": "Monday-Thursday",
-      "working_hour": ["10:00 AM to 12:00 PM", "6:00 PM to 8:00 PM"],
-      "image":
-          "https://images.theconversation.com/files/304957/original/file-20191203-66986-im7o5.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop",
-    },
-    {
-      "id": "3",
-      "name": "Dr. Mirant Patel",
-      "hospital": "Codec",
-      "type": "Maxillofacial",
-      "specialist": true,
-      "address": "23 street 1, Gorwa, vadodara",
-      "working_day": "Monday, Tuesday, Friday, Saturday",
-      "working_hour": [
-        "10:00 AM to 12:00 PM",
-        "2:00 PM to 4:00 PM",
-        "6:00 PM to 8:00 PM"
-      ],
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRtcAdqTgmM7vV8XEkpGumjp0Mcg4TsjTBPQ&usqp=CAU",
-    },
-    {
-      "id": "4",
-      "name": "Dr. Mona Shah",
-      "hospital": "Monal Hospital",
-      "type": "M.D",
-      "specialist": false,
-      "address": "23 street 1, Gorwa, vadodara",
-      "working_day": "Monday-Thursday",
-      "working_hour": ["10:00 AM to 12:00 PM", "6:00 PM to 8:00 PM"],
-      "image":
-          "https://thumbs.dreamstime.com/b/beautiful-arab-female-doctor-posing-isolated-white-background-34173775.jpg",
-    },
-    {
-      "id": "5",
-      "name": "Dr. Akash Joshi",
-      "hospital": "Divya Clinic",
-      "type": "ENT",
-      "specialist": true,
-      "address": "23 street 1, Gorwa, ahmedabad",
-      "working_day": "Monday, Thursday, Saturday",
-      "working_hour": ["10:00 AM to 12:00 PM", "6:00 PM to 8:00 PM"],
-      "image":
-          "https://static.toiimg.com/photo/msid-76714980/76714980.jpg?1422821",
-    },
-    {
-      "id": "6",
-      "name": "Dr. Tapan Shah",
-      "hospital": "Infectious Disease Care",
-      "type": "Skin",
-      "specialist": false,
-      "address": "23 street 1, jodhpur, ahmedabad",
-      "working_day": "Monday-Thursday",
-      "working_hour": [
-        "10:00 AM to 12:00 PM",
-        "2:00 PM to 3:00 PM",
-        "6:00 PM to 8:00 PM"
-      ],
-      "image":
-          "https://www.lumahealth.io/wp-content/uploads/2018/05/Transparency-in-the-Doctor-Patient-Relationship-1.jpg",
-    },
-    {
-      "id": "7",
-      "name": "Dr. Divya Trivedi",
-      "hospital": "We Care",
-      "type": "Hernia Surgeon",
-      "specialist": true,
-      "address": "23 street 1, december villa, ahmedabad",
-      "working_day": "Monday-Thursday",
-      "working_hour": ["10:00 AM to 12:00 PM", "6:00 PM to 8:00 PM"],
-      "image":
-          "https://toppng.com/uploads/preview/female-doctor-png-picture-indian-lady-doctor-11562855283suvdrc34qc.png",
-    },
-    {
-      "id": "8",
-      "name": "Dr. Pradip Bhatt",
-      "hospital": "TCP",
-      "type": "Audiologist",
-      "specialist": true,
-      "address": "23 street 1, satellite, ahmedabad",
-      "working_day": "Monday-Thursday",
-      "working_hour": ["10:00 AM to 12:00 PM", "6:00 PM to 8:00 PM"],
-      "image":
-          "https://img.freepik.com/free-photo/friendly-indian-doctor-reviewing-medical-history-tablet_1262-12661.jpg?size=626&ext=jpg&ga=GA1.2.563753139.1611446400",
-    },
-    {
-      "id": "9",
-      "name": "Dr. Pavan Solanki",
-      "hospital": "Amba Health Care",
-      "type": "Orthopedic",
-      "specialist": true,
-      "address": "23 street 1, sim city, adalaj",
-      "working_day": "Monday-Thursday",
-      "working_hour": ["10:00 AM to 12:00 PM", "6:00 PM to 8:00 PM"],
-      "image":
-          "https://www.pinnaclecare.com/wp-content/uploads/2017/12/bigstock-African-young-doctor-portrait-28825394.jpg.webp",
-    },
-    {
-      "id": "10",
-      "name": "Dr. Harit Bhatt",
-      "hospital": "GMC",
-      "type": "M.D",
-      "specialist": false,
-      "address": "23 street 1, infocity, gandhinagar",
-      "working_day": "Monday-Thursday",
-      "working_hour": ["10:00 AM to 12:00 PM", "6:00 PM to 8:00 PM"],
-      "image":
-          "https://www.nutritionfactors.com/blog/wp-content/uploads/2019/12/Male-doctor-smiling-portrait-close-up-Med-Res-72991363.jpg",
-    },
-  ];
-
+  var searchDoctorController = Get.put(SearchDoctorController());
   TextEditingController _searchTextEditingController = TextEditingController();
 
   DoctorSpecialistList _specialistList = DoctorSpecialistList();
 
-  SearchDoctorController searchDoctorController =
-      Get.put(SearchDoctorController());
+  Future<List<SearchDoctorsInPatientModel>> _searchDoctorModelFuture;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _callDoctorsApi();
+  }
 
   @override
   void dispose() {
@@ -211,94 +81,103 @@ class _SearchDoctorState extends State<SearchDoctor> {
   Widget _buildChildWidget() {
     return SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: Obx(()
-            // <SearchDoctorController>
-            // (builder: (searchController)
-            {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: 4,
-              ),
+        child: FutureBuilder(
+            future: _searchDoctorModelFuture,
+            builder: (context,
+                AsyncSnapshot<List<SearchDoctorsInPatientModel>>
+                    searchDoctorsModelList) {
+              if (!searchDoctorsModelList.hasData) {
+                return Center(child: CustomProgressIndicatorWidget());
+              }
 
-              //Location
-              _buildLocationIconAndText(),
+              List<SearchDoctorsInPatientModel> _searchDoctorsModelList =
+                  searchDoctorsModelList.data;
+              return Obx(()
+                  // <SearchDoctorController>
+                  // (builder: (searchController)
+                  {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 4,
+                    ),
 
-              //Search Text
-              _searchTextField(),
+                    //Location
+                    _buildLocationIconAndText(),
 
-              //Doctors Divider
-              _searchDoctorDivider(),
+                    //Search Text
+                    _searchTextField(_searchDoctorsModelList),
 
-              //doctor list
-              _doctorList(),
-              SizedBox(
-                height: 16,
-              ),
+                    //Doctors Divider
+                    _searchDoctorDivider(),
 
-              searchDoctorController.isSearching.value
-                  ? Container()
-                  :
-                  //specialist divider
-                  _specialistDivider(),
-
-              searchDoctorController.isSearching.value
-                  ? Container()
-                  :
-                  //specialities list
-                  Flexible(fit: FlexFit.loose, child: _buildSpecialitiesList()),
-
-              searchDoctorController.isSearching.value
-                  ? Container()
-                  : SizedBox(
+                    //doctor list
+                    _doctorList(_searchDoctorsModelList),
+                    SizedBox(
                       height: 16,
                     ),
 
-              SizedBox(
-                height: 20,
-              ),
-            ],
-          );
-        }));
+                    searchDoctorController.isSearching.value
+                        ? Container()
+                        :
+                        //specialist divider
+                        _specialistDivider(),
+
+                    searchDoctorController.isSearching.value
+                        ? Container()
+                        :
+                        //specialities list
+                        Flexible(
+                            fit: FlexFit.loose,
+                            child: _buildSpecialitiesList()),
+
+                    searchDoctorController.isSearching.value
+                        ? Container()
+                        : SizedBox(
+                            height: 16,
+                          ),
+
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                );
+              });
+            }));
   }
 
-  Widget _doctorList() {
+  Widget _doctorList(List<SearchDoctorsInPatientModel> searchDoctorsModelList) {
     return Flexible(
       fit: FlexFit.loose,
       child: searchDoctorController.isSearching.value
           ? _buildDoctorsList(searchDoctorController.searchResults, true)
-          : _buildDoctorsList(_totalDoctorsStaticList, false),
+          : _buildDoctorsList(searchDoctorsModelList, false),
     );
   }
 
-  Widget _searchTextField() {
-    return TextFieldWidget(
-      margin: EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 12),
-      textEditingController: _searchTextEditingController,
-      labelText: UniversalStrings.searchDoctor,
-      isError: false,
-      onChanged: (value) {
-        _onSearchTextFieldChanged(value);
-      },
-    );
+  Widget _searchTextField(
+      List<SearchDoctorsInPatientModel> searchDoctorsModelList) {
+    return Obx(() {
+      return searchDoctorController.allow.value
+          ? TextFieldWidget(
+              margin: EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 12),
+              textEditingController: _searchTextEditingController,
+              labelText: UniversalStrings.searchDoctor,
+              isError: false,
+              onChanged: (value) {
+                _onSearchTextFieldChanged(value, searchDoctorsModelList);
+              },
+            )
+          : Container();
+    });
   }
 
   Widget _buildDoctorsList(
-      List<Map<String, dynamic>> doctors, bool isSearching) {
-    List<int> _itemCount = [];
-    //TODO: Remove item count when data is coming from backend
-
-    if (isSearching) {
-      for (int i = 0; i < doctors.length; i++) {
-        _itemCount.add(i);
-      }
-    } else {
-      _itemCount = searchDoctorController.getDoctorsCount(doctors
-          .length); // count for 4 docs from list and give random 4 docs from list
-    }
-
-    return isSearching && doctors.isEmpty
+      List<SearchDoctorsInPatientModel> searchDoctorsModelList,
+      bool isSearching) {
+    return (isSearching && searchDoctorsModelList.isEmpty) ||
+            (searchDoctorsModelList.length == 0)
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -315,29 +194,30 @@ class _SearchDoctorState extends State<SearchDoctor> {
         : ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: _itemCount.length,
+            itemCount: searchDoctorsModelList.length,
             itemBuilder: (context, index) {
+              SearchDoctorsInPatientModel _searchDoctorsModel =
+                  searchDoctorsModelList[index];
               return GetX<SearchDoctorController>(
                 builder: (controller) => GestureDetector(
                   onTap: () {
                     //TODO: Add selection
-                    controller
-                        .setSelectedDoctorId(doctors[_itemCount[index]]['id']);
+                    controller.setSelectedDoctorId(_searchDoctorsModel.id);
                   },
                   child: _buildDoctorsCard(
-                    isSelected: doctors[_itemCount[index]]['id'] ==
-                        controller.selectedDoctorId.value,
-                    doctorName: doctors[_itemCount[index]]['name'],
-                    hospitalName: doctors[_itemCount[index]]['hospital'],
-                    typeOfDoctor: doctors[_itemCount[index]]['type'],
-                    isSpecialist: doctors[_itemCount[index]]['specialist'],
-                    isNextAvailable: true, //TODO: Get Data from backend
-                    nextAvailableTime: doctors[_itemCount[index]]
-                        ['working_day'], //TODO: Get Data from backend
-                    availableDate: doctors[_itemCount[index]]
-                        ['working_day'], //TODO: Get Data from backend
-                    imageUrl: doctors[_itemCount[index]]['image'],
-                    id: doctors[_itemCount[index]]['id'],
+                    isSelected: _searchDoctorsModel.id.toLowerCase() ==
+                        controller.selectedDoctorId.value.toLowerCase(),
+                    doctorName: _searchDoctorsModel.user.firstName ??
+                        "" + " " + _searchDoctorsModel.user.lastName ??
+                        "",
+                    hospitalName: _searchDoctorsModel.hospitalId.hospitalName,
+                    typeOfDoctor: _searchDoctorsModel.doctorType,
+                    isSpecialist: _searchDoctorsModel.specialist,
+                    // isNextAvailable: true, //TODO: Get Data from backend
+                    // nextAvailableTime:_searchDoctorsModel.workingDays, //TODO: Get Data from backend
+                    // availableDate: _searchDoctorsModel.wor, //TODO: Get Data from backend
+                    imageUrl: _searchDoctorsModel.user.profilePic,
+                    id: _searchDoctorsModel.id,
                   ),
                 ),
               );
@@ -360,8 +240,8 @@ class _SearchDoctorState extends State<SearchDoctor> {
           ),
 
           //Locatin Text
-          Text(_loggedInUser['city'],
-              style: Theme.of(context).textTheme.bodyText1),
+          // Text(_loggedInUser['city'],
+          //     style: Theme.of(context).textTheme.bodyText1),
         ],
       ),
     );
@@ -372,9 +252,9 @@ class _SearchDoctorState extends State<SearchDoctor> {
     @required String hospitalName,
     @required String typeOfDoctor,
     @required bool isSpecialist,
-    @required bool isNextAvailable,
-    @required String nextAvailableTime,
-    @required String availableDate,
+    // @required bool isNextAvailable,
+    // @required String nextAvailableTime,
+    // @required String availableDate,
     @required String imageUrl,
     @required bool isSelected,
     @required String id,
@@ -508,33 +388,33 @@ class _SearchDoctorState extends State<SearchDoctor> {
                         : Container(),
                   ],
                 ),
-                isNextAvailable
-                    ? Text(
-                        "Available at 7", //TODO: temp - will come from backend
-                        style: isSelected
-                            ? Theme.of(context).textTheme.headline4.copyWith(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w300,
-                                  color: UniversalColors.whiteColor,
-                                )
-                            : Theme.of(context).textTheme.headline4.copyWith(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                      ) //TODO: to dynamic RIGHT NOW!!!!!
-                    : Text(
-                        'TIME', //TODO: temp - will come from backend
-                        style: isSelected
-                            ? Theme.of(context).textTheme.headline4.copyWith(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w300,
-                                  color: UniversalColors.whiteColor,
-                                )
-                            : Theme.of(context).textTheme.headline4.copyWith(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                      ), //TODO: CHANGE WITH PROPER TEXT
+                // isNextAvailable
+                //     ? Text(
+                //         "Available at 7", //TODO: temp - will come from backend
+                //         style: isSelected
+                //             ? Theme.of(context).textTheme.headline4.copyWith(
+                //                   fontSize: 13,
+                //                   fontWeight: FontWeight.w300,
+                //                   color: UniversalColors.whiteColor,
+                //                 )
+                //             : Theme.of(context).textTheme.headline4.copyWith(
+                //                   fontSize: 13,
+                //                   fontWeight: FontWeight.w300,
+                //                 ),
+                //       ) //TODO: to dynamic RIGHT NOW!!!!!
+                //     : Text(
+                //         'TIME', //TODO: temp - will come from backend
+                //         style: isSelected
+                //             ? Theme.of(context).textTheme.headline4.copyWith(
+                //                   fontSize: 13,
+                //                   fontWeight: FontWeight.w300,
+                //                   color: UniversalColors.whiteColor,
+                //                 )
+                //             : Theme.of(context).textTheme.headline4.copyWith(
+                //                   fontSize: 13,
+                //                   fontWeight: FontWeight.w300,
+                //                 ),
+                //       ), //TODO: CHANGE WITH PROPER TEXT
                 SizedBox(
                   height: 12,
                 ),
@@ -644,20 +524,33 @@ class _SearchDoctorState extends State<SearchDoctor> {
 
   //Methods------------------------------
 
-  void _onFloatingActionButtonClicked() {
-    Map<String, dynamic> _selectedDoctor;
-    _totalDoctorsStaticList.forEach((element) {
-      if (element['id'].toString() ==
-          searchDoctorController.selectedDoctorId.value) {
-        _selectedDoctor = element;
-      }
+  void _callDoctorsApi() {
+    SearchDoctorInPatientApi _sdpApi = SearchDoctorInPatientApi();
+    _searchDoctorModelFuture = _sdpApi.getDoctors().catchError((error) {
+      print("Error in getting doctors :" + error.toString());
+      FlushbarMessage.errorMessage(Get.context, "Something Went Wrong");
     });
+  }
+
+  void _onFloatingActionButtonClicked() {
+    AppWidgets.customProgressDialog();
+    SearchDoctorsInPatientModel _selectedDoctor;
+
+    Future.value(_searchDoctorModelFuture).then((_doctorsList) {
+      _doctorsList.forEach((element) {
+        if (element.id.toLowerCase() ==
+            searchDoctorController.selectedDoctorId.value.toLowerCase()) {
+          _selectedDoctor = element;
+        }
+      });
+    });
+
+    AppWidgets.closeDialog();
     _gotoDoctorProfileScreen(_selectedDoctor);
   }
 
   void _onSearchTextFieldChanged(
-    String value,
-  ) {
+      String value, List<SearchDoctorsInPatientModel> searchDoctorsModelList) {
     //TODO: CALL API FOR SEARCHING DOCTOR
     if (value.isEmpty) {
       searchDoctorController.setIsSearching(false);
@@ -665,11 +558,11 @@ class _SearchDoctorState extends State<SearchDoctor> {
       searchDoctorController.setIsSearching(true);
 
       searchDoctorController.searchDoctors(
-          _totalDoctorsStaticList, _searchTextEditingController.text);
+          searchDoctorsModelList, _searchTextEditingController.text);
     }
   }
 
-  void _gotoDoctorProfileScreen(Map<String, dynamic> selectedDoctor) {
-    PageUtils.pushPage(DoctorProfile(doctorDetails: selectedDoctor));
+  void _gotoDoctorProfileScreen(SearchDoctorsInPatientModel selectedDoctor) {
+    // PageUtils.pushPage(DoctorProfile(doctorDetails: selectedDoctor));
   }
 }

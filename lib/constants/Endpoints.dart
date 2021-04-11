@@ -22,4 +22,5 @@ class Endpoints {
   static const String getHospitals = '/api/hospital/';
   static const String registerHospital = '/api/hospital/register';
   static const String searchDoctors = '/api/doctor/search/doctor';
+  static const String getDoctors = '/api/doctor/';
 }
