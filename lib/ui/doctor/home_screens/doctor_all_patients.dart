@@ -3,15 +3,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/api/doctor/get_all_patients.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/models/doctor/GetAllPatientsModel.dart';
 import 'package:pcare/ui/doctor/patient/doctor_patient_detail.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
-class DoctorAllPatients extends StatelessWidget {
+class DoctorAllPatients extends StatefulWidget {
+  @override
+  _DoctorAllPatientsState createState() => _DoctorAllPatientsState();
+}
+
+class _DoctorAllPatientsState extends State<DoctorAllPatients> {
+  Future<List<GetAllPatientsModel>> _getAllPatientsModelFuture;
+
   List<Map<String, dynamic>> _patients = [
     {
       "id": "1",
@@ -78,6 +87,12 @@ class DoctorAllPatients extends StatelessWidget {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _callApi();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
@@ -124,28 +139,46 @@ class DoctorAllPatients extends StatelessWidget {
   Widget _buildPatientsList() {
     return Container(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: _patients.length,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: EdgeInsets.only(bottom: 10),
-              child: Column(
-                children: [
-                  _patientCard(
-                    _patients[index],
-                  ),
-                  SizedBox(height: 8),
-                  index == _patients.length - 1 ? Container() : Divider(),
-                ],
-              ),
-            );
-          }),
+      child: FutureBuilder(
+        future: _getAllPatientsModelFuture,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return (snapshot.data == null)
+              ? Center(
+                  child: Text("loading..."),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Column(
+                        children: [
+                          _patientCard(snapshot.data[index]),
+                          SizedBox(height: 8),
+                          index == snapshot.data.length - 1
+                              ? Container()
+                              : Divider(),
+                        ],
+                      ),
+                    );
+                  },
+                );
+        },
+      ),
     );
   }
 
-  Widget _patientCard(Map<String, dynamic> patient) {
+  Widget _patientCard(GetAllPatientsModel patient) {
+    bool isOnGoing = false;
+    patient.appointmentId.forEach(
+      (e) {
+        if (e.appointment.status.toLowerCase() == "on going") {
+          isOnGoing = true;
+        }
+      },
+    );
     return GestureDetector(
       onTap: () {
         PageUtils.pushPage(DoctorPatientDetail(patient));
@@ -158,7 +191,7 @@ class DoctorAllPatients extends StatelessWidget {
               progressIndicatorBuilder: (context, _, __) {
                 return CustomProgressIndicatorWidget();
               },
-              imageUrl: patient["image"],
+              imageUrl: patient.user.profilePic,
               height: 50,
               width: 50,
               fit: BoxFit.cover,
@@ -169,7 +202,7 @@ class DoctorAllPatients extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                patient["name"],
+                patient.user.firstname + " " + patient.user.lastname,
                 style: Theme.of(Get.context).textTheme.headline4.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -179,7 +212,7 @@ class DoctorAllPatients extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    patient["city"],
+                    patient.user.address.city,
                     style: Theme.of(Get.context).textTheme.headline5.copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.normal,
@@ -187,7 +220,7 @@ class DoctorAllPatients extends StatelessWidget {
                   ),
                   SizedBox(width: 15),
                   Text(
-                    patient["age"],
+                    patient.user.age,
                     style: Theme.of(Get.context).textTheme.headline5.copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.normal,
@@ -197,7 +230,7 @@ class DoctorAllPatients extends StatelessWidget {
               )
             ],
           ),
-          patient["status"] == "On Going"
+          isOnGoing
               ? Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -226,5 +259,16 @@ class DoctorAllPatients extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  //methods and on clicks
+  void _callApi() {
+    GetAllPatientsApi _getAllPatientsApi = GetAllPatientsApi();
+
+    try {
+      _getAllPatientsModelFuture = _getAllPatientsApi.getAllPatients();
+    } catch (error) {
+      print("Error " + error);
+    }
   }
 }

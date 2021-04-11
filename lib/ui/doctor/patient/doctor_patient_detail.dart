@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
+import 'package:pcare/models/doctor/GetAllPatientsModel.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
@@ -11,7 +12,7 @@ import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
 import 'full_treatment.dart';
 
 class DoctorPatientDetail extends StatefulWidget {
-  Map<String, dynamic> patient;
+  GetAllPatientsModel patient;
 
   DoctorPatientDetail(this.patient);
 
@@ -20,7 +21,7 @@ class DoctorPatientDetail extends StatefulWidget {
 }
 
 class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
-  Map<String, dynamic> patient;
+  GetAllPatientsModel patient;
 
   List<Map<String, dynamic>> _treatments = [
     {
@@ -126,7 +127,7 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
               progressIndicatorBuilder: (context, _, __) {
                 return CustomProgressIndicatorWidget();
               },
-              imageUrl: patient["image"],
+              imageUrl: patient.user.profilePic,
               height: 120,
               width: 120,
               fit: BoxFit.cover,
@@ -137,7 +138,7 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                patient["name"],
+                patient.user.firstname + " " + patient.user.lastname,
                 style: Theme.of(Get.context).textTheme.headline1.copyWith(
                       color: UniversalColors.gradientColorStart,
                       fontSize: 28,
@@ -146,7 +147,7 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                patient["age"],
+                patient.user.age,
                 style: Theme.of(Get.context).textTheme.headline5.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -180,11 +181,11 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemCount: _treatments.length,
+      itemCount: patient.appointmentId.length,
       itemBuilder: (context, index) {
         return Column(
           children: [
-            buildTreatmentCard(_treatments[index]),
+            buildTreatmentCard(index),
             SizedBox(height: 10),
             Divider(),
           ],
@@ -193,10 +194,15 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
     );
   }
 
-  Widget buildTreatmentCard(Map<String, dynamic> treatment) {
+  Widget buildTreatmentCard(int index) {
     return GestureDetector(
       onTap: () => {
-        PageUtils.pushPage(FullTreatment()),
+        PageUtils.pushPage(
+          FullTreatment(
+            fullTreatmentId:
+                patient.appointmentId[index].appointment.fullTreatmentId,
+          ),
+        ),
       },
       child: Container(
         margin: const EdgeInsets.only(
@@ -212,34 +218,36 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (treatment["end-date"] == null
-                ? Row(children: [
-                    Icon(Icons.date_range),
-                    SizedBox(width: 5),
-                    Text(treatment["started_date"])
-                  ])
-                : Row(
-                    children: [
-                      Icon(Icons.date_range),
-                      SizedBox(width: 5),
-                      Text(treatment["started_date"]),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(DoctorUniversalStrings.to),
-                          ],
-                        ),
-                      ),
-                      Text(treatment["end-date"]),
-                    ],
-                  )),
+            // (treatment["end-date"] == null
+            //     ?
+            Row(children: [
+              Icon(Icons.date_range),
+              SizedBox(width: 5),
+              Text(patient.appointmentId[index].appointment.appointmentDate)
+            ]),
+            // : Row(
+            //     children: [
+            //       Icon(Icons.date_range),
+            //       SizedBox(width: 5),
+            //       Text(treatment["started_date"]),
+            //       Expanded(
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             Text(DoctorUniversalStrings.to),
+            //           ],
+            //         ),
+            //       ),
+            //       Text(treatment["end-date"]),
+            //     ],
+            //   )),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildTreamentRow(treatment["case"],
-                    Icons.domain_verification_rounded, false),
-                buildTreamentRow(treatment["status"], "", true),
+                buildTreamentRow(
+                    "FEVER", Icons.domain_verification_rounded, false),
+                buildTreamentRow(
+                    patient.appointmentId[index].appointment.status, "", true),
               ],
             ),
           ],

@@ -81,17 +81,17 @@ class ApiServices {
     return res.data;
   }
 
-  Future providePostRequestFormData(String url, dynamic data) async {
-    var errorMessage;
-    print("Api****" + url);
-    print("data****" + data.toString());
-    Response res =
-        await dio.post(url, data: FormData.fromMap(data)).catchError((error) {
-      errorMessage = DioErrorUtil.handleError(error);
-      print("ERROR in API RES : " + errorMessage);
-      throw error;
-    });
+  // Future providePostRequestFormData(String url, dynamic data) async {
+  //   var errorMessage;
+  //   print("Api****" + url);
+  //   print("data****" + data.toString());
+  //   Response res =
+  //       await dio.post(url, data: FormData.fromMap(data)).catchError((error) {
+  //     errorMessage = DioErrorUtil.handleError(error);
+  //     print("ERROR in API RES : " + errorMessage);
+  //     throw error;
+  //   });
 
-    return res.data;
-  }
+  //   return res.data;
+  // }
 }
