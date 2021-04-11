@@ -79,23 +79,24 @@ class _SearchDoctorState extends State<SearchDoctor> {
   }
 
   Widget _buildChildWidget() {
-    return SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: FutureBuilder(
-            future: _searchDoctorModelFuture,
-            builder: (context,
-                AsyncSnapshot<List<SearchDoctorsInPatientModel>>
-                    searchDoctorsModelList) {
-              if (!searchDoctorsModelList.hasData) {
-                return Center(child: CustomProgressIndicatorWidget());
-              }
+    return FutureBuilder(
+        future: _searchDoctorModelFuture,
+        builder: (context,
+            AsyncSnapshot<List<SearchDoctorsInPatientModel>>
+                searchDoctorsModelList) {
+          if (!searchDoctorsModelList.hasData) {
+            return Center(child: CustomProgressIndicatorWidget());
+          }
 
-              List<SearchDoctorsInPatientModel> _searchDoctorsModelList =
-                  searchDoctorsModelList.data;
-              return Obx(()
-                  // <SearchDoctorController>
-                  // (builder: (searchController)
-                  {
+          List<SearchDoctorsInPatientModel> _searchDoctorsModelList =
+              searchDoctorsModelList.data;
+          return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Obx(
+              ()
+              // <SearchDoctorController>
+              // (builder: (searchController)
+              {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -143,8 +144,10 @@ class _SearchDoctorState extends State<SearchDoctor> {
                     ),
                   ],
                 );
-              });
-            }));
+              },
+            ),
+          );
+        });
   }
 
   Widget _doctorList(List<SearchDoctorsInPatientModel> searchDoctorsModelList) {
@@ -207,9 +210,9 @@ class _SearchDoctorState extends State<SearchDoctor> {
                   child: _buildDoctorsCard(
                     isSelected: _searchDoctorsModel.id.toLowerCase() ==
                         controller.selectedDoctorId.value.toLowerCase(),
-                    doctorName: _searchDoctorsModel.user.firstName ??
-                        "" + " " + _searchDoctorsModel.user.lastName ??
-                        "",
+                    doctorName: _searchDoctorsModel.user.firstName +
+                        " " +
+                        _searchDoctorsModel.user.lastName,
                     hospitalName: _searchDoctorsModel.hospitalId.hospitalName,
                     typeOfDoctor: _searchDoctorsModel.doctorType,
                     isSpecialist: _searchDoctorsModel.specialist,
@@ -294,13 +297,13 @@ class _SearchDoctorState extends State<SearchDoctor> {
                   },
                   fit: BoxFit.cover,
                   height: 100,
-                  width: 90,
+                  width: 100,
                 ),
               ),
             ),
           ),
           SizedBox(
-            width: 12,
+            width: 8,
           ),
 
           //Doc details
@@ -538,15 +541,15 @@ class _SearchDoctorState extends State<SearchDoctor> {
 
     Future.value(_searchDoctorModelFuture).then((_doctorsList) {
       _doctorsList.forEach((element) {
-        if (element.id.toLowerCase() ==
-            searchDoctorController.selectedDoctorId.value.toLowerCase()) {
+        if (element.id.toLowerCase().contains(
+            searchDoctorController.selectedDoctorId.value.toLowerCase())) {
           _selectedDoctor = element;
+
+          AppWidgets.closeDialog();
+          _gotoDoctorProfileScreen(_selectedDoctor);
         }
       });
     });
-
-    AppWidgets.closeDialog();
-    _gotoDoctorProfileScreen(_selectedDoctor);
   }
 
   void _onSearchTextFieldChanged(
@@ -563,6 +566,6 @@ class _SearchDoctorState extends State<SearchDoctor> {
   }
 
   void _gotoDoctorProfileScreen(SearchDoctorsInPatientModel selectedDoctor) {
-    // PageUtils.pushPage(DoctorProfile(doctorDetails: selectedDoctor));
+    PageUtils.pushPage(DoctorProfile(doctorDetails: selectedDoctor));
   }
 }

@@ -13,9 +13,9 @@ class SelectAppointmentDayController extends GetxController {
     selectedDay.value = day;
   }
 
-  List<String> getDates(String workingDay) {
+  List<String> getDates(List<String> workingDay) {
     List<String> _dates = List<String>();
-    List<String> _workingDays = _getWorkingDayList(workingDay);
+    // List<String> _workingDays = _getWorkingDayList(workingDay);
 
     for (int i = 0; i < 10; i++) {
       var _checkDate = DateTime.now().add(
@@ -23,12 +23,17 @@ class SelectAppointmentDayController extends GetxController {
       );
 
       String _checkDay = DateFormat('EEEE').format(_checkDate);
-      if (_workingDays
+
+      var _conditionCheck = workingDay.where((element) => _checkDay
           .toString()
           .toLowerCase()
-          .contains(_checkDay.toLowerCase())) {
-        String _displayDate =
-            DateFormat('dd-MM').format(_checkDate) + ' (' + _checkDay + ')';
+          .contains(element.toString().toLowerCase()));
+
+      if (_conditionCheck.length > 0) {
+        String _displayDate = DateFormat('dd-MM-yyyy').format(_checkDate) +
+            ' (' +
+            _checkDay +
+            ')';
 
         _dates.add(_displayDate);
       }

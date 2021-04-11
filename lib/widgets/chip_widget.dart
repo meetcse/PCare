@@ -51,9 +51,19 @@ class ChipWidget extends StatelessWidget {
               onTap: () {
                 return onChipPressed(labelList[index]);
               },
-              child: _buildChip(
-                labelList[index],
-                isSelectd,
+              child: AnimatedSwitcher(
+                switchInCurve: Curves.easeIn,
+                switchOutCurve: Curves.linear,
+                duration: Duration(milliseconds: 150),
+                child: isSelectd
+                    ? _buildChip(
+                        labelList[index],
+                        isSelectd,
+                      )
+                    : _buildChip(
+                        labelList[index],
+                        isSelectd,
+                      ),
               ),
             );
           },
@@ -64,6 +74,7 @@ class ChipWidget extends StatelessWidget {
 
   Widget _buildChip(String label, bool isSelected) {
     return Chip(
+      key: isSelected ? Key("0") : Key("1"),
       label: Text(
         label,
         style: isSelected != null && isSelected

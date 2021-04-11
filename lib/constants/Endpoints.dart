@@ -23,4 +23,5 @@ class Endpoints {
   static const String registerHospital = '/api/hospital/register';
   static const String searchDoctors = '/api/doctor/search/doctor';
   static const String getDoctors = '/api/doctor/';
+  static const String bookNewAppointment = '/api/appointment/book/new';
 }

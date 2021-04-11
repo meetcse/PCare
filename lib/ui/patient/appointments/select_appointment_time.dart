@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/api/patient/appointment/BookAppointmentAPI.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/patient/appointment/SearchDoctorInPatientModel.dart';
 import 'package:pcare/store/patients/appointments/select_appointment_day_controller.dart';
 import 'package:pcare/store/patients/appointments/select_appointment_time_controller.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
 import 'package:pcare/ui/patient/appointments/my_appointments.dart';
+import 'package:pcare/widgets/AppWidgets.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/chip_widget.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
@@ -17,7 +21,8 @@ import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 
 class SelectAppointmentTime extends StatefulWidget {
-  final Map<String, dynamic> doctorDetails;
+  final SearchDoctorsInPatientModel doctorDetails;
+
   SelectAppointmentTime({this.doctorDetails});
 
   @override
@@ -35,8 +40,8 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _confettiControllerCenter.dispose();
+    super.dispose();
   }
 
   @override
@@ -110,7 +115,7 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
       builder: (sATController) {
         return sATController.isTimeLoaded.value
             ? ChipWidget(
-                labelList: widget.doctorDetails['working_hour'],
+                labelList: widget.doctorDetails.workingHours,
                 onChipPressed: (value) {
                   sATController.setSelectedTime(value);
                 },
@@ -147,8 +152,7 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
             controller.selectedTime.value == null) {
         } else {
           //TODO: Add route
-          _showConfirmDialog();
-          _confettiControllerCenter.play();
+          _bookAppointmentAPI();
         }
       },
     );
@@ -165,7 +169,11 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
         children: [
           //doc name
           TextSpan(
-            text: widget.doctorDetails['name'] + ' ',
+            text: "Dr. " +
+                widget.doctorDetails.user.firstName +
+                ' ' +
+                widget.doctorDetails.user.lastName +
+                ' ',
             style: Theme.of(Get.context).textTheme.headline4.copyWith(
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -217,9 +225,7 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
     return Container(
       // width: 100,
       child: InkWell(
-        onTap: () {
-          PageUtils.pushPageAndRemoveAll(HomePage());
-        },
+        onTap: _gotoHomeScreen,
         child: Text(
           UniversalStrings.home,
           style: Theme.of(context).textTheme.button.copyWith(
@@ -242,9 +248,7 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
 
   Widget _buildNavigateToAppointment() {
     return InkWell(
-      onTap: () {
-        PageUtils.pushPageAndRemoveAll(MyAppointments());
-      },
+      onTap: _gotoAppointmentsScreen,
       child: Container(
         // width: 100,
         child: Text(
@@ -281,7 +285,7 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
           Radius.circular(100),
         ),
         child: CachedNetworkImage(
-          imageUrl: widget.doctorDetails['image'],
+          imageUrl: widget.doctorDetails.user.profilePic,
           progressIndicatorBuilder: (context, url, _) {
             return Center(
               child: CustomProgressIndicatorWidget(
@@ -331,7 +335,7 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
                   child: Container(
                     // color: UniversalColors.whiteColor,
                     // alignment: Alignment.topCenter,
-                    transform: Matrix4Transform().translate(y: -45).matrix4,
+                    transform: Matrix4Transform().translate(y: -58).matrix4,
                     child: _buildImage(),
                   ),
                 ),
@@ -388,5 +392,37 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
         );
       },
     );
+  }
+
+  //methods
+  void _bookAppointmentAPI() async {
+    AppWidgets.customProgressDialog();
+    BookAppointmentApi _bookAppApi = BookAppointmentApi();
+    bool _result = await _bookAppApi
+        .bookAppointment(widget.doctorDetails.id, controller.selectedTime.value,
+            dayController.selectedDay.value)
+        .catchError((error) {
+      AppWidgets.closeDialog();
+      print("ERROR IN BOOKING APPOINTMENT  : " + error.toString());
+      FlushbarMessage.errorMessage(Get.context, UniversalStrings.error);
+    });
+
+    if (_result) {
+      AppWidgets.closeDialog();
+      FlushbarMessage.successMessage(Get.context, "Your Appointment is booked");
+      _showConfirmDialog();
+      _confettiControllerCenter.play();
+    } else {
+      AppWidgets.closeDialog();
+      FlushbarMessage.errorMessage(Get.context, UniversalStrings.error);
+    }
+  }
+
+  void _gotoAppointmentsScreen() {
+    PageUtils.pushPageAndRemoveAll(MyAppointments());
+  }
+
+  void _gotoHomeScreen() {
+    PageUtils.pushPageAndRemoveAll(HomePage());
   }
 }
