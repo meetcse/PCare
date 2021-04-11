@@ -104,7 +104,7 @@ class _SearchDoctorState extends State<SearchDoctor> {
                     ),
 
                     //Location
-                    _buildLocationIconAndText(),
+                    // _buildLocationIconAndText(),
 
                     //Search Text
                     _searchTextField(_searchDoctorsModelList),
