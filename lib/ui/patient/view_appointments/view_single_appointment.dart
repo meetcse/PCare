@@ -1,8 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/api/patient/appointment/GetCurrentAppointmentAPI.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/patient/appointment/AppointmentModel.dart';
 import 'package:pcare/ui/patient/view_appointments/view_treatment.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
@@ -10,26 +15,18 @@ import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 
 class ViewSingleAppointment extends StatefulWidget {
-  Map<String, dynamic> appointment;
-
-  ViewSingleAppointment({this.appointment});
-
   @override
   _ViewSingleAppointmentState createState() => _ViewSingleAppointmentState();
 }
 
 class _ViewSingleAppointmentState extends State<ViewSingleAppointment> {
-  Map<String, dynamic> _appointment;
+  Future<AppointmentModel> _appointmentModelFuture;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (widget.appointment == null) {
-      _addStaticAppointment();
-    } else {
-      _appointment = widget.appointment;
-    }
+    _callApi();
   }
 
   @override
@@ -48,49 +45,63 @@ class _ViewSingleAppointmentState extends State<ViewSingleAppointment> {
   }
 
   Widget _buildBody() {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Container(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 10),
+    return FutureBuilder(
+        future: _appointmentModelFuture,
+        builder: (context, AsyncSnapshot<AppointmentModel> appointmentModel) {
+          if (!appointmentModel.hasData) {
+            return CustomProgressIndicatorWidget();
+          }
 
-            Center(child: _buildProfileImage(_appointment['profile_image'])),
+          return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10),
 
-            SizedBox(height: 20),
-            //doc name
-            _doctorName(_appointment['doctor_name']),
+                  Center(
+                      child: _buildProfileImage(
+                          appointmentModel.data.doctorId.user.profilePic)),
 
-            SizedBox(height: 10),
+                  SizedBox(height: 20),
+                  //doc name
+                  _doctorName(appointmentModel.data.doctorId.user.firstName +
+                      " " +
+                      appointmentModel.data.doctorId.user.lastName),
 
-            //hospital name and location icon
-            _hospitalNameAndIcon(_appointment['hospital_name']),
+                  SizedBox(height: 10),
 
-            SizedBox(height: 10),
+                  //hospital name and location icon
+                  _hospitalNameAndIcon(
+                      appointmentModel.data.doctorId.hospital_id.hospitalName),
 
-            //appointment time
-            _appointmentTime(_appointment['appointment_time']),
+                  SizedBox(height: 10),
 
-            SizedBox(height: 10),
+                  //appointment time
+                  _appointmentTime(appointmentModel.data.appointmentTime),
 
-            //status
-            _appointmetStatus(_appointment['appointment_status']),
-            SizedBox(height: 10),
+                  SizedBox(height: 10),
 
-            _bookingTimeAndDate(_appointment['booking_time']),
+                  //status
+                  _appointmetStatus(appointmentModel.data.status),
+                  SizedBox(height: 10),
 
-            SizedBox(
-              height: 120,
+                  _bookingTimeAndDate(getDateTimeInStringFromUTC(
+                      appointmentModel.data.createddate)),
+
+                  SizedBox(
+                    height: 120,
+                  ),
+                  //next button
+                  _viewTreatmentButton()
+                ],
+              ),
             ),
-            //next button
-            _viewTreatmentButton()
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 
   Widget _viewTreatmentButton() {
@@ -274,16 +285,20 @@ class _ViewSingleAppointmentState extends State<ViewSingleAppointment> {
   }
 
 //methods and on clicks
-  void _addStaticAppointment() {
-    _appointment = {
-      "id": "1",
-      "profile_image":
-          "https://cdn.sanity.io/images/0vv8moc6/hcplive/0ebb6a8f0c2850697532805d09d4ff10e838a74b-200x200.jpg?auto=format",
-      "doctor_name": "Dr. John Doe",
-      "hospital_name": "Global Hospital",
-      "appointment_time": "5:00 PM to 6:00 PM",
-      "appointment_status": "Confirm",
-      "booking_time": "01-02-2021 3:00 PM",
-    };
+  void _callApi() {
+    GetCurrentAppointmentAPI _api = GetCurrentAppointmentAPI();
+    _appointmentModelFuture = _api.getCurrentAppointment().catchError((error) {
+      print("ERROR IN GETTING APPOINTMENT : " + error.toString());
+      FlushbarMessage.errorMessage(Get.context, error.toString());
+    });
+  }
+
+  String getDateTimeInStringFromUTC(String dateTime) {
+    DateTime _dateTime = DateTime.parse(dateTime);
+    DateTime dateLocal = _dateTime.toLocal();
+
+    String _format = DateFormat("dd-MM-yyyy hh:mm a").format(dateLocal);
+
+    return _format.toString();
   }
 }
