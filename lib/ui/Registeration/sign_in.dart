@@ -381,6 +381,8 @@ class _SigninState extends State<Signin> {
     try {
       controller.loginModel = await _loginApi.loginUser(
           controller.mobileNumber.value, controller.password.value);
+      controller.mobileNumber.value = '';
+      controller.password.value = '';
 
       if (controller.loginModel.user.userType.toLowerCase() == "patient") {
         _saveDetailsToSharedPrefs(controller.loginModel.token);
