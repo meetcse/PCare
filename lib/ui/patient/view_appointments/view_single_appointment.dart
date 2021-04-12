@@ -96,7 +96,11 @@ class _ViewSingleAppointmentState extends State<ViewSingleAppointment> {
                     height: 120,
                   ),
                   //next button
-                  _viewTreatmentButton()
+                  (appointmentModel.data.full_treatment_id != null &&
+                          appointmentModel.data.full_treatment_id.isNotEmpty)
+                      ? _viewTreatmentButton(
+                          appointmentModel.data.full_treatment_id)
+                      : Container(),
                 ],
               ),
             ),
@@ -104,11 +108,11 @@ class _ViewSingleAppointmentState extends State<ViewSingleAppointment> {
         });
   }
 
-  Widget _viewTreatmentButton() {
+  Widget _viewTreatmentButton(String fullTreatmentId) {
     return RectangleButtonWidget(
       childText: UniversalStrings.viewTreatment,
       onPressed: () {
-        PageUtils.pushPage(ViewTreatment());
+        _gotoViewTreatmentScreen(fullTreatmentId);
       },
     );
   }
@@ -300,5 +304,11 @@ class _ViewSingleAppointmentState extends State<ViewSingleAppointment> {
     String _format = DateFormat("dd-MM-yyyy hh:mm a").format(dateLocal);
 
     return _format.toString();
+  }
+
+  void _gotoViewTreatmentScreen(String fullTreatmentId) {
+    PageUtils.pushPage(ViewTreatment(
+      fullTreatmentId: fullTreatmentId,
+    ));
   }
 }

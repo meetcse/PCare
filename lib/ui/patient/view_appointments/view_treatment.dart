@@ -1,59 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:pcare/api/patient/treatment/GetFullTreatmentApi.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/patient/appointment/treatment/GetFullTreatmentModel.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
+import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
 
 class ViewTreatment extends StatefulWidget {
-  ViewTreatment();
+  String fullTreatmentId;
+  ViewTreatment({@required this.fullTreatmentId});
 
   @override
   _ViewTreatmentState createState() => _ViewTreatmentState();
 }
 
 class _ViewTreatmentState extends State<ViewTreatment> {
-  List<Map<String, dynamic>> _treatmentDetails = [
-    {
-      "date": "20-02-2020",
-      "details": {
-        "disease": "Cold",
-        "treatment": "On-Going",
-        "prescription": "Having improvement",
-        "special_note": "Take medicines properly"
-      }
-    },
-    {
-      "date": "15-01-2020",
-      "details": {
-        "disease": "COVID",
-        "treatment": "On-Going",
-        "prescription": "There are improvements",
-        "special_note": "Take Nebulizer daily"
-      }
-    },
-    {
-      "date": "18-12-2020",
-      "details": {
-        "disease": "Lung Disorder",
-        "treatment": "Stopped",
-        "prescription": "Recovered Fully",
-        "special_note": "Full Recovery is been observed"
-      }
-    }
-  ];
+  // List<Map<String, dynamic>> _treatmentDetails = [
+  //   {
+  //     "date": "20-02-2020",
+  //     "details": {
+  //       "disease": "Cold",
+  //       "treatment": "On-Going",
+  //       "prescription": "Having improvement",
+  //       "special_note": "Take medicines properly"
+  //     }
+  //   },
+  //   {
+  //     "date": "15-01-2020",
+  //     "details": {
+  //       "disease": "COVID",
+  //       "treatment": "On-Going",
+  //       "prescription": "There are improvements",
+  //       "special_note": "Take Nebulizer daily"
+  //     }
+  //   },
+  //   {
+  //     "date": "18-12-2020",
+  //     "details": {
+  //       "disease": "Lung Disorder",
+  //       "treatment": "Stopped",
+  //       "prescription": "Recovered Fully",
+  //       "special_note": "Full Recovery is been observed"
+  //     }
+  //   }
+  // ];
 
-  Map<String, dynamic> _appointmentDetails = {
-    "patientName": "Pallav Patel",
-    "doctorName": "Harsh Trivedi",
-    "hospitalName": "John Doe Hospital"
-  };
+  // Map<String, dynamic> _appointmentDetails = {
+  //   "patientName": "Pallav Patel",
+  //   "doctorName": "Harsh Trivedi",
+  //   "hospitalName": "John Doe Hospital"
+  // };
 
-  Widget buildListForTreatmentDetails() {
+  Future<GetFullTreatmentModel> _fullTreatmentModelFuture;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _callApi();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: _buildBody(),
+    );
+  }
+
+  Widget buildListForTreatmentDetails(List<Treatments> treatments) {
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: _treatmentDetails.length,
+        itemCount: treatments.length,
         itemBuilder: (context, index) {
+          Treatments _treatment = treatments[index];
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -67,7 +92,7 @@ class _ViewTreatmentState extends State<ViewTreatment> {
                     endIndent: 8,
                   )),
                   Text(
-                    _treatmentDetails[index]["date"],
+                    getDateTimeInStringFromUTC(_treatment.appointmentDate),
                     style: Theme.of(context).textTheme.headline4.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
@@ -83,19 +108,19 @@ class _ViewTreatmentState extends State<ViewTreatment> {
                 height: 12,
               ),
               buildAppointDetailsRow(
-                  "Disease :", _treatmentDetails[index]["details"]["disease"]),
+                  "Disease :", _treatment.singleTreatmentId.disease ?? ''),
               SizedBox(height: 10),
-              buildAppointDetailsRow("Treatment :",
-                  _treatmentDetails[index]["details"]["treatment"]),
-              SizedBox(height: 10),
+              // buildAppointDetailsRow("Treatment :",
+              //     _treatment.),
+              // SizedBox(height: 10),
               Flexible(
                 fit: FlexFit.loose,
                 child: buildAppointDetailsRow("Prescription :",
-                    _treatmentDetails[index]["details"]["prescription"]),
+                    _treatment.singleTreatmentId.prescription ?? ''),
               ),
               SizedBox(height: 10),
               buildAppointDetailsRow("Special Note :",
-                  _treatmentDetails[index]["details"]["special_note"]),
+                  _treatment.singleTreatmentId.specialNote ?? ''),
             ],
           );
         });
@@ -133,14 +158,6 @@ class _ViewTreatmentState extends State<ViewTreatment> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(),
-    );
-  }
-
   Widget _buildAppBar() {
     return MainAppBarWidget(
       leading: BackButtonWidget(),
@@ -149,40 +166,77 @@ class _ViewTreatmentState extends State<ViewTreatment> {
   }
 
   Widget _buildBody() {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Container(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 10),
-            buildAppointDetailsRow(
-                "Patient :", _appointmentDetails["patientName"]),
-            SizedBox(height: 5),
-            Divider(),
-            buildAppointDetailsRow(
-                "Doctor :", _appointmentDetails["doctorName"]),
-            SizedBox(height: 5),
-            Divider(),
-            buildAppointDetailsRow(
-                "Hospital :", _appointmentDetails["hospitalName"]),
-            SizedBox(height: 14),
-            Text(
-              UniversalStrings.yourTreatmentsAccToDate,
-              textAlign: TextAlign.center,
-              style:
-                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 22),
+    return FutureBuilder(
+        future: _fullTreatmentModelFuture,
+        builder:
+            (context, AsyncSnapshot<GetFullTreatmentModel> fullTreatmentModel) {
+          if (!fullTreatmentModel.hasData) {
+            return Center(child: CustomProgressIndicatorWidget());
+          }
+          return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10),
+                  buildAppointDetailsRow(
+                      "Patient :",
+                      fullTreatmentModel.data.patientId.user.firstName +
+                          " " +
+                          fullTreatmentModel.data.patientId.user.lastName),
+                  SizedBox(height: 5),
+                  Divider(),
+                  buildAppointDetailsRow(
+                      "Doctor :",
+                      fullTreatmentModel.data.doctorId.user.firstName +
+                          " " +
+                          fullTreatmentModel.data.doctorId.user.lastName),
+                  SizedBox(height: 5),
+                  Divider(),
+                  buildAppointDetailsRow(
+                      "Hospital :",
+                      fullTreatmentModel
+                          .data.doctorId.hospital_id.hospitalName),
+                  SizedBox(height: 14),
+                  Text(
+                    UniversalStrings.yourTreatmentsAccToDate,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline2
+                        .copyWith(fontSize: 22),
+                  ),
+                  SizedBox(height: 4),
+                  buildListForTreatmentDetails(
+                      fullTreatmentModel.data.treatments),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 4),
-            buildListForTreatmentDetails(),
-            SizedBox(
-              height: 20,
-            ),
-          ],
-        ),
-      ),
-    );
+          );
+        });
+  }
+
+  void _callApi() {
+    GetFullTreatmentApi _api = GetFullTreatmentApi();
+    _fullTreatmentModelFuture =
+        _api.getFullTreatment(widget.fullTreatmentId).catchError((error) {
+      print("ERROR in getting full treatment : " + error.toString());
+      FlushbarMessage.errorMessage(Get.context, error.toString());
+    });
+  }
+
+  String getDateTimeInStringFromUTC(String dateTime) {
+    DateTime _dateTime = DateTime.parse(dateTime);
+    DateTime dateLocal = _dateTime.toLocal();
+
+    String _format = DateFormat("dd-MM-yyyy").format(dateLocal);
+
+    return _format.toString();
   }
 }
