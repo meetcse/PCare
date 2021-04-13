@@ -116,8 +116,11 @@ class _FullTreatmentState extends State<FullTreatment> {
                                 SizedBox(width: 5),
                                 Text(
                                   snapshot
-                                      .data.treatments[index].appointmentDate,
+                                      .data.treatments[index].appointmentDate
+                                      .split("T")[0],
                                   style: TextStyle(fontSize: 12),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
@@ -133,6 +136,8 @@ class _FullTreatmentState extends State<FullTreatment> {
                                   snapshot.data.treatments[index]
                                       .singleAppointmentId.appointmentTime,
                                   style: TextStyle(fontSize: 12),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             )

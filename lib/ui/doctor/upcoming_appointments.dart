@@ -157,7 +157,7 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
                   ),
 
                   Text(
-                    upcomingAppointmentModel.appointment_date,
+                    upcomingAppointmentModel.appointment_date.split("T")[0],
                     style: Theme.of(context)
                         .textTheme
                         .headline5

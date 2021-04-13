@@ -223,7 +223,8 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
             Row(children: [
               Icon(Icons.date_range),
               SizedBox(width: 5),
-              Text(patient.appointmentId[index].appointment.appointmentDate)
+              Text(patient.appointmentId[index].appointment.appointmentDate
+                  .split("T")[0])
             ]),
             // : Row(
             //     children: [

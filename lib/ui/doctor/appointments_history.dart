@@ -147,7 +147,7 @@ class _AppointmentsHistoryState extends State<AppointmentsHistory> {
                   ),
                   //Appointment time
                   Text(
-                    DoctorUniversalStrings.appointTime +
+                    DoctorUniversalStrings.appointTime +                  
                         ' : ' +
                         upcomingAppointmentModel.appointment_time,
                     style: Theme.of(context)
@@ -158,7 +158,7 @@ class _AppointmentsHistoryState extends State<AppointmentsHistory> {
                   ),
 
                   Text(
-                    upcomingAppointmentModel.appointment_date,
+                    upcomingAppointmentModel.appointment_date.split("T")[0],
                     style: Theme.of(context)
                         .textTheme
                         .headline5

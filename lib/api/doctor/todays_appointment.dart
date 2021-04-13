@@ -18,7 +18,7 @@ class TodaysAppointmentApi {
           .toList();
       print("RESPONSE : " + _res.toString());
     } on DioError catch (e) {
-      print("Issue in fetching Appointment History" + e.toString());
+      print("Issue in fetching Today's Appointment" + e.toString());
       throw e;
     }
     return _upcomingAppointmentModel;

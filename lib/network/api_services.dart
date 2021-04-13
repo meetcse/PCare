@@ -29,16 +29,17 @@ class ApiServices {
       ))
       ..interceptors.add(
         InterceptorsWrapper(
-          onRequest: (Options options) async {
+          onRequest: (RequestOptions options, handler) async {
             // getting shared pref instance
             var prefs = await SharedPreferences.getInstance();
-
+                        
             // getting token
             var token = prefs.getString(Preferences.authToken);
 
             if (token != null) {
               options.headers.putIfAbsent('Authorization', () => token);
               options.headers.addAll({"authorization": "Bearer $token"});
+              return handler.next(options);
             } else {
               print('Auth token is null');
             }
