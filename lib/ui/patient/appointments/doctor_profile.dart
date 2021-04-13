@@ -256,9 +256,9 @@ class _DoctorProfileState extends State<DoctorProfile> {
 
   Widget _buildAppBar() {
     return MainAppBarWidget(
-      title: widget.doctorDetails.user.firstName +
+      title: widget.doctorDetails.user.firstname +
           " " +
-          widget.doctorDetails.user.lastName,
+          widget.doctorDetails.user.lastname,
       leading: BackButtonWidget(),
     );
   }

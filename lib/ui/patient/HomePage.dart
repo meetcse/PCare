@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
       appBar: MainAppBarWidget(
         leading: DrawerIconWidget(),
         //TODO: ADD ANIMATED TITLE IF POSSIBLE
-        title: UniversalStrings.welcome + ' ' +_loginController.loginModel.user.firstName + '!',
+        title: UniversalStrings.welcome + ' ' +_loginController.loginModel.user.firstname + '!',
       ),
       body: _buildChildWidget(context),
     );

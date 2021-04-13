@@ -169,9 +169,9 @@ class _MyAppointmentsState extends State<MyAppointments> {
                       }
                     },
                     child: _buildDoctorsCard(
-                        doctorName: _appointmentModel.doctorId.user.firstName +
+                        doctorName: _appointmentModel.doctorId.user.firstname +
                             " " +
-                            _appointmentModel.doctorId.user.lastName,
+                            _appointmentModel.doctorId.user.lastname,
                         hospitalName:
                             _appointmentModel.doctorId.hospital_id.hospitalName,
                         imageUrl: _appointmentModel.doctorId.user.profilePic,

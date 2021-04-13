@@ -170,9 +170,9 @@ class _SelectAppointmentTimeState extends State<SelectAppointmentTime> {
           //doc name
           TextSpan(
             text: "Dr. " +
-                widget.doctorDetails.user.firstName +
+                widget.doctorDetails.user.firstname +
                 ' ' +
-                widget.doctorDetails.user.lastName +
+                widget.doctorDetails.user.lastname +
                 ' ',
             style: Theme.of(Get.context).textTheme.headline4.copyWith(
                   fontWeight: FontWeight.w700,

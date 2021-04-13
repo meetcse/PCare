@@ -184,16 +184,16 @@ class _ViewTreatmentState extends State<ViewTreatment> {
                   SizedBox(height: 10),
                   buildAppointDetailsRow(
                       "Patient :",
-                      fullTreatmentModel.data.patientId.user.firstName +
+                      fullTreatmentModel.data.patientId.user.firstname +
                           " " +
-                          fullTreatmentModel.data.patientId.user.lastName),
+                          fullTreatmentModel.data.patientId.user.lastname),
                   SizedBox(height: 5),
                   Divider(),
                   buildAppointDetailsRow(
                       "Doctor :",
-                      fullTreatmentModel.data.doctorId.user.firstName +
+                      fullTreatmentModel.data.doctorId.user.firstname +
                           " " +
-                          fullTreatmentModel.data.doctorId.user.lastName),
+                          fullTreatmentModel.data.doctorId.user.lastname),
                   SizedBox(height: 5),
                   Divider(),
                   buildAppointDetailsRow(

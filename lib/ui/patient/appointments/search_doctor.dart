@@ -210,9 +210,9 @@ class _SearchDoctorState extends State<SearchDoctor> {
                   child: _buildDoctorsCard(
                     isSelected: _searchDoctorsModel.id.toLowerCase() ==
                         controller.selectedDoctorId.value.toLowerCase(),
-                    doctorName: _searchDoctorsModel.user.firstName +
+                    doctorName: _searchDoctorsModel.user.firstname +
                         " " +
-                        _searchDoctorsModel.user.lastName,
+                        _searchDoctorsModel.user.lastname,
                     hospitalName: _searchDoctorsModel.hospitalId.hospitalName,
                     typeOfDoctor: _searchDoctorsModel.doctorType,
                     isSpecialist: _searchDoctorsModel.specialist,

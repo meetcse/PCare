@@ -68,9 +68,9 @@ class _ViewSingleAppointmentState extends State<ViewSingleAppointment> {
 
                   SizedBox(height: 20),
                   //doc name
-                  _doctorName(appointmentModel.data.doctorId.user.firstName +
+                  _doctorName(appointmentModel.data.doctorId.user.firstname +
                       " " +
-                      appointmentModel.data.doctorId.user.lastName),
+                      appointmentModel.data.doctorId.user.lastname),
 
                   SizedBox(height: 10),
 
