@@ -18,6 +18,19 @@ class Endpoints {
   //login endpoints
   static const String loginUser = '/api/auth/login';
 
+  //registration endpoints
+  static const String registerUser = '/api/auth/register';
+
+  //upcoming appointments for Doctor
+  static const String getUpcomingAppointment = '/api/appointment/upcoming';
+
+  static const String getAppointmentsHistory = '/api/appointment/doctor/all';
+
+  static const String getTodaysAppointment = '/api/appointment/today';
+
+  static const String getAllPatients = '/api/doctor/mypatients';
+
+  static const String getFullTreatment = '/api/treatment/full';
   static const String signup = '/api/auth/register';
   static const String getHospitals = '/api/hospital/';
   static const String registerHospital = '/api/hospital/register';

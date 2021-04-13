@@ -5,7 +5,6 @@ import 'package:pcare/api/login/login_api.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/services/SharedPrefsServices.dart';
 import 'package:pcare/store/login/login_controller.dart';
-
 import 'package:pcare/ui/Registeration/sign_in.dart';
 import 'package:pcare/ui/doctor/doctor_home_page.dart';
 import 'package:pcare/ui/patient/HomePage.dart';

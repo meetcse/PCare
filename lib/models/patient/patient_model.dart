@@ -5,13 +5,12 @@ class PatientModel {
   List<OnGoingTreatmentId> ongoingTreatmentId;
   List<CompletedTreatmentId> completedTreatmentId;
   List<AppointmentId> appointmentId;
-
   String userId;
-
   UserModel user;
 
   PatientModel.fromMap(Map<String, dynamic> json) {
     id = json['_id'];
+    user = UserModel.fromMap(json['user']);
     if (json['appointmentId'] != null) {
       List<dynamic> _appointments = json['appointmentId'];
 

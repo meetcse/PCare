@@ -205,9 +205,9 @@ class _ReceptionistRegistrationState extends State<ReceptionistRegistration> {
 
                           return ListTile(
                             title: Text(
-                              (_doctor.user.firstName +
+                              (_doctor.user.firstname +
                                       " " +
-                                      _doctor.user.lastName) ??
+                                      _doctor.user.lastname) ??
                                   '',
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
@@ -257,9 +257,9 @@ class _ReceptionistRegistrationState extends State<ReceptionistRegistration> {
                           //
                           DoctorDetailsModel _doctor;
                           _doctor = suggestion;
-                          _doctorNameController.text = _doctor.user.firstName +
+                          _doctorNameController.text = _doctor.user.firstname +
                               " " +
-                              _doctor.user.lastName;
+                              _doctor.user.lastname;
                           _selectedDoctorId = _doctor.sId;
                         } else if (_registrationList[index]['id'] ==
                             UniversalStrings.lastNameId) {

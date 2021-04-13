@@ -29,16 +29,17 @@ class ApiServices {
       ))
       ..interceptors.add(
         InterceptorsWrapper(
-          onRequest: (Options options) async {
+          onRequest: (RequestOptions options, handler) async {
             // getting shared pref instance
             var prefs = await SharedPreferences.getInstance();
-
+                        
             // getting token
             var token = prefs.getString(Preferences.authToken);
 
             if (token != null) {
               options.headers.putIfAbsent('Authorization', () => token);
               options.headers.addAll({"authorization": "Bearer $token"});
+              return handler.next(options);
             } else {
               print('Auth token is null');
             }
@@ -81,17 +82,17 @@ class ApiServices {
     return res.data;
   }
 
-  Future providePostRequestFormData(String url, dynamic data) async {
-    var errorMessage;
-    print("Api****" + url);
-    print("data****" + data.toString());
-    Response res =
-        await dio.post(url, data: FormData.fromMap(data)).catchError((error) {
-      errorMessage = DioErrorUtil.handleError(error);
-      print("ERROR in API RES : " + errorMessage);
-      throw error;
-    });
+  // Future providePostRequestFormData(String url, dynamic data) async {
+  //   var errorMessage;
+  //   print("Api****" + url);
+  //   print("data****" + data.toString());
+  //   Response res =
+  //       await dio.post(url, data: FormData.fromMap(data)).catchError((error) {
+  //     errorMessage = DioErrorUtil.handleError(error);
+  //     print("ERROR in API RES : " + errorMessage);
+  //     throw error;
+  //   });
 
-    return res.data;
-  }
+  //   return res.data;
+  // }
 }

@@ -113,7 +113,7 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       width: Get.width,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
         color: Color(0xff2C8BFF),
       ),
       child: Column(
@@ -123,7 +123,7 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
             "Appointment Request",
             style: TextStyle(color: Colors.white),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 5),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

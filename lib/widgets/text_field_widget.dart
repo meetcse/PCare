@@ -17,6 +17,7 @@ class TextFieldWidget extends StatelessWidget {
   final EdgeInsets margin;
   final double width;
   final Widget prefixIcon;
+  int maxLines ;
 
   TextFieldWidget(
       {@required this.labelText,
@@ -31,7 +32,8 @@ class TextFieldWidget extends StatelessWidget {
       this.onTap,
       this.readOnly = false,
       this.width,
-      this.prefixIcon});
+      this.prefixIcon,
+      this.maxLines=1});
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class TextFieldWidget extends StatelessWidget {
       width: width != null ? width : MediaQuery.of(context).size.width,
       margin: margin != null ? margin : EdgeInsets.all(20),
       child: TextField(
+        maxLines: maxLines,
         keyboardType: textInputType,
         onChanged: onChanged,
         obscureText: isObscureText,

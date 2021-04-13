@@ -1,17 +1,23 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:pcare/api/doctor/full_treatment.dart';
 import 'package:pcare/constants/app_colors.dart';
-import 'package:pcare/constants/doctor/doctor_strings.dart';
+import 'package:pcare/models/doctor/FullTreatmentModel.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
 
 class FullTreatment extends StatefulWidget {
+  String fullTreatmentId;
+
+  FullTreatment({this.fullTreatmentId});
   @override
   _FullTreatmentState createState() => _FullTreatmentState();
 }
 
 class _FullTreatmentState extends State<FullTreatment> {
+  Future<FullTreatmentModel> _fullTreatmentModelFuture;
+
   List<Map<String, dynamic>> treatments = [
     {
       "date": "01-01-2021",
@@ -42,6 +48,12 @@ class _FullTreatmentState extends State<FullTreatment> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _callApi();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
@@ -62,88 +74,117 @@ class _FullTreatmentState extends State<FullTreatment> {
   Widget _buildBody() {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
-      child: _buildTreatmentList(),
+      child: Column(
+        children: [
+          _buildTreatmentList(),
+          SizedBox(
+            height: 50,
+          )
+        ],
+      ),
     );
   }
 
   Widget _buildTreatmentList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: treatments.length,
-      itemBuilder: (context, index) {
-        return Container(
-          padding: EdgeInsets.only(top: 25),
-          margin: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.date_range,
-                        size: 18,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        treatments[index]["date"],
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.alarm,
-                        size: 18,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        treatments[index]["time"],
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                elevation: 10,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      _buildTreatmentField(
-                        "Case",
-                        treatments[index]["case"],
-                      ),
-                      _buildTreatmentField(
-                        "Observation",
-                        treatments[index]["observation"],
-                      ),
-                      _buildTreatmentField(
-                        "Experiments",
-                        treatments[index]["experiments"],
-                      ),
-                      _buildTreatmentField(
-                        "Treatment",
-                        treatments[index]["treatment"],
-                      ),
-                      _buildTreatmentField(
-                        "Prescription",
-                        treatments[index]["prescription"],
-                      ),
-                    ],
-                  ),
-                ),
+    return FutureBuilder(
+      future: _fullTreatmentModelFuture,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return (snapshot.data == null)
+            ? Center(
+                child: Text("loading..."),
               )
-            ],
-          ),
-        );
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: snapshot.data.treatments.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: EdgeInsets.only(top: 25),
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.date_range,
+                                  size: 18,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  snapshot
+                                      .data.treatments[index].appointmentDate
+                                      .split("T")[0],
+                                  style: TextStyle(fontSize: 12),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 10),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.alarm,
+                                  size: 18,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  snapshot.data.treatments[index]
+                                      .singleAppointmentId.appointmentTime,
+                                  style: TextStyle(fontSize: 12),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                        Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          elevation: 10,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              children: [
+                                _buildTreatmentField(
+                                  "Case",
+                                  snapshot.data.treatments[index]
+                                      .singleTreatmentId.disease,
+                                ),
+                                _buildTreatmentField(
+                                  "Observation",
+                                  snapshot.data.treatments[index]
+                                      .singleTreatmentId.observation,
+                                ),
+                                _buildTreatmentField(
+                                  "Experiments",
+                                  snapshot.data.treatments[index]
+                                      .singleTreatmentId.experiments,
+                                ),
+                                _buildTreatmentField(
+                                  "Treatment",
+                                  snapshot.data.treatments[index]
+                                      .singleTreatmentId.specialNote,
+                                ),
+                                _buildTreatmentField(
+                                  "Prescription",
+                                  snapshot.data.treatments[index]
+                                      .singleTreatmentId.prescription,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              );
       },
     );
   }
@@ -188,5 +229,21 @@ class _FullTreatmentState extends State<FullTreatment> {
         ),
       ],
     );
+  }
+
+  //methods and on clicks
+  void _callApi() {
+    FullTreatmentApi _fullTreatmentApi = FullTreatmentApi();
+
+    try {
+      if (widget.fullTreatmentId != null) {
+        _fullTreatmentModelFuture =
+            _fullTreatmentApi.getFullTreatment(widget.fullTreatmentId);
+      } else {
+        _fullTreatmentModelFuture = null;
+      }
+    } catch (error) {
+      print("Error " + error);
+    }
   }
 }

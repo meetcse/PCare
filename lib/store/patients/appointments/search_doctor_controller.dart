@@ -21,11 +21,11 @@ class SearchDoctorController extends GetxController {
     searchResults.clear();
 
     doctorsList.forEach((doctor) {
-      if (doctor.user.firstName
+      if (doctor.user.firstname
               .toString()
               .toLowerCase()
               .contains(searchQuery.toLowerCase()) ||
-          doctor.user.lastName
+          doctor.user.lastname
               .toString()
               .toLowerCase()
               .contains(searchQuery.toLowerCase())) {

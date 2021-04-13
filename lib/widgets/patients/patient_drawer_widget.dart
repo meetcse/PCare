@@ -149,7 +149,7 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //Name
-                    Text( _loginController.loginModel.user.firstName +" "+  _loginController.loginModel.user.lastName,
+                    Text( _loginController.loginModel.user.firstname +" "+  _loginController.loginModel.user.lastname,
                         style: Theme.of(context).textTheme.headline3),
                     //Age and Gender in row
                     // Row(
@@ -172,7 +172,7 @@ class _PatientDrawerWidgetState extends State<PatientDrawerWidget> {
                     // ),
 
                     //Mobile NUmber
-                    Text( _loginController.loginModel.user.mobileNumber,
+                    Text( _loginController.loginModel.user.mobilenumber,
                         style: Theme.of(context)
                             .textTheme
                             .button

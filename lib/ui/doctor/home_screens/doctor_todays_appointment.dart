@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/api/doctor/todays_appointment.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
+import 'package:pcare/models/doctor/UpcomingAppointmentModel.dart';
+import 'package:pcare/ui/doctor/patient/add_patient_observation.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
-import 'package:pcare/widgets/main_app_bar_widget.dart';
 
 class DoctorTodaysAppointment extends StatefulWidget {
   @override
@@ -14,6 +17,14 @@ class DoctorTodaysAppointment extends StatefulWidget {
 }
 
 class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
+  Future<List<UpcomingAppointmentModel>> _upcomingAppointmentModelFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _callApi();
+  }
+
   Map<String, dynamic> _doctor = {
     "name": "Dr. John Doe",
   };
@@ -156,23 +167,45 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
   }
 
   Widget _buildTodaysAppointment(List<Map<String, dynamic>> todaysAppointment) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: todaysAppointment.length,
-      itemBuilder: (context, index) {
-        Map<String, dynamic> _appointment = todaysAppointment[index];
-        return Container(
-          margin: const EdgeInsets.only(bottom: 14),
-          child: _appointmentCard(
-            _appointment['image'],
-            _appointment['patient_name'],
-            _appointment['age'],
-            false,
-            false,
-            _appointment['appointment_time'],
-          ),
-        );
+    String a = "H";
+    a.toLowerCase();
+    return FutureBuilder(
+      future: _upcomingAppointmentModelFuture,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return (snapshot.data == null)
+            ? Center(
+                child: Text("loading..."),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 14),
+                    child: _appointmentCard(
+                      snapshot.data[index].patient_id.user.profilePic,
+                      snapshot.data[index].patient_id.user.firstname +
+                          " " +
+                          snapshot.data[index].patient_id.user.lastname,
+                      snapshot.data[index].patient_id.user.age,
+                      (snapshot.data[index].status.toLowerCase() == "ongoing")
+                          ? true
+                          : false,
+                      (snapshot.data[index].status.toLowerCase() == "next")
+                          ? true
+                          : false,
+                      snapshot.data[index].appointment_time,
+                      onPressed: () {
+                        if (snapshot.data[index].status.toLowerCase() ==
+                            "ongoing") {
+                          PageUtils.pushPage(AddPatientObservation());
+                        }
+                      },
+                    ),
+                  );
+                },
+              );
       },
     );
   }
@@ -196,6 +229,9 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
       true,
       false,
       currentAppointment['appointment_time'],
+      onPressed: () {
+        PageUtils.pushPage(AddPatientObservation());
+      },
     );
   }
 
@@ -387,5 +423,17 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
         fit: BoxFit.fill,
       ),
     );
+  }
+
+  //methods and on clicks
+  void _callApi() {
+    TodaysAppointmentApi _todaysAppointmentApi = TodaysAppointmentApi();
+
+    try {
+      _upcomingAppointmentModelFuture =
+          _todaysAppointmentApi.getTodaysAppointment();
+    } catch (error) {
+      print("Error " + error);
+    }
   }
 }
