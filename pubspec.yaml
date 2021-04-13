@@ -42,6 +42,7 @@ dependencies:
   curved_navigation_bar: ^0.3.7
   dio: ^4.0.0
   lottie: ^1.0.1
+  flutter_typeahead: ^2.0.0
 
 dev_dependencies:
   flutter_test:

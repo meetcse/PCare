@@ -31,4 +31,12 @@ class Endpoints {
   static const String getAllPatients = '/api/doctor/mypatients';
 
   static const String getFullTreatment = '/api/treatment/full';
+  static const String signup = '/api/auth/register';
+  static const String getHospitals = '/api/hospital/';
+  static const String registerHospital = '/api/hospital/register';
+  static const String searchDoctors = '/api/doctor/search/doctor';
+  static const String getDoctors = '/api/doctor/';
+  static const String bookNewAppointment = '/api/appointment/book/new';
+  static const String getAppointmentsPatient = '/api/appointment/patient';
+  static const String getFullTreatmentPatient = '/api/treatment/full';
 }

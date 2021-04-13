@@ -25,17 +25,21 @@ class RectangleButtonWidget extends StatelessWidget {
     return Container(
       child: ElevatedButton(
         onPressed: onPressed,
-        child: _buildImageAndText(childText),
+        child: _buildImageAndText(childText, image: image),
         style: ButtonStyle(
-          backgroundColor:
-              MaterialStateProperty.all(UniversalColors.gradientColorStart),
+          backgroundColor: MaterialStateProperty.all(isColor
+              ? UniversalColors.gradientColorStart
+              : UniversalColors.whiteColor),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
           ),
           minimumSize: MaterialStateProperty.all(
-            Size(width ?? Get.width * 0.7, height ?? 50),
+            Size(
+              width ?? Get.width * 0.7,
+              height ?? 50,
+            ),
           ),
         ),
       ),
@@ -44,23 +48,32 @@ class RectangleButtonWidget extends StatelessWidget {
 
   Widget _buildImageAndText(String text, {String image}) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
       children: [
-        image != null
-            ? Image(
-                image: AssetImage(image),
-              )
-            : Container(),
-        icon != null ? icon : Container(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            image != null
+                ? Image(
+                    image: AssetImage(image),
+                  )
+                : Container(),
+            icon != null ? icon : Container(),
+          ],
+        ),
         Expanded(
-          child: Container(
-            alignment: Alignment.center,
-            child: Text(text,
-                style: isColor
-                    ? Theme.of(Get.context).textTheme.button
-                    : Theme.of(Get.context).textTheme.button.copyWith(
-                          color: UniversalColors.darkBlue,
-                          fontWeight: FontWeight.w500,
-                        )),
+          child: Center(
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(text,
+                  style: isColor
+                      ? Theme.of(Get.context).textTheme.button
+                      : Theme.of(Get.context).textTheme.button.copyWith(
+                            color: UniversalColors.darkBlue,
+                            fontWeight: FontWeight.w500,
+                          )),
+            ),
           ),
         ),
       ],

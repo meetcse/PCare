@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/models/patient/appointment/SearchDoctorInPatientModel.dart';
 import 'package:pcare/ui/patient/appointments/select_appointment_day.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/chip_widget.dart';
@@ -12,7 +13,7 @@ import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 
 class DoctorProfile extends StatefulWidget {
-  final Map<String, dynamic> doctorDetails;
+  final SearchDoctorsInPatientModel doctorDetails;
   DoctorProfile({@required this.doctorDetails});
   @override
   _DoctorProfileState createState() => _DoctorProfileState();
@@ -43,19 +44,25 @@ class _DoctorProfileState extends State<DoctorProfile> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           //TODO: DISPLAY ONLY IF NEXT AVAILABLE - FROM BACKEND
-          _buildButton(
-            UniversalStrings.instantBook,
-            () {
-              //TODO: Add functionality
-            },
+          Container(
+            width: Get.width * 0.4,
+            child: _buildButton(
+              UniversalStrings.instantBook,
+              () {
+                //TODO: Add functionality
+              },
+            ),
           ),
 
           //book now
-          _buildButton(
-            UniversalStrings.bookNow,
-            () {
-              _gotoSelectAppointmentDayScreen();
-            },
+          Container(
+            width: Get.width * 0.4,
+            child: _buildButton(
+              UniversalStrings.bookNow,
+              () {
+                _gotoSelectAppointmentDayScreen();
+              },
+            ),
           ),
         ],
       ),
@@ -101,8 +108,8 @@ class _DoctorProfileState extends State<DoctorProfile> {
                   SizedBox(height: 10),
 
                   //next avail
-                  _buildNextAvailable(), //TODO: Get data from backend directly
-                  SizedBox(height: 10),
+                  // _buildNextAvailable(), //TODO: Get data from backend directly
+                  // SizedBox(height: 10),
                   Divider(),
 
                   //general opd timings
@@ -139,7 +146,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
         ),
 
         //build table for time and working days
-        _buildWorkingDayChips(widget.doctorDetails['working_day']),
+        _buildWorkingDayChips(widget.doctorDetails.workingDays),
 
         SizedBox(
           height: 10,
@@ -154,7 +161,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
               ),
         ),
 
-        _buildWorkingTime(widget.doctorDetails['working_hour']),
+        _buildWorkingTime(widget.doctorDetails.workingHours),
 
         SizedBox(
           height: 20,
@@ -169,11 +176,11 @@ class _DoctorProfileState extends State<DoctorProfile> {
     );
   }
 
-  Widget _buildWorkingDayChips(String workingDay) {
-    List<String> _splittedString = _getWorkingDayList(workingDay);
+  Widget _buildWorkingDayChips(List<String> workingDay) {
+    // List<String> _splittedString = _getWorkingDayList(workingDay);
 
     return ChipWidget(
-      labelList: _splittedString,
+      labelList: workingDay,
     );
   }
 
@@ -192,12 +199,12 @@ class _DoctorProfileState extends State<DoctorProfile> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          widget.doctorDetails['type'],
+          widget.doctorDetails.doctorType,
           style: Theme.of(context).textTheme.headline5.copyWith(
                 fontSize: 16,
               ),
         ),
-        widget.doctorDetails['specialist']
+        widget.doctorDetails.specialist
             ? Container(
                 // margin: const EdgeInsets.only(right: 14),
                 padding: const EdgeInsets.only(
@@ -227,7 +234,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
 
   Widget _buildAddress() {
     return Text(
-      widget.doctorDetails['address'],
+      widget.doctorDetails.hospitalId.hospitalAddress,
       style: Theme.of(context).textTheme.headline5,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
@@ -237,7 +244,9 @@ class _DoctorProfileState extends State<DoctorProfile> {
   Widget _buildHospitalNameAndSpecialist() {
     return Container(
       child: Text(
-        UniversalStrings.at + ' ' + widget.doctorDetails['hospital'],
+        UniversalStrings.at +
+            ' ' +
+            widget.doctorDetails.hospitalId.hospitalName,
         style: Theme.of(Get.context).textTheme.headline5.copyWith(
               fontSize: 16,
             ),
@@ -247,16 +256,18 @@ class _DoctorProfileState extends State<DoctorProfile> {
 
   Widget _buildAppBar() {
     return MainAppBarWidget(
-      title: widget.doctorDetails['name'],
+      title: widget.doctorDetails.user.firstName +
+          " " +
+          widget.doctorDetails.user.lastName,
       leading: BackButtonWidget(),
     );
   }
 
   Widget _buildImage() {
     return Hero(
-      tag: widget.doctorDetails['id'],
+      tag: widget.doctorDetails.id,
       child: CachedNetworkImage(
-        imageUrl: widget.doctorDetails['image'],
+        imageUrl: widget.doctorDetails.user.profilePic,
         progressIndicatorBuilder: (context, url, _) {
           return Center(
             child: CustomProgressIndicatorWidget(
@@ -264,7 +275,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
             ),
           );
         },
-        fit: BoxFit.fill,
+        fit: BoxFit.contain,
         height: 280,
         width: Get.width,
       ),
@@ -276,7 +287,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
       childText: text,
       // isImage: false,
       onPressed: onPressed,
-      // width: Get.width,
+      width: Get.width * 0.1,
     );
   }
 

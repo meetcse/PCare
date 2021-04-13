@@ -21,7 +21,7 @@ class LoginApi {
 
       loginModel = LoginModel.fromMap(res);
     } on DioError catch (e) {
-      print("Issue in login" "" + e.toString());
+      print("Issue in login" + e.toString());
 
       throw e;
     }

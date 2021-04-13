@@ -8,6 +8,8 @@ class PatientModel {
   String userId;
   UserModel user;
 
+  UserModel user;
+
   PatientModel.fromMap(Map<String, dynamic> json) {
     id = json['_id'];
     user = UserModel.fromMap(json['user']);
@@ -17,6 +19,9 @@ class PatientModel {
       appointmentId = _appointments.map((e) {
         return AppointmentId.fromMap(e);
       }).toList();
+    }
+    if (json['user'] != null) {
+      user = UserModel.fromMap(json['user']);
     }
   }
 

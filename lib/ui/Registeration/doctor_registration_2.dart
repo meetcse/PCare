@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pcare/Utils/AppMethods.dart';
 import 'package:pcare/Utils/PageUtils.dart';
+import 'package:pcare/api/registration/SignupApi.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/signup/SignupModel.dart';
+import 'package:pcare/store/login/login_controller.dart';
+import 'package:pcare/ui/doctor/doctor_home_page.dart';
 import 'package:pcare/ui/patient/HomePage.dart';
+import 'package:pcare/widgets/AppWidgets.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
 import 'package:pcare/widgets/chip_widget.dart';
 import 'package:pcare/widgets/main_app_bar_widget.dart';
@@ -12,6 +18,9 @@ import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
 class DoctorRegistration2 extends StatefulWidget {
+  SignupModel signupModel;
+
+  DoctorRegistration2({@required this.signupModel});
   @override
   _DoctorRegistrationState2 createState() => _DoctorRegistrationState2();
 }
@@ -20,6 +29,7 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
   int count = 1;
 
   TextEditingController specialistController = new TextEditingController();
+  LoginController _loginController = Get.find<LoginController>();
 
   List<TextEditingController> controller = [
     new TextEditingController(),
@@ -123,58 +133,6 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
         });
   }
 
-  buildWeekDayList() {
-    print("SELECTED 1: " + selectedDay.toString());
-    weekDayNumber.clear();
-    selectedDay.forEach((element) {
-      if (element == "Sunday") {
-        weekDayNumber.add(0);
-      } else if (element == "Monday") {
-        weekDayNumber.add(1);
-      } else if (element == "Tuesday") {
-        weekDayNumber.add(2);
-      } else if (element == "Wednesday") {
-        weekDayNumber.add(3);
-      } else if (element == "Thursday") {
-        weekDayNumber.add(4);
-      } else if (element == "Friday") {
-        weekDayNumber.add(5);
-      } else if (element == "Saturday") {
-        weekDayNumber.add(6);
-      }
-    });
-    weekDayNumber.sort();
-
-//converting number to string weekDay
-    print("SELECTED 2: " + selectedDay.toString());
-    selectedDay.clear();
-    weekDayNumber.forEach((element) {
-      switch (element) {
-        case 0:
-          selectedDay.add("Sunday");
-          break;
-        case 1:
-          selectedDay.add("Monday");
-          break;
-        case 2:
-          selectedDay.add("Tuesday");
-          break;
-        case 3:
-          selectedDay.add("Wednesday");
-          break;
-        case 4:
-          selectedDay.add("Thursday");
-          break;
-        case 5:
-          selectedDay.add("Friday");
-          break;
-        case 6:
-          selectedDay.add("Saturday");
-          break;
-      }
-    });
-  }
-
   Widget _buildChildWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,11 +189,13 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
                   margin: EdgeInsets.only(top: 0, left: 20),
                   child: Row(
                     children: [
-                      Text(
-                        "What are your Working Days?",
-                        style: Theme.of(context).textTheme.headline2.copyWith(
-                              fontSize: 24,
-                            ),
+                      Expanded(
+                        child: Text(
+                          "What are your Working Days?",
+                          style: Theme.of(context).textTheme.headline2.copyWith(
+                                fontSize: 24,
+                              ),
+                        ),
                       ),
                     ],
                   ),
@@ -317,34 +277,7 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
                   child: RectangleButtonWidget(
                     childText: "REGISTER",
                     onPressed: () {
-                      String fromTime, toTime;
-                      int counter = 1;
-                      controller.forEach((element) {
-                        if (counter != 2) {
-                          counter++;
-                          fromTime = element.text;
-                        } else {
-                          toTime = element.text;
-                          timings.add(fromTime + " to " + toTime);
-                          counter = 1;
-                        }
-                      });
-                      if (isSpecialist == "Yes") {
-                        typeOfSpecialist = specialistController.text;
-                      }
-                      if (selectedDay.length == 0 ||
-                              timings.length == 0 ||
-                              isSpecialist == "" ||
-                              isSpecialist == "Yes"
-                          ? typeOfSpecialist == ""
-                          : false) {
-                        FlushbarMessage.errorMessage(
-                            context, "Please enter your details properly");
-                      } else {
-                        buildWeekDayList();
-                        print("selected " + selectedDay.toString());
-                        PageUtils.pushPage(HomePage());
-                      }
+                      _onRegisterButtonPressed();
                     },
                     width: Get.width,
                   ),
@@ -387,5 +320,128 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
         });
       },
     );
+  }
+
+  //methods and on clicks
+
+  void _callDoctorRegisterAPI() async {
+    AppWidgets.customProgressDialog();
+    _saveDataToModel();
+    SignupApi _signupApi = SignupApi();
+
+    try {
+      _loginController.loginModel =
+          await _signupApi.registerUser(widget.signupModel);
+
+      AppMethods.saveLoginDetailsToSharedPrefs(
+          _loginController.loginModel.token,
+          _loginController.mobileNumber.value,
+          _loginController.password.value);
+      AppWidgets.closeDialog();
+      _gotoDoctorHomePage();
+    } catch (error) {
+      AppWidgets.closeDialog();
+      print("ERROR IN Signup : " + error.toString());
+      FlushbarMessage.errorMessage(Get.context, "Error in registering");
+    }
+  }
+
+  void _saveDataToModel() {
+    widget.signupModel.specialist =
+        isSpecialist.toLowerCase() == "yes" ? true : false;
+    widget.signupModel.specialist_in = specialistController.text != null &&
+            specialistController.text.isNotEmpty &&
+            specialistController.text != ''
+        ? specialistController.text
+        : "no";
+    widget.signupModel.working_days = selectedDay;
+    widget.signupModel.working_hours = timings;
+  }
+
+  void _onRegisterButtonPressed() {
+    String fromTime, toTime;
+    int counter = 1;
+    controller.forEach((element) {
+      if (counter != 2) {
+        counter++;
+        fromTime = element.text;
+      } else {
+        toTime = element.text;
+        timings.add(fromTime + " to " + toTime);
+        counter = 1;
+      }
+    });
+    if (isSpecialist == "Yes") {
+      typeOfSpecialist = specialistController.text;
+    }
+    if (selectedDay.length == 0 ||
+            timings.length == 0 ||
+            isSpecialist == "" ||
+            isSpecialist == "Yes"
+        ? typeOfSpecialist == ""
+        : false) {
+      FlushbarMessage.errorMessage(
+          context, "Please enter your details properly");
+    } else {
+      buildWeekDayList();
+      print("selected " + selectedDay.toString());
+      _callDoctorRegisterAPI();
+    }
+  }
+
+  buildWeekDayList() {
+    print("SELECTED 1: " + selectedDay.toString());
+    weekDayNumber.clear();
+    selectedDay.forEach((element) {
+      if (element == "Sunday") {
+        weekDayNumber.add(0);
+      } else if (element == "Monday") {
+        weekDayNumber.add(1);
+      } else if (element == "Tuesday") {
+        weekDayNumber.add(2);
+      } else if (element == "Wednesday") {
+        weekDayNumber.add(3);
+      } else if (element == "Thursday") {
+        weekDayNumber.add(4);
+      } else if (element == "Friday") {
+        weekDayNumber.add(5);
+      } else if (element == "Saturday") {
+        weekDayNumber.add(6);
+      }
+    });
+    weekDayNumber.sort();
+
+//converting number to string weekDay
+    print("SELECTED 2: " + selectedDay.toString());
+    selectedDay.clear();
+    weekDayNumber.forEach((element) {
+      switch (element) {
+        case 0:
+          selectedDay.add("Sunday");
+          break;
+        case 1:
+          selectedDay.add("Monday");
+          break;
+        case 2:
+          selectedDay.add("Tuesday");
+          break;
+        case 3:
+          selectedDay.add("Wednesday");
+          break;
+        case 4:
+          selectedDay.add("Thursday");
+          break;
+        case 5:
+          selectedDay.add("Friday");
+          break;
+        case 6:
+          selectedDay.add("Saturday");
+          break;
+      }
+    });
+  }
+
+  void _gotoDoctorHomePage() {
+    PageUtils.pushPageAndRemoveAll(DoctorHomePage());
   }
 }

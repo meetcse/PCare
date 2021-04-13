@@ -6,6 +6,7 @@ import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/ui/patient/appointments/my_appointments.dart';
 import 'package:pcare/ui/patient/appointments/search_doctor.dart';
 import 'package:pcare/ui/patient/patient_todos.dart';
@@ -23,9 +24,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Map<String, dynamic> _loggedInUser = {
-    "username": "John",
-  };
+  LoginController _loginController = Get.find<LoginController>();
 
   List<Map<String, dynamic>> _carouselImages = [
     {
@@ -113,7 +112,7 @@ class _HomePageState extends State<HomePage> {
       appBar: MainAppBarWidget(
         leading: DrawerIconWidget(),
         //TODO: ADD ANIMATED TITLE IF POSSIBLE
-        title: UniversalStrings.welcome + ' ' + _loggedInUser['username'] + '!',
+        title: UniversalStrings.welcome + ' ' +_loginController.loginModel.user.firstName + '!',
       ),
       body: _buildChildWidget(context),
     );

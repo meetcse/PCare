@@ -1,6 +1,7 @@
 import 'package:pcare/models/doctor/DoctorModel.dart';
 import 'package:pcare/models/patient/patient_model.dart';
 import 'package:pcare/models/receptionist/ReceptionistModel.dart';
+import 'package:pcare/models/signup/HospitalModel.dart';
 import 'package:pcare/models/user/user_model.dart';
 
 class LoginModel {
@@ -10,15 +11,16 @@ class LoginModel {
   PatientModel patientModel;
   DoctorDetailsModel doctorDetails;
   ReceptionistModel receptionistDetails;
+  HospitalModel hospital_id;
 
-  LoginModel({
-    this.success,
-    this.token,
-    this.user,
-    this.patientModel,
-    this.doctorDetails,
-    this.receptionistDetails,
-  });
+  LoginModel(
+      {this.success,
+      this.token,
+      this.user,
+      this.patientModel,
+      this.doctorDetails,
+      this.receptionistDetails,
+      this.hospital_id});
 
   LoginModel.fromMap(Map<String, dynamic> json) {
     success = json['success'];
@@ -26,6 +28,9 @@ class LoginModel {
     if (json['user'] != null) {
       Map<String, dynamic> _user = json['user'];
       user = UserModel.fromMap(_user);
+    }
+    if (json['hospital_id'] != null) {
+      hospital_id = HospitalModel.fromJson(json['hospital_id']);
     }
 
     if (user.userType.toLowerCase() == "patient") {

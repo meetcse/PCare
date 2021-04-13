@@ -46,7 +46,8 @@ class _SplashScreenState extends State<SplashScreen> {
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CustomProgressIndicatorWidget(),
+        Spacer(),
+        Expanded(child: CustomProgressIndicatorWidget()),
       ],
     );
   }

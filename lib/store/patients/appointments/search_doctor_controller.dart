@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:pcare/models/patient/appointment/SearchDoctorInPatientModel.dart';
 
 class SearchDoctorController extends GetxController {
   var selectedDoctorId = ''.obs;
   var isSearching = false.obs;
-  var searchResults = List<Map<String, dynamic>>().obs;
+  var searchResults = <SearchDoctorsInPatientModel>[].obs;
+  var allow = true.obs;
 
   void setIsSearching(bool value) {
     isSearching.value = value;
@@ -15,25 +17,33 @@ class SearchDoctorController extends GetxController {
   }
 
   void searchDoctors(
-      List<Map<String, dynamic>> doctorsList, String searchQuery) {
+      List<SearchDoctorsInPatientModel> doctorsList, String searchQuery) {
     searchResults.clear();
 
     doctorsList.forEach((doctor) {
-      if (doctor['name']
-          .toString()
-          .toLowerCase()
-          .contains(searchQuery.toLowerCase())) {
-        searchResults.add(doctor);
-      }
-      if (!searchResults.contains(doctor) &&
-          doctor['type']
+      if (doctor.user.firstName
+              .toString()
+              .toLowerCase()
+              .contains(searchQuery.toLowerCase()) ||
+          doctor.user.lastName
               .toString()
               .toLowerCase()
               .contains(searchQuery.toLowerCase())) {
         searchResults.add(doctor);
       }
       if (!searchResults.contains(doctor) &&
-          doctor['hospital']
+          doctor.doctorType
+              .toString()
+              .toLowerCase()
+              .contains(searchQuery.toLowerCase())) {
+        searchResults.add(doctor);
+      }
+      if (!searchResults.contains(doctor) &&
+              doctor.hospitalId.hospitalName
+                  .toString()
+                  .toLowerCase()
+                  .contains(searchQuery.toLowerCase()) ||
+          doctor.hospitalId.hospitalAddress
               .toString()
               .toLowerCase()
               .contains(searchQuery.toLowerCase())) {

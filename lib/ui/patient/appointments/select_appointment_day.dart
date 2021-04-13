@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/models/patient/appointment/SearchDoctorInPatientModel.dart';
 import 'package:pcare/store/patients/appointments/select_appointment_day_controller.dart';
 import 'package:pcare/ui/patient/appointments/select_appointment_time.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
@@ -12,15 +13,15 @@ import 'package:pcare/widgets/main_app_bar_widget.dart';
 import 'package:pcare/widgets/rectangle_button_widget.dart';
 
 class SelectAppointmentDay extends StatelessWidget {
-  final Map<String, dynamic> doctorDetails;
+  final SearchDoctorsInPatientModel doctorDetails;
   SelectAppointmentDay({this.doctorDetails});
 
   SelectAppointmentDayController controller =
       Get.put(SelectAppointmentDayController());
-  List<String> _dates = List<String>();
+  List<String> _dates = [];
 
   _loadDates() {
-    _dates = controller.getDates(doctorDetails['working_day']);
+    _dates = controller.getDates(doctorDetails.workingDays);
     controller.setDatesLoaded(true);
   }
 
@@ -94,41 +95,51 @@ class SelectAppointmentDay extends StatelessWidget {
         if (controller.selectedDay.value == '' ||
             controller.selectedDay.value == null) {
         } else {
-          PageUtils.pushPage(SelectAppointmentTime(
-            doctorDetails: doctorDetails,
-          ));
+          _gotoSelectAppointmentScreen();
         }
       },
     );
   }
 
   Widget _buildDates() {
-    return GetX<SelectAppointmentDayController>(builder: (sADController) {
-      return sADController.isDatesLoaded.value
-          ? ChipWidget(
-              labelList: _dates,
-              chipBgColor: UniversalColors.doctorListBackgroundColor,
-              chipSelectedBgColor: UniversalColors.gradientColorStart,
-              isCompare: true,
-              compareText: sADController.selectedDay.value,
-              selectedLabelStyle:
-                  Theme.of(Get.context).textTheme.button.copyWith(
-                        fontSize: 14,
-                        color: UniversalColors.whiteColor,
-                        fontWeight: FontWeight.w300,
-                      ),
-              labelStyle: Theme.of(Get.context).textTheme.headline6.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                  ),
-              onChipPressed: (value) {
-                sADController.setSelectedDay(value);
-              },
-            )
-          : Center(child: CustomProgressIndicatorWidget());
-    });
+    return Obx(
+      () {
+        return controller.isDatesLoaded.value
+            ? ChipWidget(
+                labelList: _dates,
+                chipBgColor: UniversalColors.doctorListBackgroundColor,
+                chipSelectedBgColor: UniversalColors.gradientColorStart,
+                isCompare: true,
+                compareText: controller.selectedDay.value,
+                selectedLabelStyle:
+                    Theme.of(Get.context).textTheme.button.copyWith(
+                          fontSize: 14,
+                          color: UniversalColors.whiteColor,
+                          fontWeight: FontWeight.w300,
+                        ),
+                labelStyle: Theme.of(Get.context).textTheme.headline6.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                    ),
+                onChipPressed: (value) {
+                  _onChipPressed(value);
+                },
+              )
+            : Center(child: CustomProgressIndicatorWidget());
+      },
+    );
   }
 
   //methods
+  void _gotoSelectAppointmentScreen() {
+    PageUtils.pushPage(
+      SelectAppointmentTime(
+        doctorDetails: doctorDetails,
+      ),
+    );
+  }
 
+  void _onChipPressed(String value) {
+    controller.setSelectedDay(value);
+  }
 }

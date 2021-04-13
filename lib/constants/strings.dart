@@ -59,7 +59,10 @@ class UniversalStrings {
   static const String receptionist = "Receptionist";
   static const String groupValue = "userType";
   static const String nextButtonText = "NEXT";
+  static const String register = "REGISTER";
   static const String userChoiceErrorMessage = "Please Select Something";
+
+  static String selectGender = "Select Gender";
 
   static const String specialist = "specialist";
   static const String at = "At";
@@ -92,12 +95,13 @@ class UniversalStrings {
   static const String bookedOn = "Booked On";
   static const String viewTreatment = "View Treatment";
 
-  static var myTreatment = "My Treatment";
+  static String myTreatment = "My Treatment";
 
   static String yourTreatmentsAccToDate =
       "Your Treatments according to date are as below :";
 
-  static var searchPatient = "Search Patient";
-
   static String webBrowserError="You should be on a web browser to view this screen";
+  static String searchPatient = "Search Patient";
+
+  static const letUsKnowYourRole = "Let us know your Role";
 }

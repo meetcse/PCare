@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pcare/constants/app_colors.dart';
 
 class ChipThreeSectionWidget extends StatelessWidget {
@@ -27,7 +28,8 @@ class ChipThreeSectionWidget extends StatelessWidget {
 
       // borderRadius: BorderRadius.all(Radius.circular(18)),
       child: Container(
-        padding: const EdgeInsets.all(14),
+        width: 160,
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: UniversalColors.whiteColor,
           borderRadius: BorderRadius.all(
@@ -41,34 +43,60 @@ class ChipThreeSectionWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             //title
-            Text(
-              title,
-              style: Theme.of(context).textTheme.headline5,
+            _title(),
+
+            SizedBox(
+              height: 8,
             ),
 
             //image
-            Image(
-              image: AssetImage(
-                imageUrl,
-              ),
-              height: 70,
-              width: 70,
-              fit: BoxFit.cover,
+            _image(),
+            SizedBox(
+              height: 8,
             ),
 
             //description
-            Container(
-              margin: const EdgeInsets.only(left: 4, right: 4),
-              child: Text(
-                description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyText1,
-                textAlign: TextAlign.center,
-              ),
-            ),
+            _description(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _title() {
+    return Text(
+      title,
+      style: Theme.of(Get.context).textTheme.headline5,
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _image() {
+    return Expanded(
+      child: Container(
+        alignment: Alignment.center,
+        child: Image(
+          image: AssetImage(
+            imageUrl,
+          ),
+          height: 70,
+          width: 70,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget _description() {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      margin: const EdgeInsets.only(left: 4, right: 4),
+      child: Text(
+        description,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(Get.context).textTheme.bodyText1,
+        textAlign: TextAlign.center,
       ),
     );
   }
