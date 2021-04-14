@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:pcare/api/doctor/full_treatment.dart';
 import 'package:pcare/constants/app_colors.dart';
+import 'package:pcare/constants/strings.dart';
 import 'package:pcare/models/doctor/FullTreatmentModel.dart';
 import 'package:pcare/widgets/back_button_widget.dart';
+import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
 
 class FullTreatment extends StatefulWidget {
@@ -67,7 +69,7 @@ class _FullTreatmentState extends State<FullTreatment> {
       leading: BackButtonWidget(
         isBlackColor: true,
       ),
-      title: /*TODO: replace it with variable later*/ 'FEVER',
+      title: UniversalStrings.fullTreatment,
     );
   }
 
@@ -90,9 +92,7 @@ class _FullTreatmentState extends State<FullTreatment> {
       future: _fullTreatmentModelFuture,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return (snapshot.data == null)
-            ? Center(
-                child: Text("loading..."),
-              )
+            ? CustomProgressIndicatorWidget()
             : ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -237,8 +237,13 @@ class _FullTreatmentState extends State<FullTreatment> {
 
     try {
       if (widget.fullTreatmentId != null) {
-        _fullTreatmentModelFuture =
-            _fullTreatmentApi.getFullTreatment(widget.fullTreatmentId);
+        _fullTreatmentModelFuture = _fullTreatmentApi
+            .getFullTreatment(widget.fullTreatmentId)
+            .catchError(
+          (error) {
+            print("Error : " + error);
+          },
+        );
       } else {
         _fullTreatmentModelFuture = null;
       }

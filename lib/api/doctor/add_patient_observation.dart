@@ -6,24 +6,39 @@ import 'package:pcare/network/api_services.dart';
 class AddPatientObservationApi {
   var _apiServices = ApiServices.apiServices;
 
-  Future<FullTreatmentModel> getFullTreatment(String fullTreatmentId) async {
-    FullTreatmentModel fullTreatmentModel;
+  Future<String> saveTreatmentDetails(
+      String singleAppointmentId,
+      String prescription,
+      String disease,
+      String specialNote,
+      String experiments,
+      String observation) async {
     try {
       final res = await _apiServices.providePostRequest(
-        Endpoints.getFullTreatment,
+        Endpoints.addTreatment,
         {
-          'full_treatment_id': fullTreatmentId,
+          'single_appointment_id': singleAppointmentId,
+          'prescription': prescription,
+          'disease': disease,
+          'special_note': specialNote,
+          'experiments': experiments,
+          'observation': observation
         },
       );
 
-      fullTreatmentModel = FullTreatmentModel.fromJson(res);
+      if (res["error"] != null) {
+        return res['error'];
+      } else {
+        return res['success'];
+      }
 
       print("RESPONSE : " + res.toString());
+
+      return res;
     } on DioError catch (e) {
       print("Issue in getting full treatment" "" + e.toString());
 
       throw e;
     }
-    return fullTreatmentModel;
   }
 }

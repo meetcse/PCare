@@ -44,9 +44,7 @@ class _AppointmentsHistoryState extends State<AppointmentsHistory> {
       future: _upcomingAppointmentModelFuture,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return (snapshot.data == null)
-            ? Center(
-                child: Text("loading..."),
-              )
+            ? CustomProgressIndicatorWidget()
             : _buildAppointmentCard(snapshot.data);
       },
     );
@@ -147,7 +145,7 @@ class _AppointmentsHistoryState extends State<AppointmentsHistory> {
                   ),
                   //Appointment time
                   Text(
-                    DoctorUniversalStrings.appointTime +                  
+                    DoctorUniversalStrings.appointTime +
                         ' : ' +
                         upcomingAppointmentModel.appointment_time,
                     style: Theme.of(context)
