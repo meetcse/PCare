@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_theme.dart';
 import 'package:pcare/ui/doctor/patient/add_patient_observation.dart';
 import 'package:pcare/services/SharedPrefsServices.dart';
@@ -9,11 +10,11 @@ import 'package:pcare/ui/splash_screen/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarBrightness: Brightness.light,
-    statusBarIconBrightness: Brightness.dark,
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //   // statusBarColor: UniversalColors.gradientColorStart,
+  //   statusBarBrightness: Brightness.dark,
+  //   statusBarIconBrightness: Brightness.dark,
+  // ));
   Get.put(LoginController());
 
   SharedPrefsServices _sharedPrefServces = SharedPrefsServices();

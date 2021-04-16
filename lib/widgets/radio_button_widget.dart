@@ -3,6 +3,7 @@ import 'package:pcare/constants/app_colors.dart';
 
 class RadioButtonWidget extends StatelessWidget {
   final String itemText;
+  final TextStyle itemTextStyle;
   final iconSelected;
   final String groupValue;
   final Function(String) onChanged;
@@ -12,6 +13,7 @@ class RadioButtonWidget extends StatelessWidget {
     @required this.itemText,
     @required this.groupValue,
     this.onChanged,
+    this.itemTextStyle,
   });
 
   @override
@@ -30,10 +32,11 @@ class RadioButtonWidget extends StatelessWidget {
                 padding: EdgeInsets.only(left: 20),
                 child: Text(
                   itemText,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(fontSize: 24),
+                  style: itemTextStyle ??
+                      Theme.of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(fontSize: 24),
                 ),
               ),
             ),

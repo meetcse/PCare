@@ -38,6 +38,14 @@ class _SigninState extends State<Signin> {
   SharedPrefsServices _sfService = SharedPrefsServices();
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    textEditingControllerForPassword.dispose();
+    textEditingControllerForEmail.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildChildWidget(),
@@ -381,19 +389,23 @@ class _SigninState extends State<Signin> {
     try {
       controller.loginModel = await _loginApi.loginUser(
           controller.mobileNumber.value, controller.password.value);
-      controller.mobileNumber.value = '';
-      controller.password.value = '';
 
       if (controller.loginModel.user.userType.toLowerCase() == "patient") {
         _saveDetailsToSharedPrefs(controller.loginModel.token);
+        controller.mobileNumber.value = '';
+        controller.password.value = '';
         _gotoPatientHomePage();
       } else if (controller.loginModel.user.userType.toLowerCase() ==
           "doctor") {
         _saveDetailsToSharedPrefs(controller.loginModel.token);
+        controller.mobileNumber.value = '';
+        controller.password.value = '';
         _gotoDoctorHomePage();
       } else if (controller.loginModel.user.userType.toLowerCase() ==
           "receptionist") {
         _saveDetailsToSharedPrefs(controller.loginModel.token);
+        controller.mobileNumber.value = '';
+        controller.password.value = '';
         _gotoReceptionistHomePage();
       }
       _changeLoading(false);

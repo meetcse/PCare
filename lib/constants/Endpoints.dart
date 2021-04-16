@@ -8,10 +8,10 @@ class Endpoints {
   //     "https://private-92549-anjalisoni.apiary-mock.com";
 
   // receiveTimeout
-  static const int receiveTimeout = 3200;
+  static const int receiveTimeout = 32000;
 
   // connectTimeout
-  static const int connectionTimeout = 3200;
+  static const int connectionTimeout = 32000;
 
   // booking endpoints
 

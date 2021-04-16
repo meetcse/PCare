@@ -317,6 +317,8 @@ class _SignUpState extends State<SignUp> {
             flex: 4,
             child: RadioButtonWidget(
               itemText: "Male",
+              itemTextStyle:
+                  Theme.of(context).textTheme.headline6.copyWith(fontSize: 16),
               groupValue: _groupValue,
               iconSelected:
                   registrationController.gender.value.toLowerCase() == "male",
@@ -333,6 +335,8 @@ class _SignUpState extends State<SignUp> {
             flex: 5,
             child: RadioButtonWidget(
               itemText: "Female",
+              itemTextStyle:
+                  Theme.of(context).textTheme.headline6.copyWith(fontSize: 16),
               groupValue: _groupValue,
               iconSelected:
                   registrationController.gender.value.toLowerCase() == "female",

@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,27 +14,27 @@ class DoctorHomePage extends StatefulWidget {
 
 class _DoctorHomePageState extends State<DoctorHomePage> {
   int _page = 0;
-  PageController _pageController;
+  // PageController _pageController;
   GlobalKey _bottomNavigationKey = GlobalKey();
+  List<Widget> _pages = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _loadPages();
 
-    _pageController = PageController(
-      initialPage: 0,
-    );
+    // _pageController = PageController(
+    //   initialPage: 0,
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        bottomNavigationBar: _bottomNavigationBar(),
-        body: _buildChildWidget(),
-        backgroundColor: UniversalColors.whiteColor,
-      ),
+    return Scaffold(
+      bottomNavigationBar: _bottomNavigationBar(),
+      body: _buildChildWidget(),
+      backgroundColor: UniversalColors.whiteColor,
     );
   }
 
@@ -64,25 +65,27 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
       ],
       onTap: (index) {
         _changePage(index);
-        _pageController.animateToPage(
-          _page,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeInCubic,
-        );
+        // _pageController.animateToPage(
+        //   _page,
+        //   duration: Duration(milliseconds: 300),
+        //   curve: Curves.easeInCubic,
+        // );
       },
     );
   }
 
   Widget _buildChildWidget() {
-    return PageView(
-      controller: _pageController,
-      onPageChanged: _changePage,
-      // physics: NeverScrollableScrollPhysics(),
-      children: [
-        DoctorTodaysAppointment(),
-        DoctorAllPatients(),
-        DoctorProfile(),
-      ],
+    return PageTransitionSwitcher(
+      duration: Duration(milliseconds: 300),
+      transitionBuilder: (child, _, __) {
+        return SharedAxisTransition(
+          animation: _,
+          secondaryAnimation: __,
+          child: child,
+          transitionType: SharedAxisTransitionType.vertical,
+        );
+      },
+      child: _pages[_page],
     );
   }
 
@@ -91,5 +94,11 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
     setState(() {
       _page = index;
     });
+  }
+
+  void _loadPages() {
+    _pages.add(DoctorTodaysAppointment());
+    _pages.add(DoctorAllPatients());
+    _pages.add(DoctorProfile());
   }
 }

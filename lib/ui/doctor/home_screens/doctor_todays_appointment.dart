@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pcare/Utils/PageUtils.dart';
 import 'package:pcare/api/doctor/todays_appointment.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/app_icons.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
 import 'package:pcare/models/doctor/UpcomingAppointmentModel.dart';
+import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/ui/doctor/patient/add_patient_observation.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/doctor/doctor_app_bar_widget.dart';
@@ -18,75 +20,12 @@ class DoctorTodaysAppointment extends StatefulWidget {
 
 class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
   Future<List<UpcomingAppointmentModel>> _upcomingAppointmentModelFuture;
-
+  LoginController _loginController = Get.find<LoginController>();
   @override
   void initState() {
     super.initState();
     _callApi();
   }
-
-  Map<String, dynamic> _doctor = {
-    "name": "Dr. John Doe",
-  };
-  Map<String, dynamic> _currentAppointment = {
-    "id": "1",
-    "patient_name": "Pallav Patel",
-    "age": "32",
-    "appointment_time": "5:00 PM to 6:00 PM",
-    "image":
-        "https://images.pexels.com/photos/1080213/pexels-photo-1080213.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-  };
-
-  Map<String, dynamic> _nextAppointment = {
-    "id": "2",
-    "patient_name": "Gautam Vyas",
-    "age": "21",
-    "appointment_time": "5:00 PM to 6:00 PM",
-    "image":
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCexMzvTjX8oflMcyjjCL8JaeeKwqsmanIuw&usqp=CAU",
-  };
-
-  List<Map<String, dynamic>> _todaysAppointment = [
-    {
-      "id": "11",
-      "patient_name": "Pranav Suthar",
-      "age": "28",
-      "appointment_time": "5:00 PM to 6:00 PM",
-      "image":
-          "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg",
-    },
-    {
-      "id": "12",
-      "patient_name": "Dipen Biden",
-      "age": "24",
-      "appointment_time": "5:00 PM to 6:00 PM",
-      "image": "https://jooinn.com/images/portrait-of-young-man-2.jpg",
-    },
-    {
-      "id": "13",
-      "patient_name": "Ishan Suthar",
-      "age": "25",
-      "appointment_time": "5:00 PM to 6:00 PM",
-      "image":
-          "https://t4.ftcdn.net/jpg/02/45/56/35/360_F_245563558_XH9Pe5LJI2kr7VQuzQKAjAbz9PAyejG1.jpg",
-    },
-    {
-      "id": "14",
-      "patient_name": "Gautam Suthar",
-      "age": "28",
-      "appointment_time": "6:00 PM to 7:00 PM",
-      "image":
-          "https://t4.ftcdn.net/jpg/03/03/54/59/360_F_303545914_XLEAix36kSd78qCl4XYhl2S1iYSA9IyW.jpg",
-    },
-    {
-      "id": "15",
-      "patient_name": "Pranav Vyas",
-      "age": "34",
-      "appointment_time": "6:00 PM to 7:00 PM",
-      "image":
-          "https://st2.depositphotos.com/4196725/6217/i/950/depositphotos_62170113-stock-photo-young-cool-black-man-no.jpg",
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +38,9 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
 
   Widget _buildAppBar() {
     return DoctorAppbarWidget(
-      title: _doctor['name'],
+      title: _loginController.loginModel.doctorDetails.user.firstname +
+          " " +
+          _loginController.loginModel.doctorDetails.user.lastname,
     );
   }
 
@@ -155,7 +96,7 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
               height: 20,
             ),
 
-            _buildTodaysAppointment(_todaysAppointment),
+            _buildTodaysAppointment(),
 
             SizedBox(
               height: 20,
@@ -166,45 +107,48 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
     );
   }
 
-  Widget _buildTodaysAppointment(List<Map<String, dynamic>> todaysAppointment) {
+  Widget _buildTodaysAppointment() {
     String a = "H";
     a.toLowerCase();
     return FutureBuilder(
       future: _upcomingAppointmentModelFuture,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return (snapshot.data == null)
-            ? CustomProgressIndicatorWidget()
-            : ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 14),
-                    child: _appointmentCard(
-                      snapshot.data[index].patient_id.user.profilePic,
-                      snapshot.data[index].patient_id.user.firstname +
-                          " " +
-                          snapshot.data[index].patient_id.user.lastname,
-                      snapshot.data[index].patient_id.user.age,
-                      (snapshot.data[index].status.toLowerCase() == "ongoing")
-                          ? true
-                          : false,
-                      (snapshot.data[index].status.toLowerCase() == "next")
-                          ? true
-                          : false,
-                      snapshot.data[index].appointment_time,
-                      onPressed: () {
-                        if (snapshot.data[index].status.toLowerCase() ==
-                            "ongoing") {
-                          PageUtils.pushPage(
-                              AddPatientObservation(data: snapshot.data));
-                        }
-                      },
-                    ),
-                  );
+        if (!snapshot.hasData) {
+          return Container(
+            margin: const EdgeInsets.only(top: 120),
+            child: CustomProgressIndicatorWidget(),
+          );
+        }
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: snapshot.data.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: const EdgeInsets.only(bottom: 14),
+              child: _appointmentCard(
+                snapshot.data[index].patient_id.user.profilePic,
+                snapshot.data[index].patient_id.user.firstname +
+                    " " +
+                    snapshot.data[index].patient_id.user.lastname,
+                snapshot.data[index].patient_id.user.age,
+                (snapshot.data[index].status.toLowerCase() == "ongoing")
+                    ? true
+                    : false,
+                (snapshot.data[index].status.toLowerCase() == "next")
+                    ? true
+                    : false,
+                snapshot.data[index].appointment_time,
+                onPressed: () {
+                  if (snapshot.data[index].status.toLowerCase() == "ongoing") {
+                    PageUtils.pushPage(
+                        AddPatientObservation(data: snapshot.data));
+                  }
                 },
-              );
+              ),
+            );
+          },
+        );
       },
     );
   }

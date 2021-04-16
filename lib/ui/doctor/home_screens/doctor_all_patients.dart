@@ -21,71 +21,6 @@ class DoctorAllPatients extends StatefulWidget {
 class _DoctorAllPatientsState extends State<DoctorAllPatients> {
   Future<List<GetAllPatientsModel>> _getAllPatientsModelFuture;
 
-  List<Map<String, dynamic>> _patients = [
-    {
-      "id": "1",
-      "name": "Pranav Suthar",
-      "city": "Vadodara",
-      "age": "21",
-      "status": "On Going",
-      "image":
-          "https://images.pexels.com/photos/1080213/pexels-photo-1080213.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    },
-    {
-      "id": "2",
-      "name": "Marcus NG",
-      "city": "Bihar",
-      "age": "25",
-      "status": "On Going",
-      "image":
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCexMzvTjX8oflMcyjjCL8JaeeKwqsmanIuw&usqp=CAU",
-    },
-    {
-      "id": "3",
-      "name": "Gautam Vyas",
-      "city": "Ahmedabad",
-      "age": "30",
-      "status": "Completed",
-      "image":
-          "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg",
-    },
-    {
-      "id": "4",
-      "name": "Darpan Suthar",
-      "city": "Surat",
-      "age": "32",
-      "status": "On Going",
-      "image": "https://jooinn.com/images/portrait-of-young-man-2.jpg",
-    },
-    {
-      "id": "5",
-      "name": "Mitesh Patel",
-      "city": "Valsad",
-      "age": "45",
-      "status": "Completed",
-      "image":
-          "https://t4.ftcdn.net/jpg/02/45/56/35/360_F_245563558_XH9Pe5LJI2kr7VQuzQKAjAbz9PAyejG1.jpg",
-    },
-    {
-      "id": "6",
-      "name": "Viay Patel",
-      "city": "Mumbai",
-      "age": "28",
-      "status": "On Going",
-      "image":
-          "https://t4.ftcdn.net/jpg/03/03/54/59/360_F_303545914_XLEAix36kSd78qCl4XYhl2S1iYSA9IyW.jpg",
-    },
-    {
-      "id": "7",
-      "name": "Dipen Biden",
-      "city": "Pune",
-      "age": "33",
-      "status": "Completed",
-      "image":
-          "https://st2.depositphotos.com/4196725/6217/i/950/depositphotos_62170113-stock-photo-young-cool-black-man-no.jpg",
-    },
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -116,10 +51,7 @@ class _DoctorAllPatientsState extends State<DoctorAllPatients> {
           // _buildSearchBar(),
           // SizedBox(height: 20),
           Expanded(
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: _buildPatientsList(),
-            ),
+            child: _buildPatientsList(),
           ),
         ],
       ),
@@ -141,28 +73,41 @@ class _DoctorAllPatientsState extends State<DoctorAllPatients> {
       padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: FutureBuilder(
         future: _getAllPatientsModelFuture,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return (snapshot.data == null)
-              ? CustomProgressIndicatorWidget()
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      child: Column(
-                        children: [
-                          _patientCard(snapshot.data[index]),
-                          SizedBox(height: 8),
-                          index == snapshot.data.length - 1
-                              ? Container()
-                              : Divider(),
-                        ],
-                      ),
-                    );
-                  },
+        builder: (BuildContext context,
+            AsyncSnapshot<List<GetAllPatientsModel>> snapshot) {
+          if (!snapshot.hasData) {
+            if (snapshot.hasError) {
+              print("ERROR : " + snapshot.error.toString());
+              return Container();
+            }
+            return Center(child: CustomProgressIndicatorWidget());
+          }
+
+          if (snapshot.data == null || snapshot.data.isEmpty) {
+            return Container();
+          }
+          return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: Column(
+                    children: [
+                      _patientCard(snapshot.data[index]),
+                      SizedBox(height: 8),
+                      index == snapshot.data.length - 1
+                          ? Container()
+                          : Divider(),
+                    ],
+                  ),
                 );
+              },
+            ),
+          );
         },
       ),
     );

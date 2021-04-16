@@ -23,56 +23,6 @@ class DoctorPatientDetail extends StatefulWidget {
 class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
   GetAllPatientsModel patient;
 
-  List<Map<String, dynamic>> _treatments = [
-    {
-      "id": "1",
-      "started_date": "01-01-2021",
-      "case": "Fever",
-      "status": "on-going",
-      "end-date": "02-01-2021"
-    },
-    {
-      "id": "2",
-      "started_date": "01-01-2021",
-      "case": "Cold",
-      "status": "on-going",
-      "end-date": "02-01-2021"
-    },
-    {
-      "id": "3",
-      "started_date": "01-01-2021",
-      "case": "Cough",
-      "status": "on-going",
-      "end-date": "02-01-2021"
-    },
-    {
-      "id": "4",
-      "started_date": "01-01-2021",
-      "case": "Lung Disorder",
-      "status": "on-going",
-      "end-date": "02-01-2021"
-    },
-    {
-      "id": "5",
-      "started_date": "01-01-2021",
-      "case": "Heart Problem",
-      "status": "on-going",
-      "end-date": "02-01-2021"
-    },
-    {
-      "id": "6",
-      "started_date": "01-01-2021",
-      "case": "Bone Issue",
-      "status": "on-going",
-    },
-    {
-      "id": "7",
-      "started_date": "01-01-2021",
-      "case": "Fracture",
-      "status": "completed",
-    },
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -184,18 +134,18 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
       itemCount: patient.appointmentId.length,
       itemBuilder: (context, index) {
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             buildTreatmentCard(index),
-            SizedBox(height: 10),
+            SizedBox(height: 4),
             (patient.appointmentId[index].appointment.fullTreatmentId != null)
                 ? Container(
-                    padding: EdgeInsets.only(left: 20),
+                    padding: EdgeInsets.only(right: 20),
                     child: Text("--->"),
                   )
                 : Container(),
             (patient.appointmentId[index].appointment.fullTreatmentId != null)
-                ? SizedBox(height: 10)
+                ? SizedBox(height: 4)
                 : Container(),
             Divider(),
           ],
@@ -258,7 +208,11 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(),
+                // Container(),
+                buildTreamentRow(
+                    patient.appointmentId[index].appointment.appointmentTime,
+                    "",
+                    false),
                 buildTreamentRow(
                     patient.appointmentId[index].appointment.status, "", true),
               ],

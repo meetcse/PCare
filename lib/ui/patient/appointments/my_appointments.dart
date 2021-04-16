@@ -285,21 +285,26 @@ class _MyAppointmentsState extends State<MyAppointments> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        appointmentTime,
-                        style: Theme.of(context).textTheme.headline4.copyWith(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                            ),
-                        overflow: TextOverflow.ellipsis,
+                      Expanded(
+                        child: Text(
+                          appointmentTime,
+                          style: Theme.of(context).textTheme.headline4.copyWith(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                              ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      Text(
-                        appointmentDate,
-                        style: Theme.of(context).textTheme.headline4.copyWith(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
-                            ),
-                        overflow: TextOverflow.ellipsis,
+                      Container(
+                        padding: const EdgeInsets.only(left: 4),
+                        child: Text(
+                          appointmentDate,
+                          style: Theme.of(context).textTheme.headline4.copyWith(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                              ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),

@@ -233,14 +233,16 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
                 ),
 
                 Container(
-                  margin: EdgeInsets.only(top: 0, left: 20),
+                  margin: EdgeInsets.only(top: 0, left: 20, right: 20),
                   child: Row(
                     children: [
-                      Text(
-                        "What are your active hours?",
-                        style: Theme.of(context).textTheme.headline2.copyWith(
-                              fontSize: 24,
-                            ),
+                      Expanded(
+                        child: Text(
+                          "What are your active hours?",
+                          style: Theme.of(context).textTheme.headline2.copyWith(
+                                fontSize: 24,
+                              ),
+                        ),
                       ),
                     ],
                   ),
@@ -249,7 +251,7 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
                 buildTimeFields(),
 
                 SizedBox(
-                  height: 10,
+                  height: 12,
                 ),
 
                 Container(
@@ -335,8 +337,8 @@ class _DoctorRegistrationState2 extends State<DoctorRegistration2> {
 
       AppMethods.saveLoginDetailsToSharedPrefs(
           _loginController.loginModel.token,
-          _loginController.mobileNumber.value,
-          _loginController.password.value);
+          widget.signupModel.mobilenumber,
+          widget.signupModel.password);
       AppWidgets.closeDialog();
       _gotoDoctorHomePage();
     } catch (error) {
