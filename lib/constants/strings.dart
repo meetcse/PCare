@@ -100,8 +100,13 @@ class UniversalStrings {
   static String yourTreatmentsAccToDate =
       "Your Treatments according to date are as below :";
 
-  static String webBrowserError="You should be on a web browser to view this screen";
+  static String webBrowserError =
+      "You should be on a web browser to view this screen";
   static String searchPatient = "Search Patient";
 
   static const letUsKnowYourRole = "Let us know your Role";
+
+  static String submit = "Submit";
+
+  static String fullTreatment = "Full Treatment";
 }

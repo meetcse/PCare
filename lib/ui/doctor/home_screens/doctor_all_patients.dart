@@ -112,8 +112,8 @@ class _DoctorAllPatientsState extends State<DoctorAllPatients> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          SizedBox(height: 16),
-          _buildSearchBar(),
+          // SizedBox(height: 16),
+          // _buildSearchBar(),
           // SizedBox(height: 20),
           Expanded(
             child: SingleChildScrollView(
@@ -143,9 +143,7 @@ class _DoctorAllPatientsState extends State<DoctorAllPatients> {
         future: _getAllPatientsModelFuture,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           return (snapshot.data == null)
-              ? Center(
-                  child: Text("loading..."),
-                )
+              ? CustomProgressIndicatorWidget()
               : ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),

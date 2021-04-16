@@ -32,7 +32,7 @@ class ApiServices {
           onRequest: (RequestOptions options, handler) async {
             // getting shared pref instance
             var prefs = await SharedPreferences.getInstance();
-                        
+
             // getting token
             var token = prefs.getString(Preferences.authToken);
 
@@ -42,6 +42,7 @@ class ApiServices {
               return handler.next(options);
             } else {
               print('Auth token is null');
+              return handler.next(options);
             }
           },
         ),

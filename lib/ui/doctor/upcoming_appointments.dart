@@ -43,9 +43,7 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
       future: _upcomingAppointmentModelFuture,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return (snapshot.data == null)
-            ? Center(
-                child: Text("loading..."),
-              )
+            ? CustomProgressIndicatorWidget()
             : _buildAppointmentCard(snapshot.data);
       },
     );

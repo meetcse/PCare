@@ -116,38 +116,38 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
               height: 10,
             ),
             //todays appointments
-            _todaysAppointmentText(),
+            // _todaysAppointmentText(),
 
-            SizedBox(
-              height: 20,
-            ),
+            // SizedBox(
+            //   height: 20,
+            // ),
 
-            //running
-            _dividerWithText(DoctorUniversalStrings.onGoing),
+            // //running
+            // _dividerWithText(DoctorUniversalStrings.onGoing),
 
-            SizedBox(
-              height: 20,
-            ),
+            // SizedBox(
+            //   height: 20,
+            // ),
 
-            //on going appointments
-            _buildonGoingAppointments(_currentAppointment),
+            // //on going appointments
+            // _buildonGoingAppointments(_currentAppointment),
 
-            SizedBox(
-              height: 20,
-            ),
+            // SizedBox(
+            //   height: 20,
+            // ),
 
-            //next
-            _dividerWithText(DoctorUniversalStrings.nextAppointment),
+            // //next
+            // _dividerWithText(DoctorUniversalStrings.nextAppointment),
 
-            SizedBox(
-              height: 20,
-            ),
+            // SizedBox(
+            //   height: 20,
+            // ),
 
-            _buildNextAppointment(_nextAppointment),
+            // _buildNextAppointment(_nextAppointment),
 
-            SizedBox(
-              height: 20,
-            ),
+            // SizedBox(
+            //   height: 20,
+            // ),
 
             //today's
             _dividerWithText(DoctorUniversalStrings.todaysAppointment),
@@ -173,9 +173,7 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
       future: _upcomingAppointmentModelFuture,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return (snapshot.data == null)
-            ? Center(
-                child: Text("loading..."),
-              )
+            ? CustomProgressIndicatorWidget()
             : ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -199,7 +197,8 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
                       onPressed: () {
                         if (snapshot.data[index].status.toLowerCase() ==
                             "ongoing") {
-                          PageUtils.pushPage(AddPatientObservation());
+                          PageUtils.pushPage(
+                              AddPatientObservation(data: snapshot.data));
                         }
                       },
                     ),

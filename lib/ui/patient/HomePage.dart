@@ -53,13 +53,13 @@ class _HomePageState extends State<HomePage> {
       "icon": UniversalIcons.myAppointments,
       'navigateTo': MyAppointments(),
     },
-    {
-      "id": UniversalStrings.wishlistId,
-      "name": UniversalStrings.wishlist,
-      "color": UniversalColors.gradientColorStart,
-      "icon": UniversalIcons.wishlistDoctors,
-      'navigateTo': Wishlist(),
-    },
+    // {
+    //   "id": UniversalStrings.wishlistId,
+    //   "name": UniversalStrings.wishlist,
+    //   "color": UniversalColors.gradientColorStart,
+    //   "icon": UniversalIcons.wishlistDoctors,
+    //   'navigateTo': Wishlist(),
+    // },
     {
       "id": UniversalStrings.currentTreatmentId,
       "name": UniversalStrings.currentTreatment,
@@ -67,13 +67,13 @@ class _HomePageState extends State<HomePage> {
       "icon": UniversalIcons.currentTreatment,
       'navigateTo': ViewSingleAppointment(),
     },
-    {
-      "id": UniversalStrings.todosId,
-      "name": UniversalStrings.todos,
-      "color": UniversalColors.gradientColorStart,
-      "icon": UniversalIcons.todos,
-      'navigateTo': PatientTodos(),
-    }
+    // {
+    //   "id": UniversalStrings.todosId,
+    //   "name": UniversalStrings.todos,
+    //   "color": UniversalColors.gradientColorStart,
+    //   "icon": UniversalIcons.todos,
+    //   'navigateTo': PatientTodos(),
+    // }
   ];
 
   bool _isChange = false;
@@ -112,7 +112,10 @@ class _HomePageState extends State<HomePage> {
       appBar: MainAppBarWidget(
         leading: DrawerIconWidget(),
         //TODO: ADD ANIMATED TITLE IF POSSIBLE
-        title: UniversalStrings.welcome + ' ' +_loginController.loginModel.user.firstname + '!',
+        title: UniversalStrings.welcome +
+            ' ' +
+            _loginController.loginModel.user.firstname +
+            '!',
       ),
       body: _buildChildWidget(context),
     );

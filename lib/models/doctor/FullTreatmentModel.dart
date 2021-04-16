@@ -1,3 +1,6 @@
+import 'package:pcare/models/doctor/DoctorModel.dart';
+import 'package:pcare/models/patient/patient_model.dart';
+
 class FullTreatmentModel {
   List<Treatments> treatments;
 
@@ -61,8 +64,8 @@ class Treatments {
 class SingleAppointmentId {
   String status;
   String sId;
-  String patientId;
-  String doctorId;
+  PatientModel patientId;
+  DoctorDetailsModel doctorId;
   String appointmentTime;
   String appointmentDate;
   String createddate;
@@ -85,8 +88,8 @@ class SingleAppointmentId {
   SingleAppointmentId.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     sId = json['_id'];
-    patientId = json['patient_id'];
-    doctorId = json['doctor_id'];
+    patientId = PatientModel.fromMap(json['patient_id']);
+    doctorId = DoctorDetailsModel.fromJson(json['doctor_id']);
     appointmentTime = json['appointment_time'];
     appointmentDate = json['appointment_date'];
     createddate = json['createddate'];

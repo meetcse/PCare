@@ -7,6 +7,7 @@ import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
 import 'package:pcare/constants/preferences.dart';
 import 'package:pcare/services/SharedPrefsServices.dart';
+import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/ui/Registeration/sign_in.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 
@@ -26,6 +27,8 @@ class _DoctorProfileState extends State<DoctorProfile> {
     "image":
         "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg"
   };
+
+  LoginController _loginController = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +121,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                doctorDetails["name"],
+                '${_loginController.loginModel.user.firstname} ${_loginController.loginModel.user.lastname}',
                 style: Theme.of(Get.context).textTheme.headline1.copyWith(
                       color: UniversalColors.gradientColorStart,
                       fontSize: 28,
@@ -126,17 +129,17 @@ class _DoctorProfileState extends State<DoctorProfile> {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(height: 12),
-              Text(
-                doctorDetails["email"],
-                style: Theme.of(Get.context).textTheme.headline5.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                    ),
-              ),
+              // SizedBox(height: 12),
+              // Text(
+              //   doctorDetails["email"],
+              //   style: Theme.of(Get.context).textTheme.headline5.copyWith(
+              //         fontSize: 16,
+              //         fontWeight: FontWeight.normal,
+              //       ),
+              // ),
               SizedBox(height: 4),
               Text(
-                doctorDetails["mobile"],
+                _loginController.loginModel.user.mobilenumber,
                 style: Theme.of(Get.context).textTheme.headline5.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -154,7 +157,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
                     progressIndicatorBuilder: (context, _, __) {
                       return CustomProgressIndicatorWidget();
                     },
-                    imageUrl: doctorDetails["image"],
+                    imageUrl: _loginController.loginModel.user.profilePic,
                     height: 120,
                     width: 120,
                     fit: BoxFit.cover,

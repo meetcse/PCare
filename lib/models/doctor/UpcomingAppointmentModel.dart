@@ -21,7 +21,7 @@ class UpcomingAppointmentModel {
   factory UpcomingAppointmentModel.fromMap(Map<String, dynamic> map) {
     return UpcomingAppointmentModel(
       status: map['status'],
-      id: map['id'],
+      id: map['_id'],
       patient_id: PatientModel.fromMap(map['patient_id']),
       appointment_time: map['appointment_time'],
       appointment_date: map['appointment_date'],

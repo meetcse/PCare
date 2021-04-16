@@ -184,9 +184,19 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
       itemCount: patient.appointmentId.length,
       itemBuilder: (context, index) {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             buildTreatmentCard(index),
             SizedBox(height: 10),
+            (patient.appointmentId[index].appointment.fullTreatmentId != null)
+                ? Container(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text("--->"),
+                  )
+                : Container(),
+            (patient.appointmentId[index].appointment.fullTreatmentId != null)
+                ? SizedBox(height: 10)
+                : Container(),
             Divider(),
           ],
         );
@@ -197,12 +207,15 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
   Widget buildTreatmentCard(int index) {
     return GestureDetector(
       onTap: () => {
-        PageUtils.pushPage(
-          FullTreatment(
-            fullTreatmentId:
-                patient.appointmentId[index].appointment.fullTreatmentId,
-          ),
-        ),
+        if (patient.appointmentId[index].appointment.fullTreatmentId != null)
+          {
+            PageUtils.pushPage(
+              FullTreatment(
+                fullTreatmentId:
+                    patient.appointmentId[index].appointment.fullTreatmentId,
+              ),
+            ),
+          }
       },
       child: Container(
         margin: const EdgeInsets.only(
@@ -245,8 +258,7 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildTreamentRow(
-                    "FEVER", Icons.domain_verification_rounded, false),
+                Container(),
                 buildTreamentRow(
                     patient.appointmentId[index].appointment.status, "", true),
               ],

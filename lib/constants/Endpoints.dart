@@ -39,4 +39,5 @@ class Endpoints {
   static const String bookNewAppointment = '/api/appointment/book/new';
   static const String getAppointmentsPatient = '/api/appointment/patient';
   static const String getFullTreatmentPatient = '/api/treatment/full';
+  static const String addTreatment = '/api/treatment/add';
 }

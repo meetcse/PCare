@@ -1,13 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pcare/api/doctor/add_patient_observation.dart';
 import 'package:pcare/constants/app_colors.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
 import 'package:pcare/constants/strings.dart';
+import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/doctor/UpcomingAppointmentModel.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
+import 'package:pcare/widgets/rectangle_button_widget.dart';
 import 'package:pcare/widgets/text_field_widget.dart';
 
 class AddPatientObservation extends StatefulWidget {
+  List<UpcomingAppointmentModel> data;
+
+  AddPatientObservation({this.data});
+
   @override
   _AddPatientObservationState createState() => _AddPatientObservationState();
 }
@@ -64,6 +73,14 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
     }
   ];
 
+  List<TextEditingController> _controllers = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController()
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,31 +90,37 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
   }
 
   Widget _buildBody() {
-    return LayoutBuilder(
-      builder: (context, constraint) => constraint.maxWidth < 1104
-          ? Center(
-              child: Text(
-                UniversalStrings.webBrowserError,
-                style: Theme.of(context).textTheme.headline1.copyWith(
-                      color: UniversalColors.darkBlue,
-                      fontWeight: FontWeight.w500,
-                    ),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context);
+        return Future.value(true);
+      },
+      child: LayoutBuilder(
+        builder: (context, constraint) => constraint.maxWidth < 1104
+            ? Center(
+                child: Text(
+                  UniversalStrings.webBrowserError,
+                  style: Theme.of(context).textTheme.headline1.copyWith(
+                        color: UniversalColors.darkBlue,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildPatientDetailsCard(context),
+                  SizedBox(width: 20),
+                  buildObservationsCard(),
+                  SizedBox(width: 20),
+                  buildTodaysAppointmentsCard()
+                ],
               ),
-            )
-          : Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildPatientDetailsCard(),
-                SizedBox(width: 20),
-                buildObservationsCard(),
-                SizedBox(width: 20),
-                buildTodaysAppointmentsCard()
-              ],
-            ),
+      ),
     );
   }
 
-  Widget buildPatientDetailsCard() {
+  Widget buildPatientDetailsCard(context) {
     return Expanded(
       child: Card(
         margin: EdgeInsets.only(left: 30, top: 30),
@@ -118,7 +141,7 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
                     progressIndicatorBuilder: (context, _, __) {
                       return CustomProgressIndicatorWidget();
                     },
-                    imageUrl: patientDetails["image"],
+                    imageUrl: widget.data[0].patient_id.user.profilePic,
                     height: 100,
                     width: 100,
                     fit: BoxFit.fill,
@@ -126,27 +149,37 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  patientDetails["name"],
+                  "${widget.data[0].patient_id.user.firstname} ${widget.data[0].patient_id.user.lastname}",
                   style: Theme.of(context).textTheme.headline1.copyWith(
                         color: UniversalColors.darkBlue,
                         fontWeight: FontWeight.w500,
                       ),
                 ),
                 SizedBox(height: 20),
-                Text(patientDetails["mobileNumber"],
+                Text(widget.data[0].patient_id.user.mobilenumber,
                     style: Theme.of(context).textTheme.headline4),
                 SizedBox(height: 20),
-                Text(patientDetails["address"],
+                Text(
+                    "${widget.data[0].patient_id.user.address.houseno}, ${widget.data[0].patient_id.user.address.society}, ${widget.data[0].patient_id.user.address.area}, ${widget.data[0].patient_id.user.address.city}, ${widget.data[0].patient_id.user.address.state}, ${widget.data[0].patient_id.user.address.country}",
                     style: Theme.of(context).textTheme.headline4),
                 SizedBox(height: 20),
-                Text(patientDetails["gender"],
+                Text(widget.data[0].patient_id.user.gender,
                     style: Theme.of(context).textTheme.headline4),
                 SizedBox(height: 20),
-                Text(patientDetails["dob"],
+                Text(widget.data[0].patient_id.user.dob.split("T")[0],
                     style: Theme.of(context).textTheme.headline4),
                 SizedBox(height: 20),
-                Text(patientDetails["age"],
-                    style: Theme.of(context).textTheme.headline4)
+                Text(widget.data[0].patient_id.user.age,
+                    style: Theme.of(context).textTheme.headline4),
+                // SizedBox(height: 20),
+                // TextButton(
+                //     onPressed: () {
+                //       Navigator.pop(context);
+                //     },
+                //     child: Text(
+                //       "Back",
+                //       style: TextStyle(fontSize: 20),
+                //     ))
               ],
             ),
           ),
@@ -173,7 +206,8 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
                         .copyWith(color: UniversalColors.darkBlue)),
               ],
             ),
-            TextFieldWidget(labelText: ""),
+            TextFieldWidget(
+                labelText: "", textEditingController: _controllers[0]),
             SizedBox(height: 10),
             Row(
               children: [
@@ -185,7 +219,8 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
                         .copyWith(color: UniversalColors.darkBlue)),
               ],
             ),
-            TextFieldWidget(labelText: ""),
+            TextFieldWidget(
+                labelText: "", textEditingController: _controllers[1]),
             SizedBox(height: 10),
             Row(
               children: [
@@ -197,7 +232,8 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
                         .copyWith(color: UniversalColors.darkBlue)),
               ],
             ),
-            TextFieldWidget(labelText: ""),
+            TextFieldWidget(
+                labelText: "", textEditingController: _controllers[2]),
             SizedBox(height: 10),
             Row(
               children: [
@@ -209,7 +245,8 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
                         .copyWith(color: UniversalColors.darkBlue)),
               ],
             ),
-            TextFieldWidget(labelText: ""),
+            TextFieldWidget(
+                labelText: "", textEditingController: _controllers[3]),
             SizedBox(height: 10),
             Row(
               children: [
@@ -221,7 +258,26 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
                         .copyWith(color: UniversalColors.darkBlue)),
               ],
             ),
-            TextFieldWidget(labelText: ""),
+            TextFieldWidget(
+                labelText: "", textEditingController: _controllers[4]),
+            SizedBox(height: 10),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 250),
+              child: RectangleButtonWidget(
+                onPressed: _callApi,
+                childText: UniversalStrings.submit,
+                width: double.infinity,
+              ),
+            ),
+            // TextButton(
+            //   onPressed: _callApi,
+            //   child: Text(
+            //     "Submit",
+            //     style: TextStyle(
+            //       fontSize: 20,
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -259,7 +315,7 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
         child: ListView.builder(
           shrinkWrap: true,
           physics: BouncingScrollPhysics(),
-          itemCount: todaysAppointment.length,
+          itemCount: widget.data.length - 1,
           itemBuilder: (context, index) {
             return Container(
               margin: const EdgeInsets.only(bottom: 14),
@@ -267,9 +323,9 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
                 children: [
                   Divider(),
                   _appointmentCard(
-                    todaysAppointment[index]["image"],
-                    todaysAppointment[index]["patientName"],
-                    todaysAppointment[index]["age"],
+                    widget.data[index + 1].patient_id.user.profilePic,
+                    "${widget.data[index + 1].patient_id.user.firstname} ${widget.data[index + 1].patient_id.user.lastname}",
+                    widget.data[index + 1].patient_id.user.age,
                   ),
                 ],
               ),
@@ -363,5 +419,33 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
         fit: BoxFit.fill,
       ),
     );
+  }
+
+  void _callApi() {
+    try {
+      AddPatientObservationApi addPatientObservationApi =
+          AddPatientObservationApi();
+
+      Future<String> response = addPatientObservationApi.saveTreatmentDetails(
+          widget.data[0].id,
+          _controllers[0].text,
+          _controllers[1].text,
+          _controllers[2].text,
+          _controllers[3].text,
+          _controllers[4].text);
+
+      response.then(
+        (value) {
+          if (value.contains("successfully")) {
+            Navigator.pop(Get.context);
+            FlushbarMessage.successMessage(Get.context, value);
+          } else {
+            FlushbarMessage.errorMessage(Get.context, value);
+          }
+        },
+      );
+    } catch (error) {
+      print("Error : " + error);
+    }
   }
 }
