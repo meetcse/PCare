@@ -20,14 +20,6 @@ class DoctorProfile extends StatefulWidget {
 }
 
 class _DoctorProfileState extends State<DoctorProfile> {
-  Map<String, dynamic> doctorDetails = {
-    "name": "John Doe",
-    "email": "johndoe@gmail.com",
-    "mobile": "9789773456",
-    "image":
-        "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg"
-  };
-
   LoginController _loginController = Get.find<LoginController>();
 
   @override
