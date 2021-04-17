@@ -155,7 +155,7 @@ class _DoctorAllPatientsState extends State<DoctorAllPatients> {
               Row(
                 children: [
                   Text(
-                    patient.user.address.city,
+                    /* patient.user.address.city */ 'Vadodara', //only for demo purpose city name brought static,
                     style: Theme.of(Get.context).textTheme.headline5.copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.normal,

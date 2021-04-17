@@ -84,26 +84,28 @@ class _DoctorPatientDetailState extends State<DoctorPatientDetail> {
             ),
           ),
           SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                patient.user.firstname + " " + patient.user.lastname,
-                style: Theme.of(Get.context).textTheme.headline1.copyWith(
-                      color: UniversalColors.gradientColorStart,
-                      fontSize: 28,
-                    ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                patient.user.age,
-                style: Theme.of(Get.context).textTheme.headline5.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                    ),
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  patient.user.firstname + " " + patient.user.lastname,
+                  style: Theme.of(Get.context).textTheme.headline1.copyWith(
+                        color: UniversalColors.gradientColorStart,
+                        fontSize: 28,
+                      ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  patient.user.age,
+                  style: Theme.of(Get.context).textTheme.headline5.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal,
+                      ),
+                ),
+              ],
+            ),
           )
         ],
       ),
