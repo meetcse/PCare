@@ -132,7 +132,7 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
                     " " +
                     snapshot.data[index].patient_id.user.lastname,
                 snapshot.data[index].patient_id.user.age,
-                (snapshot.data[index].status.toLowerCase() == "ongoing")
+                (snapshot.data[index].status.toLowerCase() == "pending")
                     ? true
                     : false,
                 (snapshot.data[index].status.toLowerCase() == "next")
@@ -140,7 +140,7 @@ class _DoctorTodaysAppointmentState extends State<DoctorTodaysAppointment> {
                     : false,
                 snapshot.data[index].appointment_time,
                 onPressed: () {
-                  if (snapshot.data[index].status.toLowerCase() == "ongoing") {
+                  if (snapshot.data[index].status.toLowerCase() == "pending") {
                     PageUtils.pushPage(
                         AddPatientObservation(data: snapshot.data));
                   }

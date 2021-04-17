@@ -83,40 +83,37 @@ class _AddPatientObservationState extends State<AddPatientObservation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(),
-      backgroundColor: UniversalColors.whiteColor,
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
+        body: _buildBody(),
+        backgroundColor: UniversalColors.whiteColor,
+      ),
     );
   }
 
   Widget _buildBody() {
-    return WillPopScope(
-      onWillPop: () {
-        Navigator.pop(context);
-        return Future.value(true);
-      },
-      child: LayoutBuilder(
-        builder: (context, constraint) => constraint.maxWidth < 1104
-            ? Center(
-                child: Text(
-                  UniversalStrings.webBrowserError,
-                  style: Theme.of(context).textTheme.headline1.copyWith(
-                        color: UniversalColors.darkBlue,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-              )
-            : Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  buildPatientDetailsCard(context),
-                  SizedBox(width: 20),
-                  buildObservationsCard(),
-                  SizedBox(width: 20),
-                  buildTodaysAppointmentsCard()
-                ],
+    return LayoutBuilder(
+      builder: (context, constraint) => constraint.maxWidth < 1104
+          ? Center(
+              child: Text(
+                UniversalStrings.webBrowserError,
+                style: Theme.of(context).textTheme.headline1.copyWith(
+                      color: UniversalColors.darkBlue,
+                      fontWeight: FontWeight.w500,
+                    ),
               ),
-      ),
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildPatientDetailsCard(context),
+                SizedBox(width: 20),
+                buildObservationsCard(),
+                SizedBox(width: 20),
+                buildTodaysAppointmentsCard()
+              ],
+            ),
     );
   }
 
