@@ -444,8 +444,8 @@ class _SignUpState extends State<SignUp> {
 
       AppMethods.saveLoginDetailsToSharedPrefs(
           _loginController.loginModel.token,
-          _loginController.mobileNumber.value,
-          _loginController.password.value);
+       registrationController.mobileNumber.value,
+         registrationController.password.value);
       AppWidgets.closeDialog();
       _gotoPatientHomePage();
     } catch (error) {

@@ -1,7 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:pcare/api/receptionist/ReceptIncomingAppointmentsApi.dart';
 import 'package:pcare/constants/reception/reception_strings.dart';
+import 'package:pcare/flushbar_message/flushbar_message.dart';
+import 'package:pcare/models/receptionist/IncomingAppointmentsModel.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/receptionist/receptionist_app_bar_widget.dart';
 
@@ -12,57 +16,69 @@ class AcceptAppointmentRequest extends StatefulWidget {
 }
 
 class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
-  List<Map<String, dynamic>> _pendingAppointments = [
-    {
-      "id": "1",
-      "date": "01-01-2021",
-      "patient_name": "Dipen Biden",
-      "age": "24",
-      "appointment_time": "5:00 PM to 6:00 PM",
-      "doctor_name": "non consectetur",
-      "image": "https://jooinn.com/images/portrait-of-young-man-2.jpg",
-    },
-    {
-      "id": "2",
-      "date": "01-01-2021",
-      "patient_name": "Ishan Suthar",
-      "age": "34",
-      "appointment_time": "5:00 PM to 6:00 PM",
-      "doctor_name": "eleifend mi",
-      "image":
-          "https://t4.ftcdn.net/jpg/02/45/56/35/360_F_245563558_XH9Pe5LJI2kr7VQuzQKAjAbz9PAyejG1.jpg",
-    },
-    {
-      "id": "3",
-      "date": "02-01-2021",
-      "patient_name": "Gautam Suthar",
-      "age": "24",
-      "appointment_time": "5:00 PM to 6:00 PM",
-      "doctor_name": "massa ultricies",
-      "image":
-          "https://st2.depositphotos.com/4196725/6217/i/950/depositphotos_62170113-stock-photo-young-cool-black-man-no.jpg",
-    },
-    {
-      "id": "4",
-      "date": "02-01-2021",
-      "patient_name": "Pranav Vyas",
-      "age": "34",
-      "appointment_time": "5:00 PM to 6:00 PM",
-      "doctor_name": "ipsum dolor",
-      "image":
-          "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg",
-    },
-    {
-      "id": "5",
-      "date": "02-01-2021",
-      "patient_name": "Meet Prajapati",
-      "age": "44",
-      "appointment_time": "5:00 PM to 8:00 PM",
-      "doctor_name": "lectus urna",
-      "image":
-          "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg",
-    }
-  ];
+  // List<Map<String, dynamic>> _pendingAppointments = [
+  //   {
+  //     "id": "1",
+  //     "date": "01-01-2021",
+  //     "patient_name": "Dipen Biden",
+  //     "age": "24",
+  //     "appointment_time": "5:00 PM to 6:00 PM",
+  //     "doctor_name": "non consectetur",
+  //     "image": "https://jooinn.com/images/portrait-of-young-man-2.jpg",
+  //   },
+  //   {
+  //     "id": "2",
+  //     "date": "01-01-2021",
+  //     "patient_name": "Ishan Suthar",
+  //     "age": "34",
+  //     "appointment_time": "5:00 PM to 6:00 PM",
+  //     "doctor_name": "eleifend mi",
+  //     "image":
+  //         "https://t4.ftcdn.net/jpg/02/45/56/35/360_F_245563558_XH9Pe5LJI2kr7VQuzQKAjAbz9PAyejG1.jpg",
+  //   },
+  //   {
+  //     "id": "3",
+  //     "date": "02-01-2021",
+  //     "patient_name": "Gautam Suthar",
+  //     "age": "24",
+  //     "appointment_time": "5:00 PM to 6:00 PM",
+  //     "doctor_name": "massa ultricies",
+  //     "image":
+  //         "https://st2.depositphotos.com/4196725/6217/i/950/depositphotos_62170113-stock-photo-young-cool-black-man-no.jpg",
+  //   },
+  //   {
+  //     "id": "4",
+  //     "date": "02-01-2021",
+  //     "patient_name": "Pranav Vyas",
+  //     "age": "34",
+  //     "appointment_time": "5:00 PM to 6:00 PM",
+  //     "doctor_name": "ipsum dolor",
+  //     "image":
+  //         "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg",
+  //   },
+  //   {
+  //     "id": "5",
+  //     "date": "02-01-2021",
+  //     "patient_name": "Meet Prajapati",
+  //     "age": "44",
+  //     "appointment_time": "5:00 PM to 8:00 PM",
+  //     "doctor_name": "lectus urna",
+  //     "image":
+  //         "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg",
+  //   }
+  // ];
+
+  List<String> _acceptedIds = [];
+  List<String> _declinedIds = [];
+  Future<List<IncomingAppointmentModel>> _incomingAppModelFuture;
+  ReceptIncomingAppointmentAPI _api = ReceptIncomingAppointmentAPI();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _callIncomingAppointmentsAPI();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +90,28 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
   }
 
   Widget _buildBody() {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: _buildAppointmentsList(),
-    );
+    return FutureBuilder(
+        future: _incomingAppModelFuture,
+        builder: (context,
+            AsyncSnapshot<List<IncomingAppointmentModel>> incomingAppModel) {
+          if (!incomingAppModel.hasData) {
+            return Center(
+              child: CustomProgressIndicatorWidget(),
+            );
+          }
+          if (incomingAppModel.data != null &&
+              (incomingAppModel.data == [] || incomingAppModel.data.isEmpty)) {
+            return Center(
+                child: Text("NO REQUEST Found",
+                    style: Theme.of(context).textTheme.headline2));
+          }
+
+          IncomingAppointmentModel _model = incomingAppModel.data[0];
+          return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: _buildAppointmentsList(_model),
+          );
+        });
   }
 
   Widget _buildAppBar() {
@@ -86,12 +120,15 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
     );
   }
 
-  Widget _buildAppointmentsList() {
+  Widget _buildAppointmentsList(
+      IncomingAppointmentModel incomingAppointmentModel) {
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: _pendingAppointments.length,
+        itemCount: incomingAppointmentModel.newAppointment.length,
         itemBuilder: (context, index) {
+          NewAppointment _newAppointment =
+              incomingAppointmentModel.newAppointment[index];
           return Card(
             margin: EdgeInsets.all(10),
             shape:
@@ -99,21 +136,22 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
             elevation: 8,
             child: Column(
               children: [
-                buildUpperPart(_pendingAppointments[index]),
-                buildMiddlePart(_pendingAppointments[index]),
-                buildLowerPart(),
+                buildUpperPart(_newAppointment),
+                buildMiddlePart(_newAppointment),
+                buildLowerPart(_newAppointment),
               ],
             ),
           );
         });
   }
 
-  Widget buildUpperPart(pendingAppointment) {
+  Widget buildUpperPart(NewAppointment newAppointment) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       width: Get.width,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15), topRight: Radius.circular(15)),
         color: Color(0xff2C8BFF),
       ),
       child: Column(
@@ -140,14 +178,16 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
               SizedBox(width: 5),
               Expanded(
                 flex: 0,
-                child: Text(pendingAppointment["date"] + ", ",
+                child: Text(
+                    _getStringDateFromUtc(newAppointment.appointmentDate) +
+                        ", ",
                     style: Theme.of(context)
                         .textTheme
                         .headline4
                         .copyWith(color: Colors.white)),
               ),
               Expanded(
-                child: Text(pendingAppointment["appointment_time"],
+                child: Text(newAppointment.appointmentTime,
                     style: Theme.of(context)
                         .textTheme
                         .headline4
@@ -160,7 +200,7 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
     );
   }
 
-  Widget buildMiddlePart(pendingAppointment) {
+  Widget buildMiddlePart(NewAppointment newAppointment) {
     return Container(
       padding: EdgeInsets.all(10),
       child: Row(
@@ -171,7 +211,7 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
               progressIndicatorBuilder: (context, _, __) {
                 return CustomProgressIndicatorWidget();
               },
-              imageUrl: pendingAppointment["image"],
+              imageUrl: newAppointment.patientId.user.profilePic,
               height: 80,
               width: 80,
               fit: BoxFit.fill,
@@ -188,7 +228,7 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
                     Expanded(
                       flex: 0,
                       child: Text(
-                        "Patient Name :",
+                        "Patient : ",
                         style: Theme.of(context)
                             .textTheme
                             .headline5
@@ -196,7 +236,10 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
                       ),
                     ),
                     SizedBox(width: 4),
-                    Expanded(child: Text(pendingAppointment["patient_name"])),
+                    Expanded(
+                        child: Text(newAppointment.patientId.user.firstname +
+                            " " +
+                            newAppointment.patientId.user.lastname)),
                   ],
                 ),
                 Row(
@@ -205,7 +248,7 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
                     Expanded(
                       flex: 0,
                       child: Text(
-                        "Doctor Name :",
+                        "Doctor : ",
                         style: Theme.of(context)
                             .textTheme
                             .headline5
@@ -213,7 +256,13 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
                       ),
                     ),
                     SizedBox(width: 4),
-                    Expanded(child: Text(pendingAppointment["doctor_name"])),
+                    Expanded(
+                      child: Text(
+                        newAppointment.doctorId.user.firstname +
+                            " " +
+                            newAppointment.doctorId.user.lastname,
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -224,48 +273,163 @@ class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
     );
   }
 
-  Widget buildLowerPart() {
+  Widget buildLowerPart(NewAppointment newAppointment) {
     return Container(
       padding: EdgeInsets.only(bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            width: Get.width / 2 - 60,
-            child: Center(
-              child: Text(
-                "ACCEPT",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4
-                    .copyWith(color: Colors.white),
-              ),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color(0xff2C8BFF),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            width: Get.width / 2 - 60,
-            child: Center(
-              child: Text(
-                "DECLINE",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4
-                    .copyWith(color: Colors.black),
-              ),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color(0xffF3F6FF),
-            ),
-          ),
+          _buildAcceptButton(newAppointment),
+          _buildDeclineButton(newAppointment),
         ],
       ),
     );
+  }
+
+  Widget _buildDeclineButton(NewAppointment newAppointment) {
+    return GestureDetector(
+      onTap: () {
+        _addIdToDeclinedId(newAppointment.sId);
+        setState(() {});
+        _updateAppointmentAPI(2, newAppointment.sId);
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        padding: EdgeInsets.symmetric(vertical: 5),
+        width: _getIdIsDeclined(newAppointment.sId) ? 35 : Get.width / 2 - 60,
+        child: _getIdIsDeclined(newAppointment.sId)
+            ? CircularProgressIndicator()
+            : Center(
+                child: Text(
+                  "DECLINE",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline4
+                      .copyWith(color: Colors.black),
+                ),
+              ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: _getIdIsDeclined(newAppointment.sId)
+              ? Colors.transparent
+              : Color(0xffF3F6FF),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAcceptButton(NewAppointment newAppointment) {
+    return GestureDetector(
+      onTap: () {
+        _addIdToAcceptedId(newAppointment.sId);
+        setState(() {});
+        _updateAppointmentAPI(1, newAppointment.sId);
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        padding: EdgeInsets.symmetric(vertical: 5),
+        width: _getIdIsAccepted(newAppointment.sId) ? 35 : Get.width / 2 - 60,
+        child: _getIdIsAccepted(newAppointment.sId)
+            ? CircularProgressIndicator()
+            : Center(
+                child: Text(
+                  "ACCEPT",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline4
+                      .copyWith(color: Colors.white),
+                ),
+              ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: _getIdIsAccepted(newAppointment.sId)
+              ? Colors.transparent
+              : Color(0xff2C8BFF),
+        ),
+      ),
+    );
+  }
+
+  //methods
+
+  void _callIncomingAppointmentsAPI() {
+    _incomingAppModelFuture =
+        _api.getIncomingAppointments().catchError((error) {
+      print("ERROR : " + error.toString());
+      FlushbarMessage.errorMessage(Get.context, "Something went wrong");
+    });
+  }
+
+  void _updateAppointmentAPI(int status, String appointmentId) async {
+    var _response = await _api
+        .updateAppointmentStatus(status, appointmentId)
+        .catchError((error) {
+      print("ERROR IN UPDATING APPOINTMENT : " + error.toString());
+      FlushbarMessage.errorMessage(Get.context, "Something went wrong");
+      // FlushbarM
+    });
+
+    if (_response['success'] != null) {
+      if (_response['appointment']['status']
+          .toLowerCase()
+          .contains("accepted")) {
+        _removeIdFromAcceptedId(_response['appointment']['_id']);
+        _callIncomingAppointmentsAPI();
+        setState(() {});
+      } else {
+        _removeIdFromDeclinedId(_response['appointment']['_id']);
+        _callIncomingAppointmentsAPI();
+        setState(() {});
+      }
+    }
+  }
+
+  String _getStringDateFromUtc(String dateTime) {
+    DateTime _dateTime = DateTime.parse(dateTime);
+    DateTime dateLocal = _dateTime.toLocal();
+
+    String _format = DateFormat("dd-MM-yyyy").format(dateLocal);
+
+    return _format.toString();
+  }
+
+  bool _getIdIsAccepted(String appointmentId) {
+    bool _isId = false;
+    _acceptedIds.forEach((id) {
+      if (id.toLowerCase() == appointmentId.toLowerCase()) {
+        _isId = true;
+      }
+    });
+
+    return _isId;
+  }
+
+  bool _getIdIsDeclined(String appointmentId) {
+    bool _isId = false;
+    _declinedIds.forEach((id) {
+      if (id.toLowerCase() == appointmentId.toLowerCase()) {
+        _isId = true;
+      }
+    });
+
+    return _isId;
+  }
+
+  void _addIdToAcceptedId(String appointmentId) {
+    _acceptedIds.add(appointmentId);
+  }
+
+  void _addIdToDeclinedId(String appointmentId) {
+    _declinedIds.add(appointmentId);
+  }
+
+  void _removeIdFromAcceptedId(String appointmentId) {
+    _acceptedIds.removeWhere(
+        (element) => element.toLowerCase() == appointmentId.toLowerCase());
+  }
+
+  void _removeIdFromDeclinedId(String appointmentId) {
+    _declinedIds.removeWhere(
+        (element) => element.toLowerCase() == appointmentId.toLowerCase());
   }
 }
