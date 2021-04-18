@@ -16,58 +16,6 @@ class AcceptAppointmentRequest extends StatefulWidget {
 }
 
 class _AcceptAppointmentRequestState extends State<AcceptAppointmentRequest> {
-  // List<Map<String, dynamic>> _pendingAppointments = [
-  //   {
-  //     "id": "1",
-  //     "date": "01-01-2021",
-  //     "patient_name": "Dipen Biden",
-  //     "age": "24",
-  //     "appointment_time": "5:00 PM to 6:00 PM",
-  //     "doctor_name": "non consectetur",
-  //     "image": "https://jooinn.com/images/portrait-of-young-man-2.jpg",
-  //   },
-  //   {
-  //     "id": "2",
-  //     "date": "01-01-2021",
-  //     "patient_name": "Ishan Suthar",
-  //     "age": "34",
-  //     "appointment_time": "5:00 PM to 6:00 PM",
-  //     "doctor_name": "eleifend mi",
-  //     "image":
-  //         "https://t4.ftcdn.net/jpg/02/45/56/35/360_F_245563558_XH9Pe5LJI2kr7VQuzQKAjAbz9PAyejG1.jpg",
-  //   },
-  //   {
-  //     "id": "3",
-  //     "date": "02-01-2021",
-  //     "patient_name": "Gautam Suthar",
-  //     "age": "24",
-  //     "appointment_time": "5:00 PM to 6:00 PM",
-  //     "doctor_name": "massa ultricies",
-  //     "image":
-  //         "https://st2.depositphotos.com/4196725/6217/i/950/depositphotos_62170113-stock-photo-young-cool-black-man-no.jpg",
-  //   },
-  //   {
-  //     "id": "4",
-  //     "date": "02-01-2021",
-  //     "patient_name": "Pranav Vyas",
-  //     "age": "34",
-  //     "appointment_time": "5:00 PM to 6:00 PM",
-  //     "doctor_name": "ipsum dolor",
-  //     "image":
-  //         "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg",
-  //   },
-  //   {
-  //     "id": "5",
-  //     "date": "02-01-2021",
-  //     "patient_name": "Meet Prajapati",
-  //     "age": "44",
-  //     "appointment_time": "5:00 PM to 8:00 PM",
-  //     "doctor_name": "lectus urna",
-  //     "image":
-  //         "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg",
-  //   }
-  // ];
-
   List<String> _acceptedIds = [];
   List<String> _declinedIds = [];
   Future<List<IncomingAppointmentModel>> _incomingAppModelFuture;
