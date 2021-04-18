@@ -16,63 +16,6 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
   Future<List<ReceptionistUpcomingAppointmentModel>>
       _receptionistUpcomingAppointmentModelFuture;
 
-  List<Map<String, dynamic>> _upcoming_appointments = [
-    {
-      "date": "01-01-2021",
-      "appointments": [
-        {
-          "id": "1",
-          "patient_name": "Dipen Biden",
-          "age": "24",
-          "appointment_time": "5:00 PM to 6:00 PM",
-          "doctor_name": "non consectetur",
-          "image": "https://jooinn.com/images/portrait-of-young-man-2.jpg",
-        },
-        {
-          "id": "2",
-          "patient_name": "Ishan Suthar",
-          "age": "34",
-          "appointment_time": "5:00 PM to 6:00 PM",
-          "doctor_name": "eleifend mi",
-          "image":
-              "https://t4.ftcdn.net/jpg/02/45/56/35/360_F_245563558_XH9Pe5LJI2kr7VQuzQKAjAbz9PAyejG1.jpg",
-        }
-      ]
-    },
-    {
-      "date": "02-01-2021",
-      "appointments": [
-        {
-          "id": "3",
-          "patient_name": "Gautam Suthar",
-          "age": "24",
-          "appointment_time": "5:00 PM to 6:00 PM",
-          "doctor_name": "massa ultricies",
-          "image":
-              "https://st2.depositphotos.com/4196725/6217/i/950/depositphotos_62170113-stock-photo-young-cool-black-man-no.jpg",
-        },
-        {
-          "id": "4",
-          "patient_name": "Pranav Vyas",
-          "age": "34",
-          "appointment_time": "5:00 PM to 6:00 PM",
-          "doctor_name": "ipsum dolor",
-          "image":
-              "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg",
-        },
-        {
-          "id": "5",
-          "patient_name": "Meet Prajapati",
-          "age": "44",
-          "appointment_time": "5:00 PM to 8:00 PM",
-          "doctor_name": "lectus urna",
-          "image":
-              "https://adultballet.com.au/wp-content/uploads/2017/02/unnamed-1.jpg",
-        }
-      ]
-    }
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -89,17 +32,16 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
   }
 
   Widget _buildBody() {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: FutureBuilder(
+    return FutureBuilder(
         future: _receptionistUpcomingAppointmentModelFuture,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           return (snapshot.data == null)
-              ? CustomProgressIndicatorWidget()
-              : _buildAppointmentsList(snapshot.data);
-        },
-      ),
-    );
+              ? Center(child: CustomProgressIndicatorWidget())
+              : SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: _buildAppointmentsList(snapshot.data),
+                );
+        });
   }
 
   Widget _buildAppBar() {
