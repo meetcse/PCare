@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pcare/api/receptionist/upcoming_appointments.dart';
 import 'package:pcare/constants/doctor/doctor_strings.dart';
+import 'package:pcare/models/receptionist/UpcomingAppointMentsModel.dart';
 import 'package:pcare/store/login/login_controller.dart';
 import 'package:pcare/widgets/custom_progress_indicator_widget.dart';
 import 'package:pcare/widgets/receptionist/receptionist_app_bar_widget.dart';
@@ -11,6 +13,9 @@ class UpcomingAppointments extends StatefulWidget {
 }
 
 class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
+  Future<List<ReceptionistUpcomingAppointmentModel>>
+      _receptionistUpcomingAppointmentModelFuture;
+
   List<Map<String, dynamic>> _upcoming_appointments = [
     {
       "date": "01-01-2021",
@@ -69,6 +74,12 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _callApi();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
@@ -80,7 +91,14 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
   Widget _buildBody() {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
-      child: _buildAppointmentsList(),
+      child: FutureBuilder(
+        future: _receptionistUpcomingAppointmentModelFuture,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return (snapshot.data == null)
+              ? CustomProgressIndicatorWidget()
+              : _buildAppointmentsList(snapshot.data);
+        },
+      ),
     );
   }
 
@@ -90,11 +108,12 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
     );
   }
 
-  Widget _buildAppointmentsList() {
+  Widget _buildAppointmentsList(
+      List<ReceptionistUpcomingAppointmentModel> data) {
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: _upcoming_appointments.length,
+        itemCount: data.length,
         itemBuilder: (context, index) {
           return Container(
             padding: EdgeInsets.all(20),
@@ -109,7 +128,7 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
                     ),
                     SizedBox(width: 5),
                     Text(
-                      _upcoming_appointments[index]["date"],
+                      data[index].appointmentDate.split('T')[0],
                       style: Theme.of(context)
                           .textTheme
                           .headline4
@@ -117,15 +136,14 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
                     ),
                   ],
                 ),
-                _buildAppointmentCard(
-                    _upcoming_appointments[index]["appointments"]),
+                _buildAppointmentCard(data[index].appointments),
               ],
             ),
           );
         });
   }
 
-  Widget _buildAppointmentCard(upcoming_appointment) {
+  Widget _buildAppointmentCard(List<Appointments> upcoming_appointment) {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -139,7 +157,7 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
     );
   }
 
-  Widget _appointmentCard(upcoming_appointment_card) {
+  Widget _appointmentCard(Appointments upcoming_appointment_card) {
     return GestureDetector(
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -151,7 +169,7 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               //image
-              _buildImage(upcoming_appointment_card["image"]),
+              _buildImage(upcoming_appointment_card.patientId.user.profilepic),
 
               SizedBox(
                 width: 12,
@@ -166,7 +184,7 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        upcoming_appointment_card["patient_name"],
+                        '${upcoming_appointment_card.patientId.user.firstname} ${upcoming_appointment_card.patientId.user.lastname}',
                         style: Theme.of(context)
                             .textTheme
                             .headline4
@@ -181,7 +199,7 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
                       Text(
                         DoctorUniversalStrings.age +
                             ' : ' +
-                            upcoming_appointment_card["age"],
+                            upcoming_appointment_card.patientId.user.age,
                         style: Theme.of(context)
                             .textTheme
                             .headline5
@@ -195,7 +213,7 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
                       Text(
                         DoctorUniversalStrings.appointTime +
                             ' : ' +
-                            upcoming_appointment_card["appointment_time"],
+                            upcoming_appointment_card.appointmentTime,
                         style: Theme.of(context)
                             .textTheme
                             .headline5
@@ -206,7 +224,9 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
                       //Doctor Name
                       Text(
                         "Doctor Name : " +
-                            upcoming_appointment_card["doctor_name"],
+                            upcoming_appointment_card.doctorId.user.firstname +
+                            " " +
+                            upcoming_appointment_card.doctorId.user.lastname,
                         style: Theme.of(context)
                             .textTheme
                             .headline5
@@ -241,5 +261,18 @@ class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
         fit: BoxFit.fill,
       ),
     );
+  }
+
+  void _callApi() {
+    ReceptionistUpcomingAppointmentsApi _receptionistUpcomingAppointmentsApi =
+        ReceptionistUpcomingAppointmentsApi();
+
+    try {
+      _receptionistUpcomingAppointmentModelFuture =
+          _receptionistUpcomingAppointmentsApi
+              .getReceptionistUpcomingAppointments();
+    } catch (error) {
+      print("Error " + error);
+    }
   }
 }

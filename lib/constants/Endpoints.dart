@@ -43,4 +43,7 @@ class Endpoints {
   static const String receptIncomingAppoint =
       '/api/appointment/incoming/recept/all';
   static const String updateIncomingAppoint = '/api/appointment/recept/update';
+
+  static const String getReceptionistUpcomingAppointment =
+      '/api/appointment/upcoming/recept';
 }
