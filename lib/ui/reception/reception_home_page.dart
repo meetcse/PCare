@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,15 +14,12 @@ class ReceptionHomePage extends StatefulWidget {
 
 class _ReceptionHomePageState extends State<ReceptionHomePage> {
   int _page = 0;
-  PageController _pageController;
+  List<Widget> _pages = [];
 
   @override
   void initState() {
     super.initState();
-
-    _pageController = PageController(
-      initialPage: 0,
-    );
+    _loadPages();
   }
 
   @override
@@ -61,11 +59,11 @@ class _ReceptionHomePageState extends State<ReceptionHomePage> {
       ],
       onTap: (index) {
         _changePage(index);
-        _pageController.animateToPage(
-          _page,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeInCubic,
-        );
+        // _pageController.animateToPage(
+        //   _page,
+        //   duration: Duration(milliseconds: 300),
+        //   curve: Curves.easeInCubic,
+        // );
       },
     );
   }
@@ -78,15 +76,24 @@ class _ReceptionHomePageState extends State<ReceptionHomePage> {
   }
 
   Widget _buildChildWidget() {
-    return PageView(
-      controller: _pageController,
-      onPageChanged: _changePage,
-      // physics: NeverScrollableScrollPhysics(),
-      children: [
-        UpcomingAppointments(),
-        AcceptAppointmentRequest(),
-        ReceptionistProfile(),
-      ],
+    return PageTransitionSwitcher(
+      duration: Duration(milliseconds: 300),
+      transitionBuilder: (child, _, __) {
+        return FadeThroughTransition(
+          animation: _,
+          secondaryAnimation: __,
+          child: child,
+          // transitionType: SharedAxisTransitionType.vertical,
+        );
+      },
+      child: _pages[_page],
     );
+  }
+
+  //methods
+  void _loadPages() {
+    _pages.add(UpcomingAppointments());
+    _pages.add(AcceptAppointmentRequest());
+    _pages.add(ReceptionistProfile());
   }
 }
