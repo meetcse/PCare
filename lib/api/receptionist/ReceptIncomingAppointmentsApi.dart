@@ -13,7 +13,11 @@ class ReceptIncomingAppointmentAPI {
         Endpoints.receptIncomingAppoint,
       );
 
-      if (_res['success'] != null) {
+      try {
+        if (_res != null && (_res as List) == []) {
+          // return [];
+        }
+      } catch (error) {
         return [];
       }
       // if (_res != null) {

@@ -75,58 +75,59 @@ class _ReceptionistProfileState extends State<ReceptionistProfile> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(padding: EdgeInsets.only(left: 15)),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _loginController.loginModel.user.firstname +
-                    " " +
-                    _loginController.loginModel.user.lastname,
-                style: Theme.of(Get.context).textTheme.headline1.copyWith(
-                      color: UniversalColors.gradientColorStart,
-                      fontSize: 28,
-                    ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(height: 12),
-              Text(
-                _loginController.loginModel.user.mobilenumber,
-                style: Theme.of(Get.context).textTheme.headline5.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                    ),
-              ),
-              // SizedBox(height: 4),
-              // Text(
-              //   receptionistDetails["mobile"],
-              //   style: Theme.of(Get.context).textTheme.headline5.copyWith(
-              //         fontSize: 16,
-              //         fontWeight: FontWeight.normal,
-              //       ),
-              // ),
-            ],
-          ),
           Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: CachedNetworkImage(
-                    progressIndicatorBuilder: (context, _, __) {
-                      return CustomProgressIndicatorWidget();
-                    },
-                    imageUrl: _loginController.loginModel.user.profilePic,
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.cover,
-                  ),
+                Text(
+                  _loginController.loginModel.user.firstname +
+                      " " +
+                      _loginController.loginModel.user.lastname,
+                  style: Theme.of(Get.context).textTheme.headline1.copyWith(
+                        color: UniversalColors.gradientColorStart,
+                        fontSize: 28,
+                      ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                Padding(padding: EdgeInsets.only(right: 15))
+                SizedBox(height: 12),
+                Text(
+                  _loginController.loginModel.user.mobilenumber,
+                  style: Theme.of(Get.context).textTheme.headline5.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal,
+                      ),
+                  maxLines: 2,
+                ),
+                // SizedBox(height: 4),
+                // Text(
+                //   receptionistDetails["mobile"],
+                //   style: Theme.of(Get.context).textTheme.headline5.copyWith(
+                //         fontSize: 16,
+                //         fontWeight: FontWeight.normal,
+                //       ),
+                // ),
               ],
             ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: CachedNetworkImage(
+                  progressIndicatorBuilder: (context, _, __) {
+                    return CustomProgressIndicatorWidget();
+                  },
+                  imageUrl: _loginController.loginModel.user.profilePic,
+                  height: 120,
+                  width: 120,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(right: 15))
+            ],
           ),
         ],
       ),
