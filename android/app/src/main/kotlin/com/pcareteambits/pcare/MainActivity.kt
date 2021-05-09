@@ -1,4 +1,4 @@
-package com.example.pcare
+package com.pcareteambits
 
 import io.flutter.embedding.android.FlutterActivity
 
